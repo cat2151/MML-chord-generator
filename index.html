@@ -4,18 +4,9 @@
     <html ng-app="generatorApp">
       <head>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
-        <script>
-
-  angular.module('generatorApp', [])
-  .controller('generatorController', ['$scope', function($scope) {
-    $scope.generate = function() {
-      $scope.generatedMml = ';' +
-      $scope.inputText.replace(/C/g, 'c;e;g');
-    };
-    $scope.generatedMml = "なし";
-  }]);
-
-        </script>
+        <script src="app.js"></script>
+        <script src="services.js"></script>
+        <script src="controller.js"></script>
       </head>
       <body>
         <div ng-controller="generatorController">

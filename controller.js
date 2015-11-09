@@ -1,6 +1,6 @@
 angular.module('generatorApp')
-.controller('generatorController', ['$scope', '$location', 'GeneratorService',
-function($scope, $location, GeneratorService) {
+.controller('generatorController', ['$scope', '$location', '$timeout', 'GeneratorService',
+function($scope, $location, $timeout, GeneratorService) {
 
   $scope.generatedMml = "なし";
 
@@ -19,7 +19,9 @@ function($scope, $location, GeneratorService) {
   };
 
   SIOPM.onLoad = function() {
-    setMmlFromUrl();
+    $timeout(function() {
+      setMmlFromUrl();
+    }, 0);
   };
         
   SIOPM.onCompileComplete = function() {

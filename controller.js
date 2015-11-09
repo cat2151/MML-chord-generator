@@ -21,7 +21,7 @@ function($scope, $location, $timeout, GeneratorService) {
   SIOPM.onLoad = function() {
     $timeout(function() {
       setMmlFromUrl();
-    }, 0);
+    }, 1000);
   };
         
   SIOPM.onCompileComplete = function() {

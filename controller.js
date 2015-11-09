@@ -16,6 +16,8 @@ function($scope, $location, $timeout, GeneratorService) {
   $scope.generate = function() {
     $scope.generatedMml = GeneratorService.generate($scope.inputText);
     SIOPM.compile($scope.generatedMml);
+    // URLに反映 [用途] 書いたMMLをURLコピペで共有できるようにする
+    $location.search({mml : $scope.generatedMml});
   };
 
   SIOPM.onLoad = function() {

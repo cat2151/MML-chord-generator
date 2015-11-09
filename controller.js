@@ -6,6 +6,13 @@ function($scope, GeneratorService) {
 
   $scope.generate = function() {
     $scope.generatedMml = GeneratorService.generate($scope.inputText);
+    SIOPM.compile($scope.generatedMml);
   };
+
+  SIOPM.onCompileComplete = function() {
+    SIOPM.play();
+  };
+
+  SIOPM.initialize();
 
 }]);

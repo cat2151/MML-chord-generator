@@ -20,6 +20,10 @@ function($scope, $location, $timeout, GeneratorService) {
     $location.search({mml : $scope.generatedMml});
   };
 
+  $scope.getRootNoteType = function() {
+    return GeneratorService.getRootNoteType($scope.inputText);
+  };
+
   SIOPM.onLoad = function() {
     $timeout(function() {
       setMmlFromUrl();

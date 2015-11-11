@@ -15,7 +15,7 @@
         <h1>Chord Nameを入力してください</h1>
 
         <input type="text" ng-model="inputText"
-          placeholder="大文字でCを書いてみてください"
+          placeholder="CやBbを書いてみてください"
           ng-change="generate()"
         >
       </div>
@@ -30,6 +30,9 @@
 
       <h1>MML生成結果:</h1>
       <h2>{{generatedMml}}</h1>
+
+      <h1>開発用:</h1>
+      <h2>{{GeneratorService.getRootNoteType()}}</h1>
     </div>
 
     <hr>

@@ -15,7 +15,7 @@
         <h1>Chord Nameを入力してください</h1>
 
         <input type="text" ng-model="inputText"
-          placeholder="CやBbを書いてみてください"
+          placeholder="CやBbmを書いてみてください"
           ng-change="generate()"
         >
       </div>
@@ -33,6 +33,9 @@
 
       <h1>開発用:</h1>
       <h2>{{getRootNoteType()}}</h1>
+
+      <h1>開発用:</h1>
+      <h2>{{getChordType()}}</h1>
     </div>
 
     <hr>

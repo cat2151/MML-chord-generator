@@ -21,7 +21,12 @@ function($scope, $location, $timeout, GeneratorService) {
   };
 
   $scope.getRootNoteType = function() {
-    return GeneratorService.getRootNoteType($scope.inputText);
+    return GeneratorService.getRootNoteType($scope.inputText).r;
+  };
+
+  $scope.getChordType = function() {
+    var parsedText = GeneratorService.getRootNoteType($scope.inputText).p;
+    return GeneratorService.getChordType(parsedText);
   };
 
   SIOPM.onLoad = function() {

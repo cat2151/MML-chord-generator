@@ -20,7 +20,7 @@ function() {
     if (inputText.search(/C/) == 0) {
       ret.r = 0;
       ret.p = inputText.replace(/C/, '');
-      return 0;
+      return ret;
     }
     return ret;
   }

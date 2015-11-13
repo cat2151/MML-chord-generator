@@ -28,6 +28,12 @@ function($scope, $location, $timeout, GeneratorService) {
     var parsedText = GeneratorService.getRootNoteType($scope.inputText).p;
     return GeneratorService.getChordType(parsedText);
   };
+  
+  $scope.getChordIntervals = function() {
+    var rootNoteTypeObj = GeneratorService.getRootNoteType($scope.inputText);
+    var chordType = GeneratorService.getChordType(rootNoteTypeObj.p).t;
+    return GeneratorService.getChordIntervals(chordType);
+  };
 
   SIOPM.onLoad = function() {
     $timeout(function() {

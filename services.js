@@ -40,9 +40,16 @@ function() {
     }
   }
 
+  // [ÉCÉÅÅ[ÉW] MAJOR Å® [0, 4, 7]
+  function getChordIntervals(chordType) {
+    if (chordType == MAJOR) return [0, 4, 7];
+    if (chordType == MINOR) return [0, 3, 7];
+  }
+
   return {
     generate: generate,
     getRootNoteType: getRootNoteType,
-    getChordType: getChordType
+    getChordType: getChordType,
+    getChordIntervals: getChordIntervals
   };
 }]);

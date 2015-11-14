@@ -35,6 +35,13 @@ function($scope, $location, $timeout, GeneratorService) {
     return GeneratorService.getChordIntervals(chordType);
   };
 
+  $scope.getChordNoteNumbers = function() {
+    var rootNoteType = $scope.getRootNoteType();
+    var intervals = $scope.getChordIntervals();
+    var centerCnoteNum = 60;
+    return GeneratorService.getChordNoteNumbers(rootNoteType, intervals, centerCnoteNum);
+  };
+
   SIOPM.onLoad = function() {
     $timeout(function() {
       setMmlFromUrl();

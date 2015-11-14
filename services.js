@@ -46,10 +46,21 @@ function() {
     if (chordType == MINOR) return [0, 3, 7];
   }
 
+  // [ÉCÉÅÅ[ÉW] 10, [0, 4, 7], 60 Å® [70, 74, 77]
+  function getChordNoteNumbers(rootNoteType, intervals, centerCnoteNum) {
+    var ret = angular.copy(intervals);
+    angular.forEach(ret, function(value, key) {
+      this[key] += rootNoteType;
+      this[key] += centerCnoteNum;
+    });
+    return ret;
+  }
+
   return {
     generate: generate,
     getRootNoteType: getRootNoteType,
     getChordType: getChordType,
-    getChordIntervals: getChordIntervals
+    getChordIntervals: getChordIntervals,
+    getChordNoteNumbers: getChordNoteNumbers
   };
 }]);

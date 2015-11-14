@@ -46,6 +46,7 @@ function() {
       ret.t = MINOR;
       return ret;
     }
+    return ret;
   }
 
   // [ƒCƒ[ƒW] MAJOR ¨ [0, 4, 7]

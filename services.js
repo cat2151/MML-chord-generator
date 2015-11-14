@@ -8,10 +8,8 @@ function() {
   }
 
   function generate(inputText) {
-    if (isEmpty(inputText)) return '';
     var mml = '';
-    mml += ';';
-    mml += inputText.replace(/C/g, 'c;e;g');
+    // TODO [ÉCÉÅÅ[ÉW] 'Cm' Å® 'c; e-; g'
     return mml;
   }
   
@@ -37,7 +35,6 @@ function() {
   var MINOR = 'Minor';
   function getChordType(parsedText) {
     var ret = {t: '', p: parsedText};
-    if (isEmpty(parsedText)) return ret;
     if (parsedText == '') {
       ret.t = MAJOR;
       return ret;

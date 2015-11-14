@@ -15,16 +15,17 @@ function() {
   
   // [ÉCÉÅÅ[ÉW] 'Bb' Å® 10, ''
   function getRootNoteType(inputText) {
-    var ret = {r: -1, p: inputText};
-    if (isEmpty(inputText)) return ret;
-    if (inputText.search(/Bb/) == 0) {
+    var txt = inputText;
+    if (isEmpty(inputText)) txt = ''; // undefined Å® ''
+    var ret = {r: -1, p: txt};
+    if (txt.search(/Bb/) == 0) {
       ret.r = 10;
-      ret.p = inputText.replace(/Bb/, '');
+      ret.p = txt.replace(/Bb/, '');
       return ret;
     }
-    if (inputText.search(/C/) == 0) {
+    if (txt.search(/C/) == 0) {
       ret.r = 0;
-      ret.p = inputText.replace(/C/, '');
+      ret.p = txt.replace(/C/, '');
       return ret;
     }
     return ret;
@@ -34,12 +35,14 @@ function() {
   var MAJOR = 'Major';
   var MINOR = 'Minor';
   function getChordType(parsedText) {
-    var ret = {t: '', p: parsedText};
-    if (parsedText == '') {
+    var txt = parsedText;
+    if (isEmpty(parsedText)) txt = ''; // undefined Å® ''
+    var ret = {t: '', p: txt};
+    if (txt == '') {
       ret.t = MAJOR;
       return ret;
     }
-    if (parsedText == 'm') {
+    if (txt == 'm') {
       ret.t = MINOR;
       return ret;
     }

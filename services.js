@@ -48,11 +48,10 @@ function() {
 
   // [ÉCÉÅÅ[ÉW] 10, [0, 4, 7], 60 Å® [70, 74, 77]
   function getChordNoteNumbers(rootNoteType, intervals, centerCnoteNum) {
-    var ret = angular.copy(intervals);
-    angular.forEach(ret, function(value, key) {
-      this[key] += rootNoteType;
-      this[key] += centerCnoteNum;
-    });
+    var ret = [];
+    angular.forEach(intervals, function(interval, key) {
+      this[key] = centerCnoteNum + rootNoteType + interval;
+    }, ret);
     return ret;
   }
 

@@ -2,7 +2,13 @@ angular.module('generatorApp')
 .service('GeneratorService', [
 function() {
 
+  function isEmpty(v) {
+    if (v === undefined || v === null || v === '') return true;
+    return false;
+  }
+
   function generate(inputText) {
+    if (isEmpty(inputText)) return '';
     var mml = '';
     mml += ';';
     mml += inputText.replace(/C/g, 'c;e;g');
@@ -12,6 +18,7 @@ function() {
   // [イメージ] 'Bb' → 10, ''
   function getRootNoteType(inputText) {
     var ret = {r: -1, p: inputText};
+    if (isEmpty(inputText)) return ret;
     if (inputText.search(/Bb/) == 0) {
       ret.r = 10;
       ret.p = inputText.replace(/Bb/, '');
@@ -30,6 +37,7 @@ function() {
   var MINOR = 'Minor';
   function getChordType(parsedText) {
     var ret = {t: '', p: parsedText};
+    if (isEmpty(parsedText)) return ret;
     if (parsedText == '') {
       ret.t = MAJOR;
       return ret;
@@ -44,6 +52,7 @@ function() {
   function getChordIntervals(chordType) {
     if (chordType == MAJOR) return [0, 4, 7];
     if (chordType == MINOR) return [0, 3, 7];
+    return [];
   }
 
   // [イメージ] 10, [0, 4, 7], 60 → [70, 74, 77]
@@ -56,6 +65,7 @@ function() {
   }
 
   return {
+    isEmpty: isEmpty,
     generate: generate,
     getRootNoteType: getRootNoteType,
     getChordType: getChordType,

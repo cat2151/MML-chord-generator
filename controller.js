@@ -14,7 +14,8 @@ function($scope, $location, $timeout, GeneratorService) {
   }
 
   $scope.generate = function() {
-    $scope.generatedMml = GeneratorService.generate($scope.inputText);
+    var chordNoteNumbers = $scope.getChordNoteNumbers();
+    $scope.generatedMml = GeneratorService.getNoteMmls(chordNoteNumbers);
     SIOPM.compile($scope.generatedMml);
     // URLに反映 [用途] 書いたMMLをURLコピペで共有できるようにする
     $location.search({mml : $scope.generatedMml});
@@ -41,6 +42,19 @@ function($scope, $location, $timeout, GeneratorService) {
     var centerCnoteNum = 60;
     return GeneratorService.getChordNoteNumbers(rootNoteType, intervals, centerCnoteNum);
   };
+
+  $scope.getNoteMml1 = function() {
+    var chordNoteNumbers = $scope.getChordNoteNumbers();
+    if (!chordNoteNumbers.length) return '';
+    return GeneratorService.getNoteMml(chordNoteNumbers[0]);
+  };
+
+  $scope.getNoteMmls = function() {
+    var chordNoteNumbers = $scope.getChordNoteNumbers();
+    return GeneratorService.getNoteMmls(chordNoteNumbers);
+  };
+
+
 
   SIOPM.onLoad = function() {
     $timeout(function() {

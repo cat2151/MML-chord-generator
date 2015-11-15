@@ -9,61 +9,114 @@ function() {
 
   function generate(inputText) {
     var mml = '';
-    // TODO [ƒCƒ[ƒW] 'Cm' ¨ 'c; e-; g'
+    // TODO [ã‚¤ãƒ¡ãƒ¼ã‚¸] 'Cm' â†’ 'c; e-; g'
     return mml;
   }
   
-  // [ƒCƒ[ƒW] 'Bb' ¨ 10, ''
+  // [ã‚¤ãƒ¡ãƒ¼ã‚¸] 'Bb' â†’ 10, ''
   function getRootNoteType(inputText) {
     var txt = inputText;
-    if (isEmpty(inputText)) txt = ''; // undefined ¨ ''
+    txt = txt.replace(/[â™¯ï¼ƒ]/g, '#');
+    txt = txt.replace(/â™­/g, 'b');
+    if (isEmpty(inputText)) txt = ''; // undefined â†’ ''
     var ret = {r: -1, p: txt};
-    if (txt.search(/Bb/) == 0) {
-      ret.r = 10;
-      ret.p = txt.replace(/Bb/, '');
-      return ret;
-    }
-    if (txt.search(/C/) == 0) {
-      ret.r = 0;
-      ret.p = txt.replace(/C/, '');
-      return ret;
-    }
+    // [ã‚¤ãƒ¡ãƒ¼ã‚¸] C#ã‚’åˆ¤å®šã™ã‚‹ãŸã‚ã«ã¯Cã‚ˆã‚Šå…ˆã«åˆ¤å®š
+    if (s('C#|Db', 1)) return ret;
+    if (s('D#|Eb', 3)) return ret;
+    if (s('F#|Gb', 6)) return ret;
+    if (s('G#|Ab', 8)) return ret;
+    if (s('A#|Bb', 10)) return ret;
+    if (s('C', 0)) return ret;
+    if (s('D', 2)) return ret;
+    if (s('E', 4)) return ret;
+    if (s('F', 5)) return ret;
+    if (s('G', 7)) return ret;
+    if (s('A', 9)) return ret;
+    if (s('B', 11)) return ret;
     return ret;
+    function s(pattern, r) {
+      var rgxp = new RegExp(pattern);
+      if (txt.search(rgxp) == 0) {
+        ret.r = r;
+        ret.p = txt.replace(rgxp, '');
+        return true;
+      }
+      return false;
+    }
   }
   
-  // [ƒCƒ[ƒW] '' ¨ MAJOR, 'm' ¨ MINOR
-  var MAJOR = 'Major';
-  var MINOR = 'Minor';
+  // [ã‚¤ãƒ¡ãƒ¼ã‚¸] '' â†’ MAJOR, 'm' â†’ MINOR
+  var MAJOR = 'MAJOR';
+  var MINOR = 'MINOR';
+  var SEVENTH = 'SEVENTH';
+  var SUS4 = 'SUS4';
+  var MAJOR7 = 'MAJOR7';
+  var MINOR7 = 'MINOR7';
+  var SIXTH = 'SIXTH';
   function getChordType(parsedText) {
     var txt = parsedText;
-    if (isEmpty(parsedText)) txt = ''; // undefined ¨ ''
+    if (isEmpty(parsedText)) txt = ''; // undefined â†’ ''
     var ret = {t: '', p: txt};
-    if (txt == '') {
-      ret.t = MAJOR;
-      return ret;
-    }
-    if (txt == 'm') {
-      ret.t = MINOR;
-      return ret;
-    }
+    // [ã‚¤ãƒ¡ãƒ¼ã‚¸] m7ã‚’åˆ¤å®šã™ã‚‹ãŸã‚ã«ã¯mã‚ˆã‚Šå…ˆã«åˆ¤å®š
+    if (s('sus4', SUS4)) return ret;
+    if (s('M7', MAJOR7)) return ret;
+    if (s('m7', MINOR7)) return ret;
+    if (s('m', MINOR)) return ret;
+    if (s('7', SEVENTH)) return ret;
+    if (s('6', SIXTH)) return ret;
+    if (s('', MAJOR)) return ret;
     return ret;
+    function s(v, t) {
+      if (v == txt) {
+        ret.t = t;
+        return true;
+      }
+      return false;
+    }
   }
 
-  // [ƒCƒ[ƒW] MAJOR ¨ [0, 4, 7]
+  // [ã‚¤ãƒ¡ãƒ¼ã‚¸] MAJOR â†’ [0, 4, 7]
   function getChordIntervals(chordType) {
     if (chordType == MAJOR) return [0, 4, 7];
     if (chordType == MINOR) return [0, 3, 7];
+    if (chordType == SEVENTH) return [0, 4, 7, 10];
+    if (chordType == SUS4) return [0, 5, 7];
+    if (chordType == MAJOR7) return [0, 4, 7, 11];
+    if (chordType == MINOR7) return [0, 3, 7, 10];
+    if (chordType == SIXTH) return [0, 4, 7, 9];
     return [];
   }
 
-  // [ƒCƒ[ƒW] 10, [0, 4, 7], 60 ¨ [70, 74, 77]
+  // [ã‚¤ãƒ¡ãƒ¼ã‚¸] 10, [0, 4, 7], 60 â†’ [70, 74, 77]
   function getChordNoteNumbers(rootNoteType, intervals, centerCnoteNum) {
     var ret = [];
-    if (rootNoteType < 0 || rootNoteType > 11) return ret; // 0`11 ‚Ì‚İ‹–‰Â
+    if (rootNoteType < 0 || rootNoteType > 11) return ret; // 0ï½11 ã®ã¿è¨±å¯
     angular.forEach(intervals, function(interval, key) {
       this[key] = centerCnoteNum + rootNoteType + interval;
     }, ret);
     return ret;
+  }
+
+  // [ã‚¤ãƒ¡ãƒ¼ã‚¸] 60 â†’ o4c
+  function getNoteMml(noteNumber) {
+    if (noteNumber < 0 || noteNumber > 127) return ''; // 0ï½127 ã®ã¿è¨±å¯
+    var octave = 'o' + (Math.floor(noteNumber / 12) - 1);
+    var cdefgab = getCdefgab(noteNumber % 12);
+    return octave + cdefgab;
+    function getCdefgab(v) {
+      var n = ['c', 'c+', 'd', 'd+', 'e', 'f', 'f+', 'g', 'g+', 'a', 'a+', 'b'];
+      return n[v];
+    }
+  }
+
+  function getNoteMmls(noteNumbers) {
+    if (!noteNumbers.length) return '';
+    var mml = '';
+    angular.forEach(noteNumbers, function(noteNumber) {
+      if (mml) mml += ';';
+      mml += getNoteMml(noteNumber);
+    });
+    return mml;
   }
 
   return {
@@ -72,6 +125,8 @@ function() {
     getRootNoteType: getRootNoteType,
     getChordType: getChordType,
     getChordIntervals: getChordIntervals,
-    getChordNoteNumbers: getChordNoteNumbers
+    getChordNoteNumbers: getChordNoteNumbers,
+    getNoteMml: getNoteMml,
+    getNoteMmls: getNoteMmls
   };
 }]);

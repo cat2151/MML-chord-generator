@@ -20,11 +20,28 @@
         >
       </div>
       <br/>
-      <span>MMLフォーマット:
-        <select>
-          <option>SiON (すたどんたんでお馴染み)</option>
+      <span>MML prefix: 開発用1 MML全体
+        <select ng-model="prefixAllType" ng-init="prefixAllType='PREFIX_ALL_1'">
+          <option value="PREFIX_ALL_1">PREFIX_ALL_1</option>
+          <option value="">なし</option>
         </select>
       </span>
+      {{prefixAllType}}
+      <br/>
+      <span>MML prefix: 開発用2 trackごと
+        <select ng-model="prefixTrackType" ng-init="prefixTrackType='PREFIX_TRACK_1'">
+          <option value="PREFIX_TRACK_1">PREFIX_TRACK_1</option>
+          <option value="">なし</option>
+        </select>
+      </span>
+      {{prefixTrackType}}
+      <br/>
+      <span>MMLフォーマット:
+        <select ng-model="formatType" ng-init="formatType='SION'">
+          <option value="SION">SiON (すたどんたんでお馴染み)</option>
+        </select>
+      </span>
+      {{formatType}}
 
       <hr>
 

@@ -108,12 +108,17 @@ function() {
       return n[v];
     }
   }
+  
+  var prefixTrackStr = '%6 @0 kt12 l2';
 
-  function getNoteMmls(noteNumbers) {
+  function getNoteMmls(noteNumbers, prefixTrackType) {
     if (!noteNumbers.length) return '';
     var mml = '';
     angular.forEach(noteNumbers, function(noteNumber) {
       if (mml) mml += ';';
+      if (prefixTrackType == 'PREFIX_TRACK_1') {
+        mml += prefixTrackStr;
+      }
       mml += getNoteMml(noteNumber);
     });
     return mml;

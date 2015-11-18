@@ -7,19 +7,30 @@ function() {
     return false;
   }
 
-  function generate(inputText) {
-    var mml = '';
-    // TODO [イメージ] 'Cm' → 'c; e-; g'
+  var prefixAllStr = '#OPM@0 { 5, 1,' +
+    ' 24,  9,  8,  5, 10, 48,  0,  4,  2,  0,  0,' +
+    ' 17, 10,  9,  3, 15,  0,  0,  5,  3,  0,  0,' +
+    '  9,  8,  6,  5, 12,  0,  0,  4,  5,  0,  0,' +
+    ' 21,  7, 11,  5, 14,  0,  0,  5,  5,  0,  0,' +
+    '};'
+  ;
+
+  // [イメージ] 'Cm' → 'c;e-;g'
+  function generate(inputText, prefixTrackType, centerCnoteNum, prefixAllType) {
+    var mml = getNoteMmlsFromInputText(inputText, prefixTrackType, centerCnoteNum);
+    if (prefixAllType == 'PREFIX_ALL_1') {
+      mml = prefixAllStr + mml;
+    }
     return mml;
   }
   
   // [イメージ] 'Bb' → 10, ''
-  function getRootNoteType(inputText) {
+  function getRootNoteTypeFromInputText(inputText) {
     var txt = inputText;
-    txt = txt.replace(/[♯＃]/g, '#');
-    txt = txt.replace(/♭/g, 'b');
     if (isEmpty(inputText)) txt = ''; // undefined → ''
     var ret = {r: -1, p: txt};
+    txt = txt.replace(/[♯＃]/g, '#');
+    txt = txt.replace(/♭/g, 'b');
     // [イメージ] C#を判定するためにはCより先に判定
     if (s('C#|Db', 1)) return ret;
     if (s('D#|Eb', 3)) return ret;
@@ -75,17 +86,29 @@ function() {
     }
   }
 
+  function getChordTypeFromInputText(inputText) {
+    var parsedText = getRootNoteTypeFromInputText(inputText).p;
+    return getChordType(parsedText);
+  };
+
+
   // [イメージ] MAJOR → [0, 4, 7]
-  function getChordIntervals(chordType) {
-    if (chordType == MAJOR) return [0, 4, 7];
-    if (chordType == MINOR) return [0, 3, 7];
-    if (chordType == SEVENTH) return [0, 4, 7, 10];
-    if (chordType == SUS4) return [0, 5, 7];
-    if (chordType == MAJOR7) return [0, 4, 7, 11];
-    if (chordType == MINOR7) return [0, 3, 7, 10];
-    if (chordType == SIXTH) return [0, 4, 7, 9];
+  function getChordIntervals(t) {
+    if (t == MAJOR) return [0, 4, 7];
+    if (t == MINOR) return [0, 3, 7];
+    if (t == SEVENTH) return [0, 4, 7, 10];
+    if (t == SUS4) return [0, 5, 7];
+    if (t == MAJOR7) return [0, 4, 7, 11];
+    if (t == MINOR7) return [0, 3, 7, 10];
+    if (t == SIXTH) return [0, 4, 7, 9];
     return [];
   }
+
+  function getChordIntervalsFromInputText(inputText) {
+    var t = getChordTypeFromInputText(inputText).t;
+    return getChordIntervals(t);
+  };
+
 
   // [イメージ] 10, [0, 4, 7], 60 → [70, 74, 77]
   function getChordNoteNumbers(rootNoteType, intervals, centerCnoteNum) {
@@ -96,6 +119,12 @@ function() {
     }, ret);
     return ret;
   }
+
+  function getChordNoteNumbersFromInputText(inputText, centerCnoteNum) {
+    var r = getRootNoteTypeFromInputText(inputText).r;
+    var intervals = getChordIntervalsFromInputText(inputText);
+    return getChordNoteNumbers(r, intervals, centerCnoteNum);
+  };
 
   // [イメージ] 60 → o4c
   function getNoteMml(noteNumber) {
@@ -108,6 +137,12 @@ function() {
       return n[v];
     }
   }
+
+  function getNoteMml1FromInputText(inputText, centerCnoteNum) {
+    var chordNoteNumbers = getChordNoteNumbersFromInputText(inputText, centerCnoteNum);
+    if (!chordNoteNumbers.length) return '';
+    return getNoteMml(chordNoteNumbers[0]);
+  };
   
   var prefixTrackStr = '%6 @0 kt12 l2';
 
@@ -124,14 +159,25 @@ function() {
     return mml;
   }
 
+  // [イメージ] 'C', '', 60 → 'o4c;o4e;o4g'
+  function getNoteMmlsFromInputText(inputText, prefixTrackType, centerCnoteNum) {
+    var chordNoteNumbers = getChordNoteNumbersFromInputText(inputText, centerCnoteNum);
+    return getNoteMmls(chordNoteNumbers, prefixTrackType);
+  };
+
   return {
     isEmpty: isEmpty,
     generate: generate,
-    getRootNoteType: getRootNoteType,
+    getRootNoteTypeFromInputText: getRootNoteTypeFromInputText,
     getChordType: getChordType,
+    getChordTypeFromInputText: getChordTypeFromInputText,
     getChordIntervals: getChordIntervals,
+    getChordIntervalsFromInputText: getChordIntervalsFromInputText,
     getChordNoteNumbers: getChordNoteNumbers,
+    getChordNoteNumbersFromInputText: getChordNoteNumbersFromInputText,
     getNoteMml: getNoteMml,
-    getNoteMmls: getNoteMmls
+    getNoteMml1FromInputText: getNoteMml1FromInputText,
+    getNoteMmls: getNoteMmls,
+    getNoteMmlsFromInputText: getNoteMmlsFromInputText
   };
 }]);

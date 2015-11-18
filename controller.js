@@ -4,11 +4,11 @@ function($scope, $location, $timeout, GeneratorService) {
 
   $scope.generatedMml = "なし";
 
-  function setMmlFromUrl() {
-    // [URLイメージ] ～/#?mml=C
-    var urlMml = $location.search().mml;
-    if (angular.isString(urlMml)) {
-      $scope.inputText = urlMml;
+  function setParamsFromUrl() {
+    // [URLイメージ] ～/#?chord=C
+    var urlChord = $location.search().chord;
+    if (angular.isString(urlChord)) {
+      $scope.inputText = urlChord;
       $scope.generate();
     }
   }
@@ -18,8 +18,8 @@ function($scope, $location, $timeout, GeneratorService) {
     $scope.generatedMml = GeneratorService.generate($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType);
     
     SIOPM.compile($scope.generatedMml);
-    // URLに反映 [用途] 書いたMMLをURLコピペで共有できるようにする
-    $location.search({mml : $scope.generatedMml});
+    // URLに反映 [用途] 書いたChordNameをURLコピペで共有できるようにする
+    $location.search({chord : $scope.inputText});
   };
 
   $scope.getRootNoteType = function() {
@@ -52,8 +52,8 @@ function($scope, $location, $timeout, GeneratorService) {
 
   SIOPM.onLoad = function() {
     $timeout(function() {
-      setMmlFromUrl();
-    }, 1000);
+      setParamsFromUrl();
+    }, 500);
   };
         
   SIOPM.onCompileComplete = function() {

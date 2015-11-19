@@ -17,10 +17,11 @@ function() {
 
   // [イメージ] 'Cm' → 'c;e-;g'
   function generate(oneChordName, prefixTrackType, centerCnoteNum, prefixAllType) {
-    var mml = getNoteMmlsFromOneChordName(oneChordName, prefixTrackType, centerCnoteNum);
+    var mml = '';
     if (prefixAllType == 'PREFIX_ALL_1') {
-      mml = prefixAllStr + mml;
+      mml += prefixAllStr;
     }
+    mml += getNoteMmlsFromOneChordName(oneChordName, prefixTrackType, centerCnoteNum);
     return mml;
   }
   
@@ -189,6 +190,56 @@ function() {
     var chordNames = getChordNames(inputText);
     return getNoteNumbersListFromChordNames(chordNames, centerCnoteNum);
   }
+  
+  function getPivotNoteNumbersFromInputText(inputText, centerCnoteNum) {
+    var noteNumbersList = getNoteNumbersListFromInputText(inputText, centerCnoteNum);
+    // max和音数取得
+    var maxLength = 0;
+    angular.forEach(noteNumbersList, function(noteNumbers) {
+      if (noteNumbers.length > maxLength) maxLength = noteNumbers.length;
+    });
+    // 配列初期化
+    var arr = [];
+    var ix, iy;
+    for (iy = 0; iy < maxLength; iy++) {
+      arr.push(new Array(noteNumbersList.length));
+    }
+    // 縦横交換
+    for (ix = 0; ix < noteNumbersList.length; ix++) {
+      for (iy = 0; iy < maxLength; iy++) {
+        arr[iy][ix] = noteNumbersList[ix][iy];
+      }
+    }
+    return arr;
+  }
+  
+  // [イメージ] 'C Dm' → 'o4c o4d; o4e o4f; o4g o4a'
+  function getChordsMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType) {
+    var arr = getPivotNoteNumbersFromInputText(inputText, centerCnoteNum);
+    var mml = '';
+    if (prefixAllType == 'PREFIX_ALL_1') {
+      mml += prefixAllStr;
+    }
+    mml += getM();
+    return mml;
+    function getM() {
+      var mml = '';
+      angular.forEach(arr, function(trackNoteNumbers) {
+        if (mml) mml += ';';
+        if (prefixTrackType == 'PREFIX_TRACK_1') {
+          mml += prefixTrackStr;
+        }
+        angular.forEach(trackNoteNumbers, function(noteNumber) {
+          if (isEmpty(noteNumber)) {
+            mml += 'r';
+            return;
+          }
+          mml += getNoteMml(noteNumber);
+        });
+      });
+      return mml;
+    }
+  }
 
   return {
     isEmpty: isEmpty,
@@ -205,6 +256,8 @@ function() {
     getNoteMmls: getNoteMmls,
     getNoteMmlsFromOneChordName: getNoteMmlsFromOneChordName,
     getChordNames: getChordNames,
-    getNoteNumbersListFromInputText: getNoteNumbersListFromInputText
+    getNoteNumbersListFromInputText: getNoteNumbersListFromInputText,
+    getPivotNoteNumbersFromInputText: getPivotNoteNumbersFromInputText,
+    getChordsMmlFromInputText: getChordsMmlFromInputText
   };
 }]);

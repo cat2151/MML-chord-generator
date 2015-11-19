@@ -15,7 +15,8 @@ function($scope, $location, $timeout, GeneratorService) {
 
 
   $scope.generate = function() {
-    $scope.generatedMml = GeneratorService.generate($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType);
+    //$scope.generatedMml = GeneratorService.generate($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType);
+    $scope.generatedMml = GeneratorService.getChordsMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType);
     
     SIOPM.compile($scope.generatedMml);
     // URLに反映 [用途] 書いたChordNameをURLコピペで共有できるようにする
@@ -54,6 +55,14 @@ function($scope, $location, $timeout, GeneratorService) {
 
   $scope.getNoteNumbersList = function() {
     return GeneratorService.getNoteNumbersListFromInputText($scope.inputText, $scope.centerCnoteNum);
+  };
+
+  $scope.getPivotNoteNumbers = function() {
+    return GeneratorService.getPivotNoteNumbersFromInputText($scope.inputText, $scope.centerCnoteNum);
+  };
+
+  $scope.getChordsMml = function() {
+    return GeneratorService.getChordsMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType);
   };
 
 

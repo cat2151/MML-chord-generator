@@ -18,6 +18,10 @@
           placeholder="CやBbmを書いてみてください"
           ng-change="generate()"
         >
+        <br/>
+        <input type="text" ng-model="centerCnoteNum" ng-init="centerCnoteNum=60"
+          ng-change="generate()"
+        >
       </div>
       <br/>
       <span>MML prefix: 開発用1 MML全体

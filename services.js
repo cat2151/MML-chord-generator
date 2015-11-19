@@ -116,7 +116,7 @@ function() {
     var ret = [];
     if (rootNoteType < 0 || rootNoteType > 11) return ret; // 0～11 のみ許可
     angular.forEach(intervals, function(interval, key) {
-      this[key] = centerCnoteNum + rootNoteType + interval;
+      this[key] = Number(centerCnoteNum) + rootNoteType + interval;
     }, ret);
     return ret;
   }
@@ -145,7 +145,7 @@ function() {
     return getNoteMml(chordNoteNumbers[0]);
   };
   
-  var prefixTrackStr = '%6 @0 kt12 l2';
+  var prefixTrackStr = '%6 @0 l2';
 
   function getNoteMmls(noteNumbers, prefixTrackType) {
     if (!noteNumbers.length) return '';

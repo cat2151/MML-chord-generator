@@ -35,8 +35,6 @@ function($scope, $location, $timeout, GeneratorService) {
     return GeneratorService.getChordIntervalsFromOneChordName($scope.inputText);
   };
 
-  $scope.centerCnoteNum = 60;
-
   $scope.getChordNoteNumbers = function() {
     return GeneratorService.getChordNoteNumbersFromOneChordName($scope.inputText, $scope.centerCnoteNum);
   };

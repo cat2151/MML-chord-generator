@@ -18,6 +18,10 @@
           placeholder="CやBbmを書いてみてください"
           ng-change="generate()"
         >
+        <br/>
+        <input type="text" ng-model="centerCnoteNum" ng-init="centerCnoteNum=60"
+          ng-change="generate()"
+        >
       </div>
       <br/>
       <span>MML prefix: 開発用1 MML全体
@@ -46,25 +50,37 @@
       <hr>
 
       <h1>MML生成結果:</h1>
-      <h2>{{generatedMml}}</h1>
+      <h2>{{generatedMml}}</h2>
 
-      <h1>開発用:</h1>
-      <h2>{{getRootNoteType()}}</h1>
+      <h1>開発用:getRootNoteType</h1>
+      <h2>{{getRootNoteType()}}</h2>
 
-      <h1>開発用:</h1>
-      <h2>{{getChordType()}}</h1>
+      <h1>開発用:getChordType</h1>
+      <h2>{{getChordType()}}</h2>
 
-      <h1>開発用:</h1>
-      <h2>{{getChordIntervals()}}</h1>
+      <h1>開発用:getChordIntervals</h1>
+      <h2>{{getChordIntervals()}}</h2>
 
-      <h1>開発用:</h1>
-      <h2>{{getChordNoteNumbers()}}</h1>
+      <h1>開発用:getChordNoteNumbers</h1>
+      <h2>{{getChordNoteNumbers()}}</h2>
 
-      <h1>開発用:</h1>
-      <h2>{{getNoteMml1()}}</h1>
+      <h1>開発用:getNoteMml1</h1>
+      <h2>{{getNoteMml1()}}</h2>
 
-      <h1>開発用:</h1>
-      <h2>{{getNoteMmls()}}</h1>
+      <h1>開発用:getNoteMmls</h1>
+      <h2>{{getNoteMmls()}}</h2>
+
+      <h1>開発用:getChordNames</h1>
+      <h2>{{getChordNames()}}</h2>
+
+      <h1>開発用:getNoteNumbersList</h1>
+      <h2>{{getNoteNumbersList()}}</h2>
+
+      <h1>開発用:getPivotNoteNumbers</h1>
+      <h2>{{getPivotNoteNumbers()}}</h2>
+
+      <h1>開発用:getChordsMml</h1>
+      <h2>{{getChordsMml()}}</h2>
     </div>
 
     <hr>

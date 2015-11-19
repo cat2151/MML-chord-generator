@@ -16,18 +16,19 @@ function() {
   ;
 
   // [イメージ] 'Cm' → 'c;e-;g'
-  function generate(inputText, prefixTrackType, centerCnoteNum, prefixAllType) {
-    var mml = getNoteMmlsFromInputText(inputText, prefixTrackType, centerCnoteNum);
+  function generate(oneChordName, prefixTrackType, centerCnoteNum, prefixAllType) {
+    var mml = '';
     if (prefixAllType == 'PREFIX_ALL_1') {
-      mml = prefixAllStr + mml;
+      mml += prefixAllStr;
     }
+    mml += getNoteMmlsFromOneChordName(oneChordName, prefixTrackType, centerCnoteNum);
     return mml;
   }
   
   // [イメージ] 'Bb' → 10, ''
-  function getRootNoteTypeFromInputText(inputText) {
-    var txt = inputText;
-    if (isEmpty(inputText)) txt = ''; // undefined → ''
+  function getRootNoteTypeFromOneChordName(oneChordName) {
+    var txt = oneChordName;
+    if (isEmpty(oneChordName)) txt = ''; // undefined → ''
     var ret = {r: -1, p: txt};
     txt = txt.replace(/[♯＃]/g, '#');
     txt = txt.replace(/♭/g, 'b');
@@ -86,8 +87,8 @@ function() {
     }
   }
 
-  function getChordTypeFromInputText(inputText) {
-    var parsedText = getRootNoteTypeFromInputText(inputText).p;
+  function getChordTypeFromOneChordName(oneChordName) {
+    var parsedText = getRootNoteTypeFromOneChordName(oneChordName).p;
     return getChordType(parsedText);
   };
 
@@ -104,8 +105,8 @@ function() {
     return [];
   }
 
-  function getChordIntervalsFromInputText(inputText) {
-    var t = getChordTypeFromInputText(inputText).t;
+  function getChordIntervalsFromOneChordName(oneChordName) {
+    var t = getChordTypeFromOneChordName(oneChordName).t;
     return getChordIntervals(t);
   };
 
@@ -115,14 +116,14 @@ function() {
     var ret = [];
     if (rootNoteType < 0 || rootNoteType > 11) return ret; // 0～11 のみ許可
     angular.forEach(intervals, function(interval, key) {
-      this[key] = centerCnoteNum + rootNoteType + interval;
+      this[key] = Number(centerCnoteNum) + rootNoteType + interval;
     }, ret);
     return ret;
   }
 
-  function getChordNoteNumbersFromInputText(inputText, centerCnoteNum) {
-    var r = getRootNoteTypeFromInputText(inputText).r;
-    var intervals = getChordIntervalsFromInputText(inputText);
+  function getChordNoteNumbersFromOneChordName(oneChordName, centerCnoteNum) {
+    var r = getRootNoteTypeFromOneChordName(oneChordName).r;
+    var intervals = getChordIntervalsFromOneChordName(oneChordName);
     return getChordNoteNumbers(r, intervals, centerCnoteNum);
   };
 
@@ -138,13 +139,13 @@ function() {
     }
   }
 
-  function getNoteMml1FromInputText(inputText, centerCnoteNum) {
-    var chordNoteNumbers = getChordNoteNumbersFromInputText(inputText, centerCnoteNum);
+  function getNoteMml1FromOneChordName(oneChordName, centerCnoteNum) {
+    var chordNoteNumbers = getChordNoteNumbersFromOneChordName(oneChordName, centerCnoteNum);
     if (!chordNoteNumbers.length) return '';
     return getNoteMml(chordNoteNumbers[0]);
   };
   
-  var prefixTrackStr = '%6 @0 kt12 l2';
+  var prefixTrackStr = '%6 @0 l2';
 
   function getNoteMmls(noteNumbers, prefixTrackType) {
     if (!noteNumbers.length) return '';
@@ -160,24 +161,103 @@ function() {
   }
 
   // [イメージ] 'C', '', 60 → 'o4c;o4e;o4g'
-  function getNoteMmlsFromInputText(inputText, prefixTrackType, centerCnoteNum) {
-    var chordNoteNumbers = getChordNoteNumbersFromInputText(inputText, centerCnoteNum);
+  function getNoteMmlsFromOneChordName(oneChordName, prefixTrackType, centerCnoteNum) {
+    var chordNoteNumbers = getChordNoteNumbersFromOneChordName(oneChordName, centerCnoteNum);
     return getNoteMmls(chordNoteNumbers, prefixTrackType);
   };
+
+  // [イメージ] 'C D' → ['C','D']
+  function getChordNames(inputText) {
+    if (isEmpty(inputText)) return [];
+    var chordNames = inputText.split(' ');
+    return chordNames;
+  }
+
+  // [イメージ] ['C', 'Dm'] → [ [60,64,67], [62,65,69] ]
+  function getNoteNumbersListFromChordNames(chordNames, centerCnoteNum) {
+    var noteNumbersList = [];
+    var chordNoteNumbers;
+    angular.forEach(chordNames, function(oneChordName) {
+      chordNoteNumbers = getChordNoteNumbersFromOneChordName(oneChordName, centerCnoteNum);
+      noteNumbersList.push(chordNoteNumbers);
+    });
+    return noteNumbersList;
+  };
+
+  // [イメージ] 'C Dm' → [ [60,64,67], [62,65,69] ]
+  function getNoteNumbersListFromInputText(inputText, centerCnoteNum) {
+    if (isEmpty(inputText)) return [];
+    var chordNames = getChordNames(inputText);
+    return getNoteNumbersListFromChordNames(chordNames, centerCnoteNum);
+  }
+  
+  function getPivotNoteNumbersFromInputText(inputText, centerCnoteNum) {
+    var noteNumbersList = getNoteNumbersListFromInputText(inputText, centerCnoteNum);
+    // max和音数取得
+    var maxLength = 0;
+    angular.forEach(noteNumbersList, function(noteNumbers) {
+      if (noteNumbers.length > maxLength) maxLength = noteNumbers.length;
+    });
+    // 配列初期化
+    var arr = [];
+    var ix, iy;
+    for (iy = 0; iy < maxLength; iy++) {
+      arr.push(new Array(noteNumbersList.length));
+    }
+    // 縦横交換
+    for (ix = 0; ix < noteNumbersList.length; ix++) {
+      for (iy = 0; iy < maxLength; iy++) {
+        arr[iy][ix] = noteNumbersList[ix][iy];
+      }
+    }
+    return arr;
+  }
+  
+  // [イメージ] 'C Dm' → 'o4c o4d; o4e o4f; o4g o4a'
+  function getChordsMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType) {
+    var arr = getPivotNoteNumbersFromInputText(inputText, centerCnoteNum);
+    var mml = '';
+    if (prefixAllType == 'PREFIX_ALL_1') {
+      mml += prefixAllStr;
+    }
+    mml += getM();
+    return mml;
+    function getM() {
+      var mml = '';
+      angular.forEach(arr, function(trackNoteNumbers) {
+        if (mml) mml += ';';
+        if (prefixTrackType == 'PREFIX_TRACK_1') {
+          mml += prefixTrackStr;
+        }
+        angular.forEach(trackNoteNumbers, function(noteNumber) {
+          if (isEmpty(noteNumber)) {
+            mml += 'r';
+            return;
+          }
+          mml += getNoteMml(noteNumber);
+        });
+      });
+      return mml;
+    }
+  }
 
   return {
     isEmpty: isEmpty,
     generate: generate,
-    getRootNoteTypeFromInputText: getRootNoteTypeFromInputText,
+    getRootNoteTypeFromOneChordName: getRootNoteTypeFromOneChordName,
     getChordType: getChordType,
-    getChordTypeFromInputText: getChordTypeFromInputText,
+    getChordTypeFromOneChordName: getChordTypeFromOneChordName,
     getChordIntervals: getChordIntervals,
-    getChordIntervalsFromInputText: getChordIntervalsFromInputText,
+    getChordIntervalsFromOneChordName: getChordIntervalsFromOneChordName,
     getChordNoteNumbers: getChordNoteNumbers,
-    getChordNoteNumbersFromInputText: getChordNoteNumbersFromInputText,
+    getChordNoteNumbersFromOneChordName: getChordNoteNumbersFromOneChordName,
     getNoteMml: getNoteMml,
-    getNoteMml1FromInputText: getNoteMml1FromInputText,
+    getNoteMml1FromOneChordName: getNoteMml1FromOneChordName,
     getNoteMmls: getNoteMmls,
-    getNoteMmlsFromInputText: getNoteMmlsFromInputText
+    getNoteMmlsFromOneChordName: getNoteMmlsFromOneChordName,
+    getChordNames: getChordNames,
+    getNoteNumbersListFromInputText: getNoteNumbersListFromInputText,
+    getPivotNoteNumbersFromInputText: getPivotNoteNumbersFromInputText,
+    getChordsMmlFromInputText: getChordsMmlFromInputText
   };
 }]);

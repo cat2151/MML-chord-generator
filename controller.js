@@ -23,29 +23,37 @@ function($scope, $location, $timeout, GeneratorService) {
   };
 
   $scope.getRootNoteType = function() {
-    return GeneratorService.getRootNoteTypeFromInputText($scope.inputText).r;
+    return GeneratorService.getRootNoteTypeFromOneChordName($scope.inputText).r;
   };
 
   $scope.getChordType = function() {
-    return GeneratorService.getChordTypeFromInputText($scope.inputText);
+    return GeneratorService.getChordTypeFromOneChordName($scope.inputText);
   };
   
   $scope.getChordIntervals = function() {
-    return GeneratorService.getChordIntervalsFromInputText($scope.inputText);
+    return GeneratorService.getChordIntervalsFromOneChordName($scope.inputText);
   };
 
   $scope.centerCnoteNum = 60;
 
   $scope.getChordNoteNumbers = function() {
-    return GeneratorService.getChordNoteNumbersFromInputText($scope.inputText, $scope.centerCnoteNum);
+    return GeneratorService.getChordNoteNumbersFromOneChordName($scope.inputText, $scope.centerCnoteNum);
   };
 
   $scope.getNoteMml1 = function() {
-    return GeneratorService.getNoteMml1FromInputText($scope.inputText, $scope.centerCnoteNum);
+    return GeneratorService.getNoteMml1FromOneChordName($scope.inputText, $scope.centerCnoteNum);
   };
 
   $scope.getNoteMmls = function() {
-    return GeneratorService.getNoteMmlsFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum);
+    return GeneratorService.getNoteMmlsFromOneChordName($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum);
+  };
+
+  $scope.getChordNames = function() {
+    return GeneratorService.getChordNames($scope.inputText);
+  };
+
+  $scope.getNoteNumbersList = function() {
+    return GeneratorService.getNoteNumbersListFromInputText($scope.inputText, $scope.centerCnoteNum);
   };
 
 

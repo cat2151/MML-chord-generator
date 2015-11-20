@@ -68,6 +68,13 @@ function($scope, $location, $timeout, GeneratorService) {
     return GeneratorService.getInventionNoteNumbersFromInputText($scope.inputText, $scope.centerCnoteNum, $scope.maxTopNoteNum);
   };
 
+  $scope.prefixAllStr = GeneratorService.getPrefixAllStr();
+  $scope.getPrefixAllStr = function() {
+    $scope.prefixAllStr = GeneratorService.getPrefixAllStr();
+  }
+  $scope.setPrefixAllStr = function() {
+    GeneratorService.setPrefixAllStr($scope.prefixAllStr);
+  }
 
 
   SIOPM.onLoad = function() {

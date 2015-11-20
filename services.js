@@ -276,12 +276,12 @@ function() {
       if (noteNumbers.length == 0) return;
       while (true) {
         var topNote = noteNumbers[noteNumbers.length - 1];
-        if (topNote >= maxTopNoteNum) break;
+        if (topNote >= Number(maxTopNoteNum)) break;
         inventionNoteNumbersUp(noteNumbers);
       }
       while (true) {
         var topNote = noteNumbers[noteNumbers.length - 1];
-        if (topNote <= maxTopNoteNum) break;
+        if (topNote <= Number(maxTopNoteNum)) break;
         inventionNoteNumbersDown(noteNumbers);
       }
       while (true) { // トップノートとセカンドノートが半音差の場合は、そうならないよう、トップノートを下げる転回を行う
@@ -311,11 +311,11 @@ function() {
     angular.forEach(noteList2, function(note2Numbers, key) {
       var bass = note2Numbers[0];
       while (true) {
-        if (bass >= maxbassNoteNum) break;
+        if (bass >= Number(maxbassNoteNum)) break;
         bass += 12;
       }
       while (true) {
-        if (bass <= maxbassNoteNum) break;
+        if (bass <= Number(maxbassNoteNum)) break;
         bass -= 12;
       }
       basses.push(bass);

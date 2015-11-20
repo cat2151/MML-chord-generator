@@ -293,18 +293,18 @@ function() {
   }
   
   // [補足] 転回の後に追加すること
-  function getAddedBass(inputText, noteNumbersList, centerCnoteNum) {
+  function getAddedBass(inputText, noteNumbersList, centerCnoteNum, maxbassNoteNum) {
     var noteList2 = getNoteNumbersListFromInputText(inputText, centerCnoteNum);
     // bassを取得
     var basses = [];
     angular.forEach(noteList2, function(note2Numbers, key) {
       var bass = note2Numbers[0];
       while (true) {
-        if (bass >= 36) break;
+        if (bass >= maxbassNoteNum) break;
         bass += 12;
       }
       while (true) {
-        if (bass <= 36) break;
+        if (bass <= maxbassNoteNum) break;
         bass -= 12;
       }
       basses.push(bass);
@@ -319,9 +319,9 @@ function() {
     return noteNumbersList;
   }
 
-  function getInventionMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType, maxTopNoteNum) {
+  function getInventionMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType, maxTopNoteNum, maxbassNoteNum) {
     var noteNumbersList = getInventionNoteNumbersFromInputText(inputText, centerCnoteNum, maxTopNoteNum);
-    var addedBass = getAddedBass(inputText, noteNumbersList, centerCnoteNum);
+    var addedBass = getAddedBass(inputText, noteNumbersList, centerCnoteNum, maxbassNoteNum);
     var pivoted = getPivotNoteNumbers(addedBass);
     return getChordsMml(pivoted, prefixTrackType, prefixAllType);
   }

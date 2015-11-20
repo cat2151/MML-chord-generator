@@ -44,6 +44,10 @@
           ng-change="setPrefixAllStr(prefixAllStr); generate()"
           ng-blur="setPrefixAllStr(prefixAllStr); generate()"
         ></textarea>
+        <br/>
+        track発音タイミングずらし用休符<input type="text" ng-model="delay" ng-init="delay='r24'"
+          ng-change="generate()" ng-blur="generate()"
+        >
       </div>
       <br/>
       <span>MML prefix: 開発用1 MML全体

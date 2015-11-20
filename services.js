@@ -18,6 +18,7 @@ function() {
     ' 20,  7, 11,  5, 14,  0,  0,  1,  4,  0,  0,' + '\n' +
     '};'
   ;
+  var prefixTrackStr = '%6 @0 l2 v8';
 
   function setPrefixAllStr(v) {
     prefixAllStr = v;
@@ -157,7 +158,6 @@ function() {
     return getNoteMml(chordNoteNumbers[0]);
   };
   
-  var prefixTrackStr = '%6 @0 l2 v8';
 
   function getNoteMmls(noteNumbers, prefixTrackType) {
     if (!noteNumbers.length) return '';
@@ -231,7 +231,7 @@ function() {
     return getPivotNoteNumbers(noteNumbersList);
   }
   
-  function getChordsMml(/*pivotedNoteNumbersList as */pivoted, prefixTrackType, prefixAllType) {
+  function getChordsMml(/*pivotedNoteNumbersList as */pivoted, prefixTrackType, prefixAllType, delay) {
     if (!pivoted.length) return [];
     var mml = '';
     if (prefixAllType == 'PREFIX_ALL_1') {
@@ -241,11 +241,14 @@ function() {
     return mml;
     function getM() {
       var mml = '';
+      var delayMml = '';
       angular.forEach(pivoted, function(trackNoteNumbers) {
         if (mml) mml += ';';
         if (prefixTrackType == 'PREFIX_TRACK_1') {
           mml += prefixTrackStr;
         }
+        mml += delayMml;
+        delayMml += delay; // trackごとに増えてゆく
         angular.forEach(trackNoteNumbers, function(noteNumber) {
           if (isEmpty(noteNumber)) {
             mml += 'r';
@@ -346,12 +349,12 @@ function() {
     return noteNumbersList;
   }
 
-  function getInventionMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType, maxTopNoteNum, maxbassNoteNum) {
+  function getInventionMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType, maxTopNoteNum, maxbassNoteNum, delay) {
     if (isEmpty(inputText)) return '';
     var noteNumbersList = getInventionNoteNumbersFromInputText(inputText, centerCnoteNum, maxTopNoteNum);
     var addedBass = getAddedBass(inputText, noteNumbersList, centerCnoteNum, maxbassNoteNum);
     var pivoted = getPivotNoteNumbers(addedBass);
-    return getChordsMml(pivoted, prefixTrackType, prefixAllType);
+    return getChordsMml(pivoted, prefixTrackType, prefixAllType, delay);
   }
 
   return {

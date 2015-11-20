@@ -138,7 +138,7 @@ function() {
   // [イメージ] 60 → o4c
   function getNoteMml(noteNumber) {
     if (noteNumber < 0 || noteNumber > 127) return ''; // 0～127 のみ許可
-    var octave = 'o' + (Math.floor(noteNumber / 12) - 1);
+    var octave = 'o' + (Math.floor(noteNumber / 12) - 0); /* 基準 : OPMのnoteNumber60が中央ドに聴こえる程度 */
     var cdefgab = getCdefgab(noteNumber % 12);
     return octave + cdefgab;
     function getCdefgab(v) {

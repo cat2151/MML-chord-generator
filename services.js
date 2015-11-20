@@ -6,7 +6,7 @@ function() {
     if (v === undefined || v === null || v === '') return true;
     return false;
   }
-
+  
   var prefixAllStr = '#OPM@0 { 5, 1,\n' +
     ' 26,  7,  9,  3, 10, 20,  1,  2,  2,  0,  0,' + '\n' +
     ' 24,  9,  9,  3, 15,  0,  2,  3,  3,  0,  0,' + '\n' +
@@ -121,6 +121,7 @@ function() {
   // [イメージ] 10, [0, 4, 7], 60 → [70, 74, 77]
   function getChordNoteNumbers(rootNoteType, intervals, centerCnoteNum) {
     var ret = [];
+    if (Number(centerCnoteNum) == NaN) return ret;
     if (rootNoteType < 0 || rootNoteType > 11) return ret; // 0～11 のみ許可
     angular.forEach(intervals, function(interval, key) {
       this[key] = Number(centerCnoteNum) + rootNoteType + interval;
@@ -272,6 +273,7 @@ function() {
   }
   
   function getInventionNoteNumbers(noteNumbersList, maxTopNoteNum) {
+    if (Number(maxTopNoteNum) == NaN) return [];
     angular.forEach(noteNumbersList, function(noteNumbers) {
       if (noteNumbers.length == 0) return;
       while (true) {
@@ -305,6 +307,7 @@ function() {
   // [補足] 転回の後に追加すること
   function getAddedBass(inputText, noteNumbersList, centerCnoteNum, maxbassNoteNum) {
     if (isEmpty(inputText)) return [];
+    if (Number(maxbassNoteNum) == NaN) return [];
     var noteList2 = getNoteNumbersListFromInputText(inputText, centerCnoteNum);
     // bassを取得
     var basses = [];

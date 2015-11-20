@@ -14,17 +14,20 @@
     width: 400px;
     height: 7em;
     }
+    textarea.chord {
+    height: 1em;
+    }
     </style>
   </head>
   <body>
     <div ng-controller="generatorController">
       <div>
         <h1>Chord Nameを入力してください</h1>
-
-        <input type="text" ng-model="inputText"
+        <textarea class="chord" cols="80" rows="1"
+          ng-model="inputText"
           placeholder="CやBbmを書いてみてください"
           ng-change="generate()" ng-blur="generate()"
-        >
+        ></textarea>
         <br/>
         CのルートNoteNumber<input type="text" ng-model="centerCnoteNum" ng-init="centerCnoteNum='60'"
           ng-change="generate()" ng-blur="generate()"
@@ -84,6 +87,10 @@
       <h1>MML生成結果:</h1>
       <h2>{{generatedMml}}</h2>
 
+      <hr>
+      <input type="radio" ng-value="false" ng-model="dispDebug" ng-init="dispDebug=false"/>表示しない</radio>
+      <input type="radio" ng-value="true" ng-model="dispDebug">表示する</radio>
+    <div ng-show="dispDebug">
       <h1>開発用:getRootNoteType</h1>
       <h2>{{getRootNoteType()}}</h2>
 
@@ -116,6 +123,8 @@
 
       <h1>開発用:getInventionNoteNumbers</h1>
       <h2>{{getInventionNoteNumbers()}}</h2>
+    </div>
+
     </div>
 
     <hr>

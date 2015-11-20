@@ -198,27 +198,26 @@ function() {
       if (noteNumbers.length > maxLength) maxLength = noteNumbers.length;
     });
     // 配列初期化
-    var arr = [];
+    var pivoted = [];
     var ix, iy;
     for (iy = 0; iy < maxLength; iy++) {
-      arr.push(new Array(noteNumbersList.length));
+      pivoted.push(new Array(noteNumbersList.length));
     }
     // 縦横交換
     for (ix = 0; ix < noteNumbersList.length; ix++) {
       for (iy = 0; iy < maxLength; iy++) {
-        arr[iy][ix] = noteNumbersList[ix][iy];
+        pivoted[iy][ix] = noteNumbersList[ix][iy];
       }
     }
-    return arr;
+    return pivoted;
   }
   
   function getPivotNoteNumbersFromInputText(inputText, centerCnoteNum) {
     var noteNumbersList = getNoteNumbersListFromInputText(inputText, centerCnoteNum);
-    var arr = getPivotNoteNumbers(noteNumbersList);
-    return arr;
+    return getPivotNoteNumbers(noteNumbersList);
   }
   
-  function getChordsMml(arr, prefixTrackType, centerCnoteNum, prefixAllType) {
+  function getChordsMml(/*pivotedNoteNumbersList as */pivoted, prefixTrackType, prefixAllType) {
     var mml = '';
     if (prefixAllType == 'PREFIX_ALL_1') {
       mml += prefixAllStr;
@@ -227,7 +226,7 @@ function() {
     return mml;
     function getM() {
       var mml = '';
-      angular.forEach(arr, function(trackNoteNumbers) {
+      angular.forEach(pivoted, function(trackNoteNumbers) {
         if (mml) mml += ';';
         if (prefixTrackType == 'PREFIX_TRACK_1') {
           mml += prefixTrackStr;
@@ -246,8 +245,8 @@ function() {
   
   // [イメージ] 'C Dm' → 'o4c o4d; o4e o4f; o4g o4a'
   function getChordsMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType) {
-    var arr = getPivotNoteNumbersFromInputText(inputText, centerCnoteNum);
-    return getChordsMml(arr, prefixTrackType, centerCnoteNum, prefixAllType);
+    var pivoted = getPivotNoteNumbersFromInputText(inputText, centerCnoteNum);
+    return getChordsMml(pivoted, prefixTrackType, prefixAllType);
   }
 
   function inventionNoteNumbersUp(noteNumbers) {
@@ -286,6 +285,11 @@ function() {
     return getInventionNoteNumbers(noteNumbersList, maxTopNoteNum);
   }
 
+  function getInventionMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType, maxTopNoteNum) {
+    var noteNumbersList = getInventionNoteNumbersFromInputText(inputText, centerCnoteNum, maxTopNoteNum);
+    var pivoted = getPivotNoteNumbers(noteNumbersList);
+    return getChordsMml(pivoted, prefixTrackType, prefixAllType);
+  }
 
   return {
     isEmpty: isEmpty,
@@ -305,6 +309,7 @@ function() {
     getNoteNumbersListFromInputText: getNoteNumbersListFromInputText,
     getPivotNoteNumbersFromInputText: getPivotNoteNumbersFromInputText,
     getChordsMmlFromInputText: getChordsMmlFromInputText,
-    getInventionNoteNumbersFromInputText: getInventionNoteNumbersFromInputText
+    getInventionNoteNumbersFromInputText: getInventionNoteNumbersFromInputText,
+    getInventionMmlFromInputText: getInventionMmlFromInputText
   };
 }]);

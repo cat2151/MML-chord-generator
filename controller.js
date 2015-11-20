@@ -7,10 +7,13 @@ function($scope, $location, $timeout, GeneratorService) {
   function setParamsFromUrl() {
     // [URLイメージ] ～/#?chord=C
     var urlChord = $location.search().chord;
-    if (angular.isString(urlChord)) {
-      $scope.inputText = urlChord;
-      $scope.generate();
+    var urlOpm = $location.search().opm;
+    if (angular.isString(urlChord)) $scope.inputText = urlChord;
+    if (angular.isString(urlOpm)) {
+      $scope.prefixAllStr = urlOpm;
+      $scope.setPrefixAllStr();
     }
+    if (angular.isString(urlChord)) $scope.generate();
   }
 
 
@@ -21,7 +24,7 @@ function($scope, $location, $timeout, GeneratorService) {
     
     SIOPM.compile($scope.generatedMml);
     // URLに反映 [用途] 書いたChordNameをURLコピペで共有できるようにする
-    $location.search({chord : $scope.inputText});
+    $location.search({chord : $scope.inputText, opm : $scope.prefixAllStr});
   };
 
   $scope.getRootNoteType = function() {

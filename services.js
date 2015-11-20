@@ -8,12 +8,13 @@ function() {
   }
 
   var prefixAllStr = '#OPM@0 { 5, 1,\n' +
-    ' 24,  9,  8,  5, 10, 48,  0,  4,  2,  0,  0,\n' +
-    ' 17, 10,  9,  3, 15,  0,  0,  5,  3,  0,  0,\n' +
-    '  9,  8,  6,  5, 12,  0,  0,  4,  5,  0,  0,\n' +
-    ' 21,  7, 11,  5, 14,  0,  0,  5,  5,  0,  0,\n' +
+    ' 26,  7,  9,  3, 10, 20,  1,  2,  2,  0,  0,' + '\n' +
+    ' 24,  9,  9,  3, 15,  0,  2,  3,  3,  0,  0,' + '\n' +
+    ' 22,  8,  6,  5, 12,  0,  1,  2,  5,  0,  0,' + '\n' +
+    ' 20,  7, 11,  5, 14,  0,  0,  1,  4,  0,  0,' + '\n' +
     '};'
   ;
+
   function setPrefixAllStr(v) {
     prefixAllStr = v;
   }  
@@ -151,7 +152,7 @@ function() {
     return getNoteMml(chordNoteNumbers[0]);
   };
   
-  var prefixTrackStr = '%6 @0 l2';
+  var prefixTrackStr = '%6 @0 l2 v8';
 
   function getNoteMmls(noteNumbers, prefixTrackType) {
     if (!noteNumbers.length) return '';

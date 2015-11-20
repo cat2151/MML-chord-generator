@@ -275,6 +275,13 @@ function() {
         if (topNote <= maxTopNoteNum) break;
         inventionNoteNumbersDown(noteNumbers);
       }
+      while (true) { // トップノートとセカンドノートが半音差の場合は、そうならないよう、トップノートを下げる転回を行う
+        if (noteNumbers.length <= 2) return;
+        var topNote = noteNumbers[noteNumbers.length - 1];
+        var secondNote = noteNumbers[noteNumbers.length - 2];
+        if (topNote - secondNote != 1) break;
+        inventionNoteNumbersDown(noteNumbers);
+      }
     });
     return noteNumbersList;
   }
@@ -284,10 +291,38 @@ function() {
     var noteNumbersList = getNoteNumbersListFromInputText(inputText, centerCnoteNum);
     return getInventionNoteNumbers(noteNumbersList, maxTopNoteNum);
   }
+  
+  // [補足] 転回の後に追加すること
+  function getAddedBass(inputText, noteNumbersList, centerCnoteNum) {
+    var noteList2 = getNoteNumbersListFromInputText(inputText, centerCnoteNum);
+    // bassを取得
+    var basses = [];
+    angular.forEach(noteList2, function(note2Numbers, key) {
+      var bass = note2Numbers[0];
+      while (true) {
+        if (bass >= 36) break;
+        bass += 12;
+      }
+      while (true) {
+        if (bass <= 36) break;
+        bass -= 12;
+      }
+      basses.push(bass);
+    });
+    // bassを追加
+    angular.forEach(basses, function(bass, key) {
+      noteNumbersList[key].push(bass);
+      noteNumbersList[key].sort(function(a, b) {
+        return a - b; // 数値ソート
+      });
+    });
+    return noteNumbersList;
+  }
 
   function getInventionMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType, maxTopNoteNum) {
     var noteNumbersList = getInventionNoteNumbersFromInputText(inputText, centerCnoteNum, maxTopNoteNum);
-    var pivoted = getPivotNoteNumbers(noteNumbersList);
+    var addedBass = getAddedBass(inputText, noteNumbersList, centerCnoteNum);
+    var pivoted = getPivotNoteNumbers(addedBass);
     return getChordsMml(pivoted, prefixTrackType, prefixAllType);
   }
 

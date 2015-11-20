@@ -200,6 +200,7 @@ function() {
   }
   
   function getPivotNoteNumbers(noteNumbersList) {
+    if (!noteNumbersList.length) return [];
     // max和音数取得
     var maxLength = 0;
     angular.forEach(noteNumbersList, function(noteNumbers) {
@@ -227,6 +228,7 @@ function() {
   }
   
   function getChordsMml(/*pivotedNoteNumbersList as */pivoted, prefixTrackType, prefixAllType) {
+    if (!pivoted.length) return [];
     var mml = '';
     if (prefixAllType == 'PREFIX_ALL_1') {
       mml += prefixAllStr;
@@ -260,12 +262,14 @@ function() {
   }
 
   function inventionNoteNumbersUp(noteNumbers) {
+    if (!noteNumbers.length) return;
     noteNumbers[0] += 12;
     noteNumbers.sort(function(a, b) {
       return a - b; // 数値ソート
     });
   }
   function inventionNoteNumbersDown(noteNumbers) {
+    if (!noteNumbers.length) return;
     noteNumbers[noteNumbers.length - 1] -= 12;
     noteNumbers.sort(function(a, b) {
       return a - b; // 数値ソート
@@ -274,6 +278,7 @@ function() {
   
   function getInventionNoteNumbers(noteNumbersList, maxTopNoteNum) {
     if (Number(maxTopNoteNum) == NaN) return [];
+    if (!noteNumbersList.length) return [];
     angular.forEach(noteNumbersList, function(noteNumbers) {
       if (noteNumbers.length == 0) return;
       while (true) {
@@ -308,6 +313,7 @@ function() {
   function getAddedBass(inputText, noteNumbersList, centerCnoteNum, maxbassNoteNum) {
     if (isEmpty(inputText)) return [];
     if (Number(maxbassNoteNum) == NaN) return [];
+    if (!noteNumbersList.length) return [];
     var noteList2 = getNoteNumbersListFromInputText(inputText, centerCnoteNum);
     // bassを取得
     var basses = [];

@@ -191,8 +191,7 @@ function() {
     return getNoteNumbersListFromChordNames(chordNames, centerCnoteNum);
   }
   
-  function getPivotNoteNumbersFromInputText(inputText, centerCnoteNum) {
-    var noteNumbersList = getNoteNumbersListFromInputText(inputText, centerCnoteNum);
+  function getPivotNoteNumbers(noteNumbersList) {
     // max和音数取得
     var maxLength = 0;
     angular.forEach(noteNumbersList, function(noteNumbers) {
@@ -213,9 +212,13 @@ function() {
     return arr;
   }
   
-  // [イメージ] 'C Dm' → 'o4c o4d; o4e o4f; o4g o4a'
-  function getChordsMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType) {
-    var arr = getPivotNoteNumbersFromInputText(inputText, centerCnoteNum);
+  function getPivotNoteNumbersFromInputText(inputText, centerCnoteNum) {
+    var noteNumbersList = getNoteNumbersListFromInputText(inputText, centerCnoteNum);
+    var arr = getPivotNoteNumbers(noteNumbersList);
+    return arr;
+  }
+  
+  function getChordsMml(arr, prefixTrackType, centerCnoteNum, prefixAllType) {
     var mml = '';
     if (prefixAllType == 'PREFIX_ALL_1') {
       mml += prefixAllStr;
@@ -240,6 +243,49 @@ function() {
       return mml;
     }
   }
+  
+  // [イメージ] 'C Dm' → 'o4c o4d; o4e o4f; o4g o4a'
+  function getChordsMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType) {
+    var arr = getPivotNoteNumbersFromInputText(inputText, centerCnoteNum);
+    return getChordsMml(arr, prefixTrackType, centerCnoteNum, prefixAllType);
+  }
+
+  function inventionNoteNumbersUp(noteNumbers) {
+    noteNumbers[0] += 12;
+    noteNumbers.sort(function(a, b) {
+      return a - b; // 数値ソート
+    });
+  }
+  function inventionNoteNumbersDown(noteNumbers) {
+    noteNumbers[noteNumbers.length - 1] -= 12;
+    noteNumbers.sort(function(a, b) {
+      return a - b; // 数値ソート
+    });
+  }
+  
+  function getInventionNoteNumbers(noteNumbersList, maxTopNoteNum) {
+    angular.forEach(noteNumbersList, function(noteNumbers) {
+      if (noteNumbers.length == 0) return;
+      while (true) {
+        var topNote = noteNumbers[noteNumbers.length - 1];
+        if (topNote >= maxTopNoteNum) break;
+        inventionNoteNumbersUp(noteNumbers);
+      }
+      while (true) {
+        var topNote = noteNumbers[noteNumbers.length - 1];
+        if (topNote <= maxTopNoteNum) break;
+        inventionNoteNumbersDown(noteNumbers);
+      }
+    });
+    return noteNumbersList;
+  }
+
+  // [イメージ] 'C' → '[[60, 64, 67]]' → '[[60+12, 64, 67]] → '[[64, 67, 60+12]]
+  function getInventionNoteNumbersFromInputText(inputText, centerCnoteNum, maxTopNoteNum) {
+    var noteNumbersList = getNoteNumbersListFromInputText(inputText, centerCnoteNum);
+    return getInventionNoteNumbers(noteNumbersList, maxTopNoteNum);
+  }
+
 
   return {
     isEmpty: isEmpty,
@@ -258,6 +304,7 @@ function() {
     getChordNames: getChordNames,
     getNoteNumbersListFromInputText: getNoteNumbersListFromInputText,
     getPivotNoteNumbersFromInputText: getPivotNoteNumbersFromInputText,
-    getChordsMmlFromInputText: getChordsMmlFromInputText
+    getChordsMmlFromInputText: getChordsMmlFromInputText,
+    getInventionNoteNumbersFromInputText: getInventionNoteNumbersFromInputText
   };
 }]);

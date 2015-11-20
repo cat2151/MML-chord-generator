@@ -19,7 +19,11 @@
           ng-change="generate()"
         >
         <br/>
-        <input type="text" ng-model="centerCnoteNum" ng-init="centerCnoteNum=60"
+        CのルートNoteNumber<input type="text" ng-model="centerCnoteNum" ng-init="centerCnoteNum=60"
+          ng-change="generate()"
+        >
+        <br/>
+        topNote最大<input type="text" ng-model="maxTopNoteNum" ng-init="maxTopNoteNum=72"
           ng-change="generate()"
         >
       </div>
@@ -81,6 +85,9 @@
 
       <h1>開発用:getChordsMml</h1>
       <h2>{{getChordsMml()}}</h2>
+
+      <h1>開発用:getInventionNoteNumbers</h1>
+      <h2>{{getInventionNoteNumbers()}}</h2>
     </div>
 
     <hr>

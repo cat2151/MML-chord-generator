@@ -63,6 +63,10 @@ function($scope, $location, $timeout, GeneratorService) {
     return GeneratorService.getChordsMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType);
   };
 
+  $scope.getInventionNoteNumbers = function() {
+    return GeneratorService.getInventionNoteNumbersFromInputText($scope.inputText, $scope.centerCnoteNum, $scope.maxTopNoteNum);
+  };
+
 
 
   SIOPM.onLoad = function() {

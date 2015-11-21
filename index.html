@@ -33,41 +33,41 @@
           ng-change="generate()" ng-blur="generate()"
         >
         <br/>
-        topNote最大<input type="text" ng-model="maxTopNoteNum" ng-init="maxTopNoteNum='72'"
+        TopNote上限<input type="text" ng-model="maxTopNoteNum" ng-init="maxTopNoteNum='72'"
           ng-change="generate()" ng-blur="generate()"
         >
         <br/>
-        bassNote最大<input type="text" ng-model="maxbassNoteNum" ng-init="maxbassNoteNum='48'"
+        BassNote上限<input type="text" ng-model="maxbassNoteNum" ng-init="maxbassNoteNum='48'"
           ng-change="generate()" ng-blur="generate()"
         >
+        <br/>
+        <span>音色設定
+          <select ng-model="prefixAllType" ng-init="prefixAllType='PREFIX_ALL_1'"
+                  ng-change="setPrefixAllStrFromType()"
+          >
+            <option value="PREFIX_ALL_1">Piano or ユーザー音色</option>
+            <option value="PREFIX_ALL_2">E.Piano</option>
+            <option value="PREFIX_ALL_3">Brass</option>
+            <option value="PREFIX_ALL_4">Brass</option>
+            <option value="PREFIX_ALL_5">Brass</option>
+            <option value="">なし</option>
+          </select>
+        </span>
+        {{prefixAllType}}
         <br/>
         <textarea cols="80" rows="5"
           ng-model="prefixAllStr"
           placeholder="OPM音色定義MMLを入力してください"
-          ng-change="setPrefixAllStr(prefixAllStr); generate()"
-          ng-blur="setPrefixAllStr(prefixAllStr); generate()"
+          ng-change="prefixAllType='PREFIX_ALL_1'; setPrefixAllStr(prefixAllStr); generate()"
+          ng-blur="prefixAllType='PREFIX_ALL_1'; setPrefixAllStr(prefixAllStr); generate()"
         ></textarea>
         <br/>
-        track発音タイミングずらし用休符<input type="text" ng-model="delay" ng-init="delay='r24'"
+        track発音タイミングずらし用休符<input type="text" ng-model="delay" ng-init="delay='r48'"
           ng-change="generate()" ng-blur="generate()"
         >
       </div>
       <br/>
-      <span>MML prefix: 開発用1 MML全体
-        <select ng-model="prefixAllType" ng-init="prefixAllType='PREFIX_ALL_1'"
-                ng-change="setPrefixAllStrFromType()"
-        >
-          <option value="PREFIX_ALL_1">Piano or ユーザー音色</option>
-          <option value="PREFIX_ALL_2">E.Piano</option>
-          <option value="PREFIX_ALL_3">Brass</option>
-          <option value="PREFIX_ALL_4">Brass</option>
-          <option value="PREFIX_ALL_5">Brass</option>
-          <option value="">なし</option>
-        </select>
-      </span>
-      {{prefixAllType}}
-      <br/>
-      <span>MML prefix: 開発用2 trackごと
+      <span>MML track prefix:
         <select ng-model="prefixTrackType" ng-init="prefixTrackType='PREFIX_TRACK_1'"
                 ng-change="generate()"
         >

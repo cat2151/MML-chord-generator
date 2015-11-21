@@ -60,6 +60,7 @@ function() {
     if (prefixAllType == 'PREFIX_ALL_3') return prefixAllArrStr[1];
     if (prefixAllType == 'PREFIX_ALL_4') return prefixAllArrStr[2];
     if (prefixAllType == 'PREFIX_ALL_5') return prefixAllArrStr[3];
+    return '';
   }
   function setPrefixAllStrFromType(prefixAllType) {
     prefixAllStr = getPrefixAllStrFromType(prefixAllType);

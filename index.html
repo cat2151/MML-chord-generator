@@ -55,9 +55,13 @@
       <br/>
       <span>MML prefix: 開発用1 MML全体
         <select ng-model="prefixAllType" ng-init="prefixAllType='PREFIX_ALL_1'"
-                ng-change="generate()"
+                ng-change="setPrefixAllStrFromType()"
         >
-          <option value="PREFIX_ALL_1">PREFIX_ALL_1</option>
+          <option value="PREFIX_ALL_1">Piano or ユーザー音色</option>
+          <option value="PREFIX_ALL_2">E.Piano</option>
+          <option value="PREFIX_ALL_3">Brass</option>
+          <option value="PREFIX_ALL_4">Brass</option>
+          <option value="PREFIX_ALL_5">Brass</option>
           <option value="">なし</option>
         </select>
       </span>

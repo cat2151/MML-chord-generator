@@ -78,6 +78,12 @@ function($scope, $location, $timeout, GeneratorService) {
   $scope.setPrefixAllStr = function() {
     GeneratorService.setPrefixAllStr($scope.prefixAllStr);
   }
+  $scope.setPrefixAllStrFromType = function() {
+    GeneratorService.setPrefixAllStrFromType($scope.prefixAllType);
+    $scope.getPrefixAllStr();
+    $scope.generate();
+  }
+  
 
 
   SIOPM.onLoad = function() {

@@ -18,21 +18,57 @@ function() {
     ' 20,  7, 11,  5, 14,  0,  0,  1,  4,  0,  0,' + '\n' +
     '};'
   ;
+  var prefixAllArrStr = [
+    '#OPM@0 { 6, 1, /*E.Piano*/\n' +
+    ' 26,  7,  9,  3, 10, 23,  1,  5,  2,  0,  0,\n' +
+    ' 24,  9,  9,  3, 15,  0,  2,  4,  3,  0,  1,\n' +
+    ' 22,  8,  6,  5, 12,  0,  1,  3,  5,  0,  1,\n' +
+    ' 20,  7, 11,  5, 14,  0,  0,  1,  4,  0,  1,\n' +
+    '}t100 ma0,25,15,15;#EFFECT0{autopan};',
+    '#OPM@0 { 5, 7, /*Brass*/\n' +
+    ' 16,  7,  5,  4,  1, 20,  0,  1,  0,  0,  0,\n' +
+    ' 10,  5,  3, 21,  1,  4,  1,  0,  5,  0,  0,\n' +
+    ' 14,  4,  2, 20,  1,  0,  0,  1,  4,  0,  0,\n' +
+    ' 15,  3,  4, 22,  1,  0,  0,  1,  5,  0,  0,\n' +
+    '};',
+    '#OPM@0 { 4, 7, /*Brass*/\n' +
+    ' 16,  7,  5,  4,  1, 20,  0,  1,  3,  0,  0,\n' +
+    ' 13,  5,  3, 21,  1,  0,  0,  1,  4,  0,  0,\n' +
+    ' 14,  4,  2,  4,  1, 20,  0,  1,  5,  0,  0,\n' +
+    ' 15,  3,  4, 22,  1,  0,  0,  1,  4,  0,  0,\n' +
+    '};',
+    '#OPM@0 { 4, 7, /*Brass slow*/\n' +
+    '  8,  3,  5, 23,  1, 25,  0,  1,  3,  0,  0,\n' +
+    ' 13,  5,  3, 23,  1,  0,  0,  1,  4,  0,  0,\n' +
+    '  5,  4,  2, 23,  1, 20,  0,  1,  5,  0,  0,\n' +
+    ' 15,  3,  4, 23,  1,  0,  0,  1,  4,  0,  0,\n' +
+    '};'
+  ];
+
+
   var prefixTrackStr = '%6 @0 l2 v8';
 
   function setPrefixAllStr(v) {
     prefixAllStr = v;
-  }  
+  }
   function getPrefixAllStr() {
     return prefixAllStr;
-  }  
+  }
+  function getPrefixAllStrFromType(prefixAllType) {
+    if (prefixAllType == 'PREFIX_ALL_1') return prefixAllStr;
+    if (prefixAllType == 'PREFIX_ALL_2') return prefixAllArrStr[0];
+    if (prefixAllType == 'PREFIX_ALL_3') return prefixAllArrStr[1];
+    if (prefixAllType == 'PREFIX_ALL_4') return prefixAllArrStr[2];
+    if (prefixAllType == 'PREFIX_ALL_5') return prefixAllArrStr[3];
+  }
+  function setPrefixAllStrFromType(prefixAllType) {
+    prefixAllStr = getPrefixAllStrFromType(prefixAllType);
+  }
 
   // [イメージ] 'Cm' → 'c;e-;g'
   function generate(oneChordName, prefixTrackType, centerCnoteNum, prefixAllType) {
     var mml = '';
-    if (prefixAllType == 'PREFIX_ALL_1') {
-      mml += prefixAllStr;
-    }
+    mml += getPrefixAllStrFromType(prefixAllType);
     mml += getNoteMmlsFromOneChordName(oneChordName, prefixTrackType, centerCnoteNum);
     return mml;
   }
@@ -234,9 +270,7 @@ function() {
   function getChordsMml(/*pivotedNoteNumbersList as */pivoted, prefixTrackType, prefixAllType, delay) {
     if (!pivoted.length) return [];
     var mml = '';
-    if (prefixAllType == 'PREFIX_ALL_1') {
-      mml += prefixAllStr;
-    }
+    mml += getPrefixAllStrFromType(prefixAllType);
     mml += getM();
     return mml;
     function getM() {
@@ -378,6 +412,7 @@ function() {
     getInventionNoteNumbersFromInputText: getInventionNoteNumbersFromInputText,
     getInventionMmlFromInputText: getInventionMmlFromInputText,
     setPrefixAllStr: setPrefixAllStr,
-    getPrefixAllStr: getPrefixAllStr
+    getPrefixAllStr: getPrefixAllStr,
+    setPrefixAllStrFromType: setPrefixAllStrFromType
   };
 }]);

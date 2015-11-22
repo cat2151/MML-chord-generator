@@ -24,8 +24,8 @@
   <body>
     <div ng-controller="generatorController">
       <div>
-        <span>Chord Nameから和音MMLを生成します</span>
-        <h1>Chord Nameを入力してください</h1>
+        <span>コード進行を文字で入力すると、和音MMLを生成して演奏します</span>
+        <br/>
         <textarea class="chord" cols="80" rows="1"
           ng-model="inputText"
           placeholder="CやBbmを書いてみてください"
@@ -33,16 +33,16 @@
         ></textarea>
 
         <br/>
-        <span>音色設定
+        <span>音色
           <select ng-model="prefixAllType" ng-init="prefixAllType='PREFIX_ALL_1'"
                   ng-change="setPrefixAllStrFromType()"
           >
             <option value="PREFIX_ALL_1">Piano or ユーザー音色</option>
             <option value="PREFIX_ALL_2">E.Piano</option>
-            <option value="PREFIX_ALL_3">Brass</option>
-            <option value="PREFIX_ALL_4">Brass</option>
-            <option value="PREFIX_ALL_5">Brass</option>
-            <option value="">なし</option>
+            <option value="PREFIX_ALL_3">Brass1</option>
+            <option value="PREFIX_ALL_4">Brass2</option>
+            <option value="PREFIX_ALL_5">Brass3</option>
+            <option value="">設定なし</option>
           </select>
         </span>
 
@@ -54,8 +54,8 @@
 
       <div>
         <span>詳細設定</span>
-        <input type="radio" ng-value="false" ng-model="dispDetailSetting" ng-init="dispDetailSetting=false"/>表示しない</radio>
-        <input type="radio" ng-value="true" ng-model="dispDetailSetting">表示する</radio>
+        <label><input type="radio" ng-value="false" ng-model="dispDetailSetting" ng-init="dispDetailSetting=false"/>表示しない</label>
+        <label><input type="radio" ng-value="true" ng-model="dispDetailSetting"/>表示する</label>
       </div>
 
       <div ng-show="dispDetailSetting">
@@ -100,17 +100,20 @@
             <option value="SION">SiON (すたどんたんでお馴染み)</option>
           </select>
         </span>
-        {{formatType}}
+        
         <br/>
       </div>
 
       <div>
         <hr>
         <span>デバッグ表示</span>
-        <input type="radio" ng-value="false" ng-model="dispDebug" ng-init="dispDebug=false"/>表示しない</radio>
-        <input type="radio" ng-value="true" ng-model="dispDebug">表示する</radio>
+        <label><input type="radio" ng-value="false" ng-model="dispDebug" ng-init="dispDebug=false"/>表示しない</label>
+        <label><input type="radio" ng-value="true" ng-model="dispDebug"/>表示する</label>
       </div>
       <div ng-show="dispDebug">
+        <h4>formatType</h4>
+        <span>{{formatType}}</span>
+
         <h4>prefixAllType</h4>
         <span>{{prefixAllType}}</span>
 

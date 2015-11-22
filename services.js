@@ -105,85 +105,62 @@ function() {
       return false;
     }
   }
+
   
-  // [イメージ] '' → MAJOR, 'm' → MINOR
-  // ---- TODO この仕組みに切り替える。予想メンテコストが当初より増えたので。 ----
   var CHORD_DEFINITIONS = [
-    ['MAJOR', ['', 'maj'], [0, 4, 7]]
+    ['MAJOR', ['', 'maj'], [0, 4, 7]],
+    ['MINOR', ['m', '-', 'min'], [0, 3, 7]],
+    ['SEVENTH', ['7', 'dom7'], [0, 4, 7, 10]],
+    ['SUS4', ['sus4'], [0, 5, 7]],
+    ['MAJOR7', ['M7', 'maj7'], [0, 4, 7, 11]],
+    ['MINOR7', ['m7', 'min7'], [0, 3, 7, 10]],
+    ['SIXTH', ['6', 'maj6'], [0, 4, 7, 9]],
+    ['MIN6', ['min6'], [0, 3, 7, 9]],
+    ['AUG', ['+', 'aug'], [0, 4, 8]],
+    ['DIM', ['dim'], [0, 3, 6]],
+    ['AUG7', ['aug7'], [0, 4, 8, 10]],
+    ['DIM7', ['dim7'], [0, 3, 6, 9]],
+    ['MINMAJ7', ['mM7', 'm/M7', 'm(M7)', 'minmaj7', 'min/maj7', 'min(maj7)'], [0, 3, 7, 11]],
+    ['MAJOR9', ['M9', 'maj9'], [0, 4, 7, 11, 14]],
+    ['MINOR9', ['m9', 'min9'], [0, 3, 7, 10, 14]],
+    ['NINTH', ['9', 'dom9'], [0, 4, 7, 10, 14]],
+    null
   ];
-  // CHORD_DEFINITIONS展開結果イメージ
-  var CHORD_OBJS = [
-    {symbol: 'maj', type:'MAJOR', notes:[0, 4, 7]},
-    {symbol: '', type:'MAJOR', notes:[0, 4, 7]} // symbolの文字列長でソートしておく
-  ];
-  // CHORD_DEFINITIONS展開処理イメージ
-  //  DEFINITIONSをループし、def[1] の個数ぶんループし、def[0]とdef[n]とdef[2]を、CHORD_OBJSにpushする
-  // getChordTypeは、CHORD_OBJSをfor to arr.lengthでループさせ、symbolがマッチしたらtypeを取得
-  // getChordIntervalsは、CHORD_OBJSをfor to arr.lengthでループさせ、typeがマッチしたらnotesを取得
-  // 疎結合にする為、どちらでもアクセスできるようにしておく
-  // ----
+
+  var CHORD_OBJS = [];
+  // [イメージ] {symbol: 'maj', type:'MAJOR', notes:[0, 4, 7]},
+  //            {symbol: '', type:'MAJOR', notes:[0, 4, 7]} // symbolの文字列長で降順ソートしておく
+  (function() {
+    // 定義をメンテしやすいCHORD_DEFINITIONSから、処理をメンテしやすいCHORD_OBJSを生成
+    angular.forEach(CHORD_DEFINITIONS, function(def) {
+      if (!def) return;
+      var type = def[0];
+      var symbols = def[1];
+      var notes = def[2];
+      angular.forEach(symbols, function(symbol) {
+        CHORD_OBJS.push({"symbol": symbol, "type": type, "notes": notes});
+      });
+    });
+    // symbolの文字列長で降順ソート
+    CHORD_OBJS.sort(function(a, b) { 
+      return - (a.symbol.length - b.symbol.length);
+    });
+  })();
   
-  var MAJOR = 'MAJOR';
-  var MINOR = 'MINOR';
-  var SEVENTH = 'SEVENTH';
-  var SUS4 = 'SUS4';
-  var MAJOR7 = 'MAJOR7';
-  var MINOR7 = 'MINOR7';
-  var SIXTH = 'SIXTH';
-  var MIN6 = 'MIN6';
-  var AUG = 'AUG';
-  var DIM = 'DIM';
-  var AUG7 = 'AUG7';
-  var DIM7 = 'DIM7';
-  var MINMAJ7 = 'MINMAJ7';
-  var MAJOR9 = 'MAJOR9';
-  var MINOR9 = 'MINOR9';
-  var NINTH = 'NINTH';
+  // [イメージ] '' → 'MAJOR'
   function getChordType(parsedText) {
     var txt = parsedText;
     if (isEmpty(parsedText)) txt = ''; // undefined → ''
     var ret = {t: '', p: txt};
-    // [イメージ] m7を判定するためにはmより先に判定
-    if (s('min(maj7)', MINMAJ7)) return ret;
-    if (s('min/maj7', MINMAJ7)) return ret;
-    if (s('minmaj7', MINMAJ7)) return ret;
-    if (s('m(M7)', MINMAJ7)) return ret;
-    if (s('m/M7', MINMAJ7)) return ret;
-    if (s('dom7', SEVENTH)) return ret;
-    if (s('maj9', MAJOR9)) return ret;
-    if (s('min9', MINOR9)) return ret;
-    if (s('dom9', NINTH)) return ret;
-    if (s('maj7', MAJOR7)) return ret;
-    if (s('min7', MINOR7)) return ret;
-    if (s('aug7', AUG7)) return ret;
-    if (s('dim7', DIM7)) return ret;
-    if (s('sus4', SUS4)) return ret;
-    if (s('maj6', SIXTH)) return ret;
-    if (s('min6', MIN6)) return ret;
-    if (s('maj', MAJOR)) return ret;
-    if (s('min', MINOR)) return ret;
-    if (s('aug', AUG)) return ret;
-    if (s('dim', DIM)) return ret;
-    if (s('mM7', MINMAJ7)) return ret;
-    if (s('M7', MAJOR7)) return ret;
-    if (s('m7', MINOR7)) return ret;
-    if (s('M9', MAJOR9)) return ret;
-    if (s('m9', MINOR9)) return ret;
-    if (s('m', MINOR)) return ret;
-    if (s('7', SEVENTH)) return ret;
-    if (s('6', SIXTH)) return ret;
-    if (s('9', NINTH)) return ret;
-    if (s('+', AUG)) return ret;
-    if (s('-', MINOR)) return ret;
-    if (s('', MAJOR)) return ret;
-    return ret;
-    function s(v, t) {
-      if (v == txt) {
-        ret.t = t;
-        return true;
+    var i;
+    for (i = 0; i < CHORD_OBJS.length; i++) {
+      var obj = CHORD_OBJS[i];
+      if (obj.symbol == txt) {
+        ret.t = obj.type;
+        return ret;
       }
-      return false;
     }
+    return ret;
   }
 
   function getChordTypeFromOneChordName(oneChordName) {
@@ -194,22 +171,13 @@ function() {
 
   // [イメージ] MAJOR → [0, 4, 7]
   function getChordIntervals(t) {
-    if (t == MAJOR) return [0, 4, 7];
-    if (t == MINOR) return [0, 3, 7];
-    if (t == SEVENTH) return [0, 4, 7, 10];
-    if (t == SUS4) return [0, 5, 7];
-    if (t == MAJOR7) return [0, 4, 7, 11];
-    if (t == MINOR7) return [0, 3, 7, 10];
-    if (t == SIXTH) return [0, 4, 7, 9];
-    if (t == AUG) return [0, 4, 8];
-    if (t == DIM) return [0, 3, 6];
-    if (t == AUG7) return [0, 4, 8, 10];
-    if (t == DIM7) return [0, 3, 6, 9];
-    if (t == MIN6) return [0, 3, 7, 9];
-    if (t == MINMAJ7) return [0, 3, 7, 11];
-    if (t == MAJOR9) return [0, 4, 7, 11, 14];
-    if (t == MINOR9) return [0, 3, 7, 10, 14];
-    if (t == NINTH) return [0, 4, 7, 10, 14];
+    var i;
+    for (i = 0; i < CHORD_OBJS.length; i++) {
+      var obj = CHORD_OBJS[i];
+      if (obj.type == t) {
+        return obj.notes;
+      }
+    }
     return [];
   }
 

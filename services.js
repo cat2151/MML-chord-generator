@@ -283,6 +283,7 @@ function() {
   function getChordNames(inputText) {
     if (isEmpty(inputText)) return [];
     var txt = inputText;
+    txt = txt.replace(/ - |->|→|>/g, ' ');
     txt = txt.replace(/\s+/g, ' '); // 連続spaceをspace1つへ
     var chordNames = txt.split(' ');
     return chordNames;

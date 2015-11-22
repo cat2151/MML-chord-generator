@@ -282,7 +282,9 @@ function() {
   // [イメージ] 'C D' → ['C','D']
   function getChordNames(inputText) {
     if (isEmpty(inputText)) return [];
-    var chordNames = inputText.split(' ');
+    var txt = inputText;
+    txt = txt.replace(/\s+/g, ' '); // 連続spaceをspace1つへ
+    var chordNames = txt.split(' ');
     return chordNames;
   }
 
@@ -292,7 +294,7 @@ function() {
     var chordNoteNumbers;
     angular.forEach(chordNames, function(oneChordName) {
       chordNoteNumbers = getChordNoteNumbersFromOneChordName(oneChordName, centerCnoteNum);
-      noteNumbersList.push(chordNoteNumbers);
+      if (chordNoteNumbers.length) noteNumbersList.push(chordNoteNumbers);
     });
     return noteNumbersList;
   };

@@ -80,7 +80,7 @@ function() {
     ret = ret.replace(/♭/g, 'b');
     return ret;
   }
-  
+
   // [イメージ] 'Bb' → 10, ''
   function getRootNoteTypeFromOneChordName(oneChordName) {
     var txt = oneChordName;
@@ -103,7 +103,7 @@ function() {
     return ret;
     function s(pattern, r) {
       var rgxp = new RegExp(pattern);
-      if (txt.search(rgxp) == 0) {
+      if (txt.search(rgxp) === 0) {
         ret.r = r;
         ret.p = txt.replace(rgxp, '');
         return true;
@@ -112,7 +112,7 @@ function() {
     }
   }
 
-  
+
   var CHORD_DEFINITIONS = [
     ['MAJOR', ['', 'maj'], [0, 4, 7]],
     ['SIXTH', ['6', 'maj6'], [0, 4, 7, 9]],
@@ -187,7 +187,7 @@ function() {
       });
     });
     // symbolの文字列長で降順ソート
-    CHORD_OBJS.sort(function(a, b) { 
+    CHORD_OBJS.sort(function(a, b) {
       return - (a.symbol.length - b.symbol.length);
     });
   })();
@@ -213,7 +213,7 @@ function() {
   function getChordTypeFromOneChordName(oneChordName) {
     var parsedText = getRootNoteTypeFromOneChordName(oneChordName).p;
     return getChordType(parsedText);
-  };
+  }
 
 
   // [イメージ] MAJOR → [0, 4, 7]
@@ -231,7 +231,7 @@ function() {
   function getChordIntervalsFromOneChordName(oneChordName) {
     var t = getChordTypeFromOneChordName(oneChordName).t;
     return getChordIntervals(t);
-  };
+  }
 
 
   // [イメージ] 10, [0, 4, 7], 60 → [70, 74, 77]
@@ -249,7 +249,7 @@ function() {
     var r = getRootNoteTypeFromOneChordName(oneChordName).r;
     var intervals = getChordIntervalsFromOneChordName(oneChordName);
     return getChordNoteNumbers(r, intervals, centerCnoteNum);
-  };
+  }
 
   // [イメージ] 60 → o4c
   function getNoteMml(noteNumber) {
@@ -267,8 +267,8 @@ function() {
     var chordNoteNumbers = getChordNoteNumbersFromOneChordName(oneChordName, centerCnoteNum);
     if (!chordNoteNumbers.length) return '';
     return getNoteMml(chordNoteNumbers[0]);
-  };
-  
+  }
+
 
   function getNoteMmls(noteNumbers, prefixTrackType) {
     if (!noteNumbers.length) return '';
@@ -287,7 +287,7 @@ function() {
   function getNoteMmlsFromOneChordName(oneChordName, prefixTrackType, centerCnoteNum) {
     var chordNoteNumbers = getChordNoteNumbersFromOneChordName(oneChordName, centerCnoteNum);
     return getNoteMmls(chordNoteNumbers, prefixTrackType);
-  };
+  }
 
   // [イメージ] 'C D' → ['C','D']
   function getChordNames(inputText) {
@@ -311,7 +311,7 @@ function() {
       if (chordNoteNumbers.length) noteNumbersList.push(chordNoteNumbers);
     });
     return noteNumbersList;
-  };
+  }
 
   // [イメージ] 'C Dm' → [ [60,64,67], [62,65,69] ]
   function getNoteNumbersListFromInputText(inputText, centerCnoteNum) {
@@ -319,7 +319,7 @@ function() {
     var chordNames = getChordNames(inputText);
     return getNoteNumbersListFromChordNames(chordNames, centerCnoteNum);
   }
-  
+
   function getPivotNoteNumbers(noteNumbersList) {
     if (!noteNumbersList.length) return [];
     // max和音数取得
@@ -341,13 +341,13 @@ function() {
     }
     return pivoted;
   }
-  
+
   function getPivotNoteNumbersFromInputText(inputText, centerCnoteNum) {
     if (isEmpty(inputText)) return [];
     var noteNumbersList = getNoteNumbersListFromInputText(inputText, centerCnoteNum);
     return getPivotNoteNumbers(noteNumbersList);
   }
-  
+
   function getChordsMml(/*pivotedNoteNumbersList as */pivoted, prefixTrackType, prefixAllType, delay) {
     if (!pivoted.length) return [];
     var mml = '';
@@ -375,7 +375,7 @@ function() {
       return mml;
     }
   }
-  
+
   // [イメージ] 'C Dm' → 'o4c o4d; o4e o4f; o4g o4a'
   function getChordsMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType) {
     if (isEmpty(inputText)) return '';
@@ -397,26 +397,27 @@ function() {
       return a - b; // 数値ソート
     });
   }
-  
+
   function getInventionNoteNumbers(noteNumbersList, maxTopNoteNum) {
     if (isNumberStr(maxTopNoteNum)) return [];
     if (!noteNumbersList.length) return [];
     angular.forEach(noteNumbersList, function(noteNumbers) {
-      if (noteNumbers.length == 0) return;
+      if (noteNumbers.length === 0) return;
       var i;
+      var topNote;
       for (i = 0; i < 128; i++) {
-        var topNote = noteNumbers[noteNumbers.length - 1];
+        topNote = noteNumbers[noteNumbers.length - 1];
         if (topNote >= Number(maxTopNoteNum)) break;
         inventionNoteNumbersUp(noteNumbers);
       }
       for (i = 0; i < 128; i++) {
-        var topNote = noteNumbers[noteNumbers.length - 1];
+        topNote = noteNumbers[noteNumbers.length - 1];
         if (topNote <= Number(maxTopNoteNum)) break;
         inventionNoteNumbersDown(noteNumbers);
       }
       for (i = 0; i < 128; i++) { // トップノートとセカンドノートが半音差の場合は、そうならないよう、トップノートを下げる転回を行う
         if (noteNumbers.length <= 2) return;
-        var topNote = noteNumbers[noteNumbers.length - 1];
+        topNote = noteNumbers[noteNumbers.length - 1];
         var secondNote = noteNumbers[noteNumbers.length - 2];
         if (topNote - secondNote != 1) break;
         inventionNoteNumbersDown(noteNumbers);
@@ -431,7 +432,7 @@ function() {
     var noteNumbersList = getNoteNumbersListFromInputText(inputText, centerCnoteNum);
     return getInventionNoteNumbers(noteNumbersList, maxTopNoteNum);
   }
-  
+
   // [補足] 転回の後に追加すること
   function getAddedBass(inputText, noteNumbersList, centerCnoteNum, maxbassNoteNum) {
     if (isEmpty(inputText)) return [];

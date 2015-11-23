@@ -21,7 +21,7 @@ function($scope, $location, $timeout, GeneratorService) {
     //$scope.generatedMml = GeneratorService.generate($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType);
     //$scope.generatedMml = GeneratorService.getChordsMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType);
     $scope.generatedMml = GeneratorService.getInventionMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType, $scope.maxTopNoteNum, $scope.maxbassNoteNum, $scope.delay);
-    
+
     SIOPM.compile($scope.generatedMml);
     // URLに反映 [用途] 書いたChordNameをURLコピペで共有できるようにする
     $location.search({chord : $scope.inputText, opm : $scope.prefixAllStr});
@@ -34,7 +34,7 @@ function($scope, $location, $timeout, GeneratorService) {
   $scope.getChordType = function() {
     return GeneratorService.getChordTypeFromOneChordName($scope.inputText);
   };
-  
+
   $scope.getChordIntervals = function() {
     return GeneratorService.getChordIntervalsFromOneChordName($scope.inputText);
   };
@@ -74,16 +74,16 @@ function($scope, $location, $timeout, GeneratorService) {
   $scope.prefixAllStr = GeneratorService.getPrefixAllStr();
   $scope.getPrefixAllStr = function() {
     $scope.prefixAllStr = GeneratorService.getPrefixAllStr();
-  }
+  };
   $scope.setPrefixAllStr = function() {
     GeneratorService.setPrefixAllStr($scope.prefixAllStr);
-  }
+  };
   $scope.setPrefixAllStrFromType = function() {
     GeneratorService.setPrefixAllStrFromType($scope.prefixAllType);
     $scope.getPrefixAllStr();
     $scope.generate();
-  }
-  
+  };
+
 
 
   SIOPM.onLoad = function() {
@@ -91,7 +91,7 @@ function($scope, $location, $timeout, GeneratorService) {
       setParamsFromUrl();
     }, 500);
   };
-        
+
   SIOPM.onCompileComplete = function() {
     SIOPM.play();
   };

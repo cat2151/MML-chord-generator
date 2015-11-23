@@ -292,6 +292,7 @@ function() {
   function getChordNames(inputText) {
     if (isEmpty(inputText)) return [];
     var txt = inputText;
+    txt = txt.replace(/\-([A-G])/g, ' $1'); // [イメージ] 'Dm-Em' → 'Dm Em'
     txt = txt.replace(/ - |->|→|>/g, ' ');
     txt = txt.replace(/\{|\}/g, ' '); // ニコニコ大百科のコード進行の記事で使っている、1小節内の複数のコード進行をグルーピングするための表記
     txt = txt.replace(/\s+/g, ' '); // 連続spaceをspace1つへ

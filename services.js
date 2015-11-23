@@ -486,7 +486,7 @@ function() {
       var onChords = getChordNames(inputText);
       angular.forEach(onChords, function(chordName) {
         var bassNoteType = getSlashChordBassNoteType(chordName).r;
-        if (isEmpty(bassNoteType)) return;
+        if (isEmpty(bassNoteType) || bassNoteType == -1) return;
         var bass = bassNoteType + Number(centerCnoteNum);
         bass = getAdjustedBass(bass);
         basses.push(bass);

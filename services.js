@@ -73,14 +73,20 @@ function() {
     mml += getNoteMmlsFromOneChordName(oneChordName, prefixTrackType, centerCnoteNum);
     return mml;
   }
+
+  function getNormalizedTxt(txt) {
+    var ret = txt;
+    ret = ret.replace(/[♯＃]/g, '#');
+    ret = ret.replace(/♭/g, 'b');
+    return ret;
+  }
   
   // [イメージ] 'Bb' → 10, ''
   function getRootNoteTypeFromOneChordName(oneChordName) {
     var txt = oneChordName;
     if (isEmpty(oneChordName)) txt = ''; // undefined → ''
     var ret = {r: -1, p: txt};
-    txt = txt.replace(/[♯＃]/g, '#');
-    txt = txt.replace(/♭/g, 'b');
+    txt = getNormalizedTxt(txt);
     // [イメージ] C#を判定するためにはCより先に判定
     if (s('C#|Db', 1)) return ret;
     if (s('D#|Eb', 3)) return ret;
@@ -118,16 +124,17 @@ function() {
 
     ['MINOR', ['m', '-', 'min'], [0, 3, 7]],
     ['MIN6', ['min6'], [0, 3, 7, 9]],
-    ['MINADD9', ['madd9', 'minadd9'], [0, 3, 7, 9, 14]],
+    ['MINADD9', ['madd9', 'm(9)', 'minadd9'], [0, 3, 7, 9, 14]],
     ['MINOR7', ['m7', 'min7'], [0, 3, 7, 10]],
     ['MINOR9', ['m9', 'min9'], [0, 3, 7, 10, 14]],
     ['MINOR11', ['m11', '-11', 'min11'], [0, 3, 7, 10, 14, 17]],
     ['MINOR13', ['m13', '-13', 'min13'], [0, 3, 7, 10, 14, 17, 21]],
 
     ['SEVENTH', ['7', 'dom7'], [0, 4, 7, 10]],
-    ['SEVENTHADD13', ['7add13'], [0, 4, 7, 10, 21]],
+    ['SEVENTHADD13', ['7add13', '7(13)'], [0, 4, 7, 10, 21]],
+    ['SEVENTHFLAT9', ['7-9', '7b9'], [0, 4, 7, 10, 13]],
     ['NINTH', ['9', 'dom9', '7add9', '7add2', '7/9'], [0, 4, 7, 10, 14]],
-    ['ELEVENTH', ['11', 'dom9'], [0, 4, 7, 10, 14, 17]],
+    ['ELEVENTH', ['11', 'dom11'], [0, 4, 7, 10, 14, 17]],
     ['THIRTEENTH', ['13', 'dom13'], [0, 4, 7, 10, 14, 17, 21]],
 
     ['SUS4', ['sus4'], [0, 5, 7]],
@@ -149,7 +156,7 @@ function() {
 
     ['MIN7DIM5', ['min7dim5'], [0, 3, 6, 10]],
 
-    ['SEVENTHFLAT5', ['7b5', 'dom7dim5'], [0, 4, 6, 10]],
+    ['SEVENTHFLAT5', ['7b5', '7-5', 'dom7dim5'], [0, 4, 6, 10]],
 
     ['AUG', ['+', 'aug'], [0, 4, 8]],
     ['AUG7', ['+7', 'aug7'], [0, 4, 8, 10]],
@@ -183,12 +190,14 @@ function() {
       return - (a.symbol.length - b.symbol.length);
     });
   })();
-  
+
   // [イメージ] '' → 'MAJOR'
   function getChordType(parsedText) {
     var txt = parsedText;
     if (isEmpty(parsedText)) txt = ''; // undefined → ''
     var ret = {t: '', p: txt};
+    if (txt.indexOf('/') != -1) txt = txt.split('/')[0]; // 分数コードは一旦無視（仮実装、あとで変更予定）
+    txt = getNormalizedTxt(txt);
     var i;
     for (i = 0; i < CHORD_OBJS.length; i++) {
       var obj = CHORD_OBJS[i];
@@ -284,7 +293,9 @@ function() {
     if (isEmpty(inputText)) return [];
     var txt = inputText;
     txt = txt.replace(/ - |->|→|>/g, ' ');
+    txt = txt.replace(/\{|\}/g, ' '); // ニコニコ大百科のコード進行の記事で使っている、1小節内の複数のコード進行をグルーピングするための表記
     txt = txt.replace(/\s+/g, ' '); // 連続spaceをspace1つへ
+    txt = txt.replace(/^\s|\s$/g, ''); // 先頭と末尾のspaceを削除
     var chordNames = txt.split(' ');
     return chordNames;
   }

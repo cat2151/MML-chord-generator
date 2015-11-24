@@ -413,29 +413,33 @@ function() {
   function getInventionNoteNumbers(noteNumbersList, maxTopNoteNum) {
     if (isNumberStr(maxTopNoteNum)) return [];
     if (!noteNumbersList.length) return [];
-    angular.forEach(noteNumbersList, function(noteNumbers) {
-      if (noteNumbers.length === 0) return;
-      var i;
-      var topNote;
-      for (i = 0; i < 128; i++) {
-        topNote = noteNumbers[noteNumbers.length - 1];
-        if (topNote >= Number(maxTopNoteNum)) break;
-        inventionNoteNumbersUp(noteNumbers);
-      }
-      for (i = 0; i < 128; i++) {
-        topNote = noteNumbers[noteNumbers.length - 1];
-        if (topNote <= Number(maxTopNoteNum)) break;
-        inventionNoteNumbersDown(noteNumbers);
-      }
-      for (i = 0; i < 128; i++) { // トップノートとセカンドノートが半音差の場合は、そうならないよう、トップノートを下げる転回を行う
-        if (noteNumbers.length <= 2) return;
-        topNote = noteNumbers[noteNumbers.length - 1];
-        var secondNote = noteNumbers[noteNumbers.length - 2];
-        if (topNote - secondNote != 1) break;
-        inventionNoteNumbersDown(noteNumbers);
-      }
+    angular.forEach(noteNumbersList, function(noteNumbers, key) {
+      this[key] = getInventionNoteNumber(noteNumbers, maxTopNoteNum);
     });
     return noteNumbersList;
+  }
+  function getInventionNoteNumber(noteNumbers, maxTopNoteNum) {
+    if (noteNumbers.length === 0) return;
+    var i;
+    var topNote;
+    for (i = 0; i < 128; i++) {
+      topNote = noteNumbers[noteNumbers.length - 1];
+      if (topNote >= Number(maxTopNoteNum)) break;
+      inventionNoteNumbersUp(noteNumbers);
+    }
+    for (i = 0; i < 128; i++) {
+      topNote = noteNumbers[noteNumbers.length - 1];
+      if (topNote <= Number(maxTopNoteNum)) break;
+      inventionNoteNumbersDown(noteNumbers);
+    }
+    for (i = 0; i < 128; i++) { // トップノートとセカンドノートが半音差の場合は、そうならないよう、トップノートを下げる転回を行う
+      if (noteNumbers.length <= 2) return;
+      topNote = noteNumbers[noteNumbers.length - 1];
+      var secondNote = noteNumbers[noteNumbers.length - 2];
+      if (topNote - secondNote != 1) break;
+      inventionNoteNumbersDown(noteNumbers);
+    }
+    return noteNumbers;
   }
 
   // [イメージ] 'C' → '[[60, 64, 67]]' → '[[60+12, 64, 67]] → '[[64, 67, 60+12]]
@@ -509,9 +513,22 @@ function() {
 
   function getInventionMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType, maxTopNoteNum, maxbassNoteNum, delay) {
     if (isEmpty(inputText)) return '';
-    var noteNumbersList = getInventionNoteNumbersFromInputText(inputText, centerCnoteNum, maxTopNoteNum);
-    var addedBass = getAddedBass(inputText, noteNumbersList, centerCnoteNum, maxbassNoteNum);
-    var pivoted = getPivotNoteNumbers(addedBass);
+    // var noteNumbersList = getInventionNoteNumbersFromInputText(inputText, centerCnoteNum, maxTopNoteNum);
+    // var addedBass = getAddedBass(inputText, noteNumbersList, centerCnoteNum, maxbassNoteNum);
+    var chordNames = getChordNames(inputText);
+    if (isNumberStr(maxTopNoteNum)) return '';
+    if (isEmpty(chordNames)) return '';
+    var noteNumbersList = [];
+    var i;
+    for (i = 0; i < chordNames.length; i++) {
+      var chordName = chordNames[i];
+      var noteNumbers = getChordNoteNumbersFromOneChordName(chordName, centerCnoteNum);
+      noteNumbers = getInventionNoteNumber(noteNumbers, maxTopNoteNum);
+      noteNumbers = getAddedBassFromOneChordName(chordName, noteNumbers, centerCnoteNum, maxbassNoteNum);
+        // TODO getAddedBassFromOneChordName を実装する
+      noteNumbersList.push(noteNumbers);
+    }
+    var pivoted = getPivotNoteNumbers(noteNumbersList);
     return getChordsMml(pivoted, prefixTrackType, prefixAllType, delay);
   }
 

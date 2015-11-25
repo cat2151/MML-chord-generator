@@ -449,53 +449,38 @@ function() {
     return getInventionNoteNumbers(noteNumbersList, maxTopNoteNum);
   }
 
+  // noteNumbersにbassをつけたうえでsortもする
   // [補足] 転回の後に追加すること
-  function getAddedBass(inputText, noteNumbersList, centerCnoteNum, maxbassNoteNum) {
-    if (isEmpty(inputText)) return [];
+  function getAddedBassFromOneChordName(chordName, noteNumbers, centerCnoteNum, maxbassNoteNum) {
     if (isNumberStr(maxbassNoteNum)) return [];
-    if (!noteNumbersList.length) return [];
-    // bassを生成
-    var normalBasses = getNormalBasses();
-    var onChordBasses = getOnChordBasses();
-    var basses = [];
-    var i;
-    for (i = 0; i < normalBasses.length; i++) {
-      if (onChordBasses[i]) {
-        basses.push(onChordBasses[i]);
-      } else {
-        basses.push(normalBasses[i]);
-      }
+    if (!noteNumbers.length) return [];
+    var bass;
+    if (isSlash(chordName)) {
+      bass = getOnChordBass();
+    } else {
+      bass = getNormalBass();
     }
-    // bassを追加
-    angular.forEach(basses, function(bass, key) {
-      noteNumbersList[key].push(bass);
-      noteNumbersList[key].sort(function(a, b) {
-        return a - b; // 数値ソート
-      });
+    if (isEmpty(bass)) return [];
+    noteNumbers.push(bass);
+    noteNumbers.sort(function(a, b) {
+      return a - b; // 数値ソート
     });
-    return noteNumbersList;
-    function getNormalBasses() {
-      var basses = [];
-      var noteListForBass = getNoteNumbersListFromInputText(inputText, centerCnoteNum);
-      angular.forEach(noteListForBass, function(noteNumbers) {
-        if (!noteNumbers.length) return;
-        var bass = noteNumbers[0];
-        bass = getAdjustedBass(bass);
-        basses.push(bass);
-      });
-      return basses;
+    return noteNumbers;
+    function isSlash(chordName) {
+      if (chordName.indexOf('/') == -1) return false; // slashなし
+      return true;
     }
-    function getOnChordBasses() {
-      var basses = [];
-      var onChords = getChordNames(inputText);
-      angular.forEach(onChords, function(chordName) {
-        var bassNoteType = getSlashChordBassNoteType(chordName).r;
-        if (isEmpty(bassNoteType) || bassNoteType == -1) return;
-        var bass = bassNoteType + Number(centerCnoteNum);
-        bass = getAdjustedBass(bass);
-        basses.push(bass);
-      });
-      return basses;
+    function getNormalBass() {
+      var bass = noteNumbers[0];
+      bass = getAdjustedBass(bass);
+      return bass;
+    }
+    function getOnChordBass() {
+      var bassNoteType = getSlashChordBassNoteType(chordName).r;
+      if (isEmpty(bassNoteType) || bassNoteType == -1) return [];
+      var bass = bassNoteType + Number(centerCnoteNum);
+      bass = getAdjustedBass(bass);
+      return bass;
     }
     function getAdjustedBass(bass) {
       var i;
@@ -513,8 +498,6 @@ function() {
 
   function getInventionMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType, maxTopNoteNum, maxbassNoteNum, delay) {
     if (isEmpty(inputText)) return '';
-    // var noteNumbersList = getInventionNoteNumbersFromInputText(inputText, centerCnoteNum, maxTopNoteNum);
-    // var addedBass = getAddedBass(inputText, noteNumbersList, centerCnoteNum, maxbassNoteNum);
     var chordNames = getChordNames(inputText);
     if (isNumberStr(maxTopNoteNum)) return '';
     if (isEmpty(chordNames)) return '';
@@ -525,7 +508,6 @@ function() {
       var noteNumbers = getChordNoteNumbersFromOneChordName(chordName, centerCnoteNum);
       noteNumbers = getInventionNoteNumber(noteNumbers, maxTopNoteNum);
       noteNumbers = getAddedBassFromOneChordName(chordName, noteNumbers, centerCnoteNum, maxbassNoteNum);
-        // TODO getAddedBassFromOneChordName を実装する
       noteNumbersList.push(noteNumbers);
     }
     var pivoted = getPivotNoteNumbers(noteNumbersList);

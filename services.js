@@ -116,7 +116,7 @@ function() {
   function getSlashChordBassNoteType(oneChordName) {
     var txt = oneChordName;
     if (isEmpty(txt)) txt = ''; // undefined → ''
-    if (txt.indexOf('/') == -1) txt = ''; // slashなし
+    if (!isSlash(txt)) txt = ''; // slashなし
     var ret = {r: -1, p: txt};
     if (!isEmpty(txt)) {
       var arr = oneChordName.split('/');
@@ -419,7 +419,7 @@ function() {
     return noteNumbersList;
   }
   function getInventionNoteNumber(noteNumbers, maxTopNoteNum) {
-    if (noteNumbers.length === 0) return;
+    if (!noteNumbers.length) return [];
     var i;
     var topNote;
     for (i = 0; i < 128; i++) {
@@ -449,6 +449,11 @@ function() {
     return getInventionNoteNumbers(noteNumbersList, maxTopNoteNum);
   }
 
+  function isSlash(chordName) {
+    if (chordName.indexOf('/') == -1) return false; // slashなし
+    return true;
+  }
+
   // noteNumbersにbassをつけたうえでsortもする
   // [補足] 転回の後に追加すること
   function getAddedBassFromOneChordName(chordName, noteNumbers, centerCnoteNum, maxbassNoteNum) {
@@ -456,9 +461,9 @@ function() {
     if (!noteNumbers.length) return [];
     var bass;
     if (isSlash(chordName)) {
-      bass = getOnChordBass();
+      bass = getOnChordBass(chordName);
     } else {
-      bass = getNormalBass();
+      bass = getNormalBass(chordName);
     }
     if (isEmpty(bass)) return [];
     noteNumbers.push(bass);
@@ -466,18 +471,16 @@ function() {
       return a - b; // 数値ソート
     });
     return noteNumbers;
-    function isSlash(chordName) {
-      if (chordName.indexOf('/') == -1) return false; // slashなし
-      return true;
+    function getNormalBass(chordName) {
+      var bassNoteType = getRootNoteTypeFromOneChordName(chordName).r;
+      return getBass(bassNoteType);
     }
-    function getNormalBass() {
-      var bass = noteNumbers[0];
-      bass = getAdjustedBass(bass);
-      return bass;
-    }
-    function getOnChordBass() {
+    function getOnChordBass(chordName) {
       var bassNoteType = getSlashChordBassNoteType(chordName).r;
-      if (isEmpty(bassNoteType) || bassNoteType == -1) return [];
+      return getBass(bassNoteType);
+    }
+    function getBass(bassNoteType) {
+      if (isEmpty(bassNoteType) || bassNoteType == -1) return null;
       var bass = bassNoteType + Number(centerCnoteNum);
       bass = getAdjustedBass(bass);
       return bass;

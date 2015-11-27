@@ -4,7 +4,6 @@ function($scope, $location, $timeout, GeneratorService) {
 
   $scope.generatedMml = "なし";
   $scope.initWait = 100;
-  setParamsFromUrl();
 
   function setParamsFromUrl() {
     // [URLイメージ] ～/#?chord=C
@@ -112,6 +111,7 @@ function($scope, $location, $timeout, GeneratorService) {
     }, 0);
   };
 
-  SIOPM.initialize();
+  SIOPM.initialize(); // [前提] SIOPMのプロパティへ各functionを代入し終わっていること
+  setParamsFromUrl(); // [前提] $scopeのプロパティへ各functionを代入し終わっていること
 
 }]);

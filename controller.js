@@ -3,11 +3,8 @@ angular.module('generatorApp')
 function($scope, $location, $timeout, GeneratorService) {
 
   $scope.generatedMml = "なし";
-  $scope.initWait = 500;
-
-  console.log($location.search().chord);
-  console.log($location.search().opm);
-  console.log($location.search().initwait);
+  $scope.initWait = 100;
+  setParamsFromUrl();
 
   function setParamsFromUrl() {
     // [URLイメージ] ～/#?chord=C
@@ -21,11 +18,6 @@ function($scope, $location, $timeout, GeneratorService) {
     }
     if (angular.isString(urlInitWait)) {
       $scope.initWait = urlInitWait;
-    }
-    if (angular.isString(urlChord)) {
-      $timeout(function() {
-        $scope.generate();
-      }, $scope.initWait);
     }
   }
   // URLに反映 [用途] 書いたChordNameをURLコピペで共有できるようにする
@@ -106,9 +98,11 @@ function($scope, $location, $timeout, GeneratorService) {
 
 
   SIOPM.onLoad = function() {
-    $timeout(function() {
-      setParamsFromUrl();
-    }, 250);
+    if (angular.isString($scope.inputText)) {
+      $timeout(function() {
+        $scope.generate();
+      }, $scope.initWait);
+    }
   };
 
   SIOPM.onCompileComplete = function() {

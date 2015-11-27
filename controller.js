@@ -3,7 +3,7 @@ angular.module('generatorApp')
 function($scope, $location, $timeout, GeneratorService) {
 
   $scope.generatedMml = "なし";
-  $scope.initWait = 100;
+  $scope.initWait = 0;
 
   function setParamsFromUrl() {
     // [URLイメージ] ～/#?chord=C
@@ -33,6 +33,8 @@ function($scope, $location, $timeout, GeneratorService) {
     //$scope.generatedMml = GeneratorService.generate($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType);
     //$scope.generatedMml = GeneratorService.getChordsMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType);
     $scope.generatedMml = GeneratorService.getInventionMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType, $scope.maxTopNoteNum, $scope.maxbassNoteNum, $scope.delay);
+
+    setParamsToUrl();
 
     SIOPM.compile($scope.generatedMml);
   };
@@ -98,17 +100,12 @@ function($scope, $location, $timeout, GeneratorService) {
 
   SIOPM.onLoad = function() {
     if (angular.isString($scope.inputText)) {
-      $timeout(function() {
-        $scope.generate();
-      }, $scope.initWait);
+      $scope.generate();
     }
   };
 
   SIOPM.onCompileComplete = function() {
     SIOPM.play();
-    $timeout(function() {
-      setParamsToUrl();
-    }, 0);
   };
 
   SIOPM.initialize(); // [前提] SIOPMのプロパティへ各functionを代入し終わっていること

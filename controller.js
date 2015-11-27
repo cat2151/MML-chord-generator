@@ -34,7 +34,9 @@ function($scope, $location, $timeout, GeneratorService) {
     //$scope.generatedMml = GeneratorService.getChordsMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType);
     $scope.generatedMml = GeneratorService.getInventionMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType, $scope.maxTopNoteNum, $scope.maxbassNoteNum, $scope.delay);
 
-    setParamsToUrl();
+    $timeout(function() { // compileより前にする(compileがSIOPMロード失敗の為にundefinedでexceptionになっても、先にURLへの反映はしておく)
+      setParamsToUrl();
+    }, 0);
 
     SIOPM.compile($scope.generatedMml);
   };
@@ -100,7 +102,9 @@ function($scope, $location, $timeout, GeneratorService) {
 
   SIOPM.onLoad = function() {
     if (angular.isString($scope.inputText)) {
-      $scope.generate();
+      $timeout(function() {
+        $scope.generate();
+      }, 0);
     }
   };
 
@@ -109,6 +113,8 @@ function($scope, $location, $timeout, GeneratorService) {
   };
 
   SIOPM.initialize(); // [前提] SIOPMのプロパティへ各functionを代入し終わっていること
-  setParamsFromUrl(); // [前提] $scopeのプロパティへ各functionを代入し終わっていること
+  $timeout(function() {
+    setParamsFromUrl(); // [前提] $scopeのプロパティへ各functionを代入し終わっていること
+  }, 0);
 
 }]);

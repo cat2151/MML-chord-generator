@@ -3,17 +3,38 @@ angular.module('generatorApp')
 function($scope, $location, $timeout, GeneratorService) {
 
   $scope.generatedMml = "なし";
+  $scope.initWait = 500;
+
+  console.log($location.search().chord);
+  console.log($location.search().opm);
+  console.log($location.search().initwait);
 
   function setParamsFromUrl() {
     // [URLイメージ] ～/#?chord=C
     var urlChord = $location.search().chord;
     var urlOpm = $location.search().opm;
+    var urlInitWait = $location.search().initwait;
     if (angular.isString(urlChord)) $scope.inputText = urlChord;
     if (angular.isString(urlOpm)) {
       $scope.prefixAllStr = urlOpm;
       $scope.setPrefixAllStr();
     }
-    if (angular.isString(urlChord)) $scope.generate();
+    if (angular.isString(urlInitWait)) {
+      $scope.initWait = urlInitWait;
+    }
+    if (angular.isString(urlChord)) {
+      $timeout(function() {
+        $scope.generate();
+      }, $scope.initWait);
+    }
+  }
+  // URLに反映 [用途] 書いたChordNameをURLコピペで共有できるようにする
+  function setParamsToUrl() {
+    $location.search({
+      chord : $scope.inputText,
+      opm : $scope.prefixAllStr,
+      initwait : $scope.initWait
+    });
   }
 
 
@@ -23,8 +44,6 @@ function($scope, $location, $timeout, GeneratorService) {
     $scope.generatedMml = GeneratorService.getInventionMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType, $scope.maxTopNoteNum, $scope.maxbassNoteNum, $scope.delay);
 
     SIOPM.compile($scope.generatedMml);
-    // URLに反映 [用途] 書いたChordNameをURLコピペで共有できるようにする
-    $location.search({chord : $scope.inputText, opm : $scope.prefixAllStr});
   };
 
   $scope.getRootNoteType = function() {
@@ -89,11 +108,14 @@ function($scope, $location, $timeout, GeneratorService) {
   SIOPM.onLoad = function() {
     $timeout(function() {
       setParamsFromUrl();
-    }, 500);
+    }, 250);
   };
 
   SIOPM.onCompileComplete = function() {
     SIOPM.play();
+    $timeout(function() {
+      setParamsToUrl();
+    }, 0);
   };
 
   SIOPM.initialize();

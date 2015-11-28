@@ -78,7 +78,7 @@ function($scope, $location, $timeout, GeneratorService) {
   };
 
   $scope.getChordsMml = function() {
-    return GeneratorService.getChordsMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType);
+    return GeneratorService.getChordsMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType, $scope.delay);
   };
 
   $scope.getInventionNoteNumbers = function() {

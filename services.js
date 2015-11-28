@@ -389,10 +389,10 @@ function() {
   }
 
   // [イメージ] 'C Dm' → 'o4c o4d; o4e o4f; o4g o4a'
-  function getChordsMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType) {
+  function getChordsMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType, delay) {
     if (isEmpty(inputText)) return '';
     var pivoted = getPivotNoteNumbersFromInputText(inputText, centerCnoteNum);
-    return getChordsMml(pivoted, prefixTrackType, prefixAllType);
+    return getChordsMml(pivoted, prefixTrackType, prefixAllType, delay);
   }
 
   function inventionNoteNumbersUp(noteNumbers) {

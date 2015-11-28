@@ -8,7 +8,7 @@ function() {
   }
 
   function isNumberStr(x) {
-    return Number(x) !== Number(x);
+    return !(Number(x) !== Number(x));
   }
 
   var prefixAllStr = '#OPM@0 { 5, 1,\n' +
@@ -190,7 +190,7 @@ function() {
   (function() {
     // 定義をメンテしやすいCHORD_DEFINITIONSから、処理をメンテしやすいCHORD_OBJSを生成
     angular.forEach(CHORD_DEFINITIONS, function(def) {
-      if (!def) return;
+      if (!def) return; // forEachを1つ進める
       var type = def[0];
       var symbols = def[1];
       var notes = def[2];
@@ -249,7 +249,7 @@ function() {
   // [イメージ] 10, [0, 4, 7], 60 → [70, 74, 77]
   function getChordNoteNumbers(rootNoteType, intervals, centerCnoteNum) {
     var ret = [];
-    if (isNumberStr(centerCnoteNum)) return ret;
+    if (!isNumberStr(centerCnoteNum)) return ret;
     if (rootNoteType < 0 || rootNoteType > 11) return ret; // 0～11 のみ許可
     angular.forEach(intervals, function(interval, key) {
       this[key] = Number(centerCnoteNum) + rootNoteType + interval;
@@ -379,7 +379,7 @@ function() {
         angular.forEach(trackNoteNumbers, function(noteNumber) {
           if (isEmpty(noteNumber)) {
             mml += 'r';
-            return;
+            return; // forEachを1つ進める
           }
           mml += getNoteMml(noteNumber);
         });
@@ -411,7 +411,7 @@ function() {
   }
 
   function getInventionNoteNumbers(noteNumbersList, maxTopNoteNum) {
-    if (isNumberStr(maxTopNoteNum)) return [];
+    if (!isNumberStr(maxTopNoteNum)) return [];
     if (!noteNumbersList.length) return [];
     angular.forEach(noteNumbersList, function(noteNumbers, key) {
       this[key] = getInventionNoteNumber(noteNumbers, maxTopNoteNum);
@@ -432,11 +432,12 @@ function() {
       if (topNote <= Number(maxTopNoteNum)) break;
       inventionNoteNumbersDown(noteNumbers);
     }
-    for (i = 0; i < 128; i++) { // トップノートとセカンドノートが半音差の場合は、そうならないよう、トップノートを下げる転回を行う
-      if (noteNumbers.length <= 2) return;
+   // トップノートとセカンドノートが半音差の場合は、そうならないよう、トップノートを下げる転回を行う
+    if (noteNumbers.length <= 2) return noteNumbers;
+    for (i = 0; i < 128; i++) {
       topNote = noteNumbers[noteNumbers.length - 1];
       var secondNote = noteNumbers[noteNumbers.length - 2];
-      if (topNote - secondNote != 1) break;
+      if (topNote - secondNote != 1) return noteNumbers;
       inventionNoteNumbersDown(noteNumbers);
     }
     return noteNumbers;
@@ -457,7 +458,7 @@ function() {
   // noteNumbersにbassをつけたうえでsortもする
   // [補足] 転回の後に追加すること
   function getAddedBassFromOneChordName(chordName, noteNumbers, centerCnoteNum, maxbassNoteNum) {
-    if (isNumberStr(maxbassNoteNum)) return [];
+    if (!isNumberStr(maxbassNoteNum)) return [];
     if (!noteNumbers.length) return [];
     var bass;
     if (isSlash(chordName)) {
@@ -502,7 +503,7 @@ function() {
   function getInventionMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType, maxTopNoteNum, maxbassNoteNum, delay) {
     if (isEmpty(inputText)) return '';
     var chordNames = getChordNames(inputText);
-    if (isNumberStr(maxTopNoteNum)) return '';
+    if (!isNumberStr(maxTopNoteNum)) return '';
     if (isEmpty(chordNames)) return '';
     var noteNumbersList = [];
     var i;

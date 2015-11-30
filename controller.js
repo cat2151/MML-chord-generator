@@ -98,7 +98,7 @@ function($scope, $location, $timeout, GeneratorService) {
     $scope.generate();
   };
 
-
+  $scope.maxTopNoteNums = [69,68,67,66,65];
 
   SIOPM.onLoad = function() {
     if (angular.isString($scope.inputText)) {

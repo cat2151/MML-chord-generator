@@ -111,6 +111,17 @@
         <label><input type="radio" ng-value="true" ng-model="dispDebug"/>表示する</label>
       </div>
       <div ng-show="dispDebug">
+        <span>ChordごとのTopNote上限</span>
+        <span ng-repeat="m in maxTopNoteNums">
+          <input type="text" ng-model="m">
+        </span>
+
+        <h4>noteNumbersList件数</h4>
+        <span>{{getNoteNumbersList().length}}</span>
+
+        <h4>maxTopNoteNums件数</h4>
+        <span>{{maxTopNoteNums.length}}</span>
+
         <h4>formatType</h4>
         <span>{{formatType}}</span>
 

@@ -39,6 +39,8 @@ function($scope, $location, $timeout, GeneratorService) {
     }, 0);
 
     SIOPM.compile($scope.generatedMml);
+
+    $scope.expandMaxTopNoteNumsByChordNamesCount();
   };
 
   $scope.getRootNoteType = function() {
@@ -99,6 +101,13 @@ function($scope, $location, $timeout, GeneratorService) {
   };
 
   $scope.maxTopNoteNums = [69,68,67,66,65];
+  $scope.oldMaxTopNoteNumsCount = $scope.maxTopNoteNums.length;
+  $scope.expandMaxTopNoteNumsByChordNamesCount = function() {
+    // TODO 実装する
+    //$scope.inputText からchordNamesを得て、そのlengthを得る
+    // oldより大きいならoldを更新しつつarrayにpush
+    // なお減らすほうは別途対応。issue参照
+  };
 
   SIOPM.onLoad = function() {
     if (angular.isString($scope.inputText)) {

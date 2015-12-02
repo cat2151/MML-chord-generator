@@ -38,9 +38,9 @@ function($scope, $location, $timeout, GeneratorService) {
       setParamsToUrl();
     }, 0);
 
-    SIOPM.compile($scope.generatedMml);
+    $scope.expandMaxTopNoteNumsByChordNamesCount(); // localでテストできるようcompileの前にしておく
 
-    $scope.expandMaxTopNoteNumsByChordNamesCount();
+    SIOPM.compile($scope.generatedMml);
   };
 
   $scope.getRootNoteType = function() {
@@ -100,13 +100,15 @@ function($scope, $location, $timeout, GeneratorService) {
     $scope.generate();
   };
 
-  $scope.maxTopNoteNums = [69,68,67,66,65];
+  $scope.maxTopNoteNums = [];
   $scope.oldMaxTopNoteNumsCount = $scope.maxTopNoteNums.length;
   $scope.expandMaxTopNoteNumsByChordNamesCount = function() {
-    // TODO 実装する
-    //$scope.inputText からchordNamesを得て、そのlengthを得る
-    // oldより大きいならoldを更新しつつarrayにpush
-    // なお減らすほうは別途対応。issue参照
+    var maxTopNoteNumsCount = $scope.getNoteNumbersList().length;
+    while ($scope.oldMaxTopNoteNumsCount < maxTopNoteNumsCount) {
+      $scope.maxTopNoteNums.push({maxTopNoteNum: $scope.maxTopNoteNum});
+      $scope.oldMaxTopNoteNumsCount = $scope.maxTopNoteNums.length;
+    }
+    // [補足] localではonLoadに到達しないのでこれが起動後に呼ばれない、のは、やむなし
   };
 
   SIOPM.onLoad = function() {

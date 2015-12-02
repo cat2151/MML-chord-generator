@@ -112,8 +112,8 @@
       </div>
       <div ng-show="dispDebug">
         <span>ChordごとのTopNote上限</span>
-        <span ng-repeat="m in maxTopNoteNums">
-          <input type="text" ng-model="m">
+        <span ng-repeat="m in maxTopNoteNums" ng-show="$index < getNoteNumbersList().length">
+          <input type="text" ng-model="m.maxTopNoteNum">
         </span>
 
         <h4>noteNumbersList件数</h4>

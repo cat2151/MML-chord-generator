@@ -30,15 +30,16 @@ function($scope, $location, $timeout, GeneratorService) {
 
 
   $scope.generate = function() {
+    $scope.expandMaxTopNoteNumsByChordNamesCount(); // MML生成の前にmaxTopNoteNumsの生成を行う
+
     //$scope.generatedMml = GeneratorService.generate($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType);
     //$scope.generatedMml = GeneratorService.getChordsMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType);
-    $scope.generatedMml = GeneratorService.getInventionMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType, $scope.maxTopNoteNum, $scope.maxbassNoteNum, $scope.delay);
+    //$scope.generatedMml = GeneratorService.getInventionMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType, $scope.maxTopNoteNum, $scope.maxbassNoteNum, $scope.delay);
+    $scope.generatedMml = GeneratorService.getInventionMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType, $scope.maxTopNoteNums, $scope.maxbassNoteNum, $scope.delay);
 
     $timeout(function() { // compileより前にする(compileがSIOPMロード失敗の為にundefinedでexceptionになっても、先にURLへの反映はしておく)
       setParamsToUrl();
     }, 0);
-
-    $scope.expandMaxTopNoteNumsByChordNamesCount(); // localでテストできるようcompileの前にしておく
 
     SIOPM.compile($scope.generatedMml);
   };

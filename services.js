@@ -8,7 +8,8 @@ function() {
   }
 
   function isNumberStr(x) {
-    return !(Number(x) !== Number(x));
+    if (Number(x) !== Number(x)) return false;
+    return true;
   }
 
   var prefixAllStr = '#OPM@0 { 5, 1,\n' +
@@ -500,16 +501,17 @@ function() {
     }
   }
 
-  function getInventionMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType, maxTopNoteNum, maxbassNoteNum, delay) {
+  function getInventionMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType, maxTopNoteNums, maxbassNoteNum, delay) {
     if (isEmpty(inputText)) return '';
     var chordNames = getChordNames(inputText);
-    if (!isNumberStr(maxTopNoteNum)) return '';
     if (isEmpty(chordNames)) return '';
     var noteNumbersList = [];
     var i;
     for (i = 0; i < chordNames.length; i++) {
       var chordName = chordNames[i];
       var noteNumbers = getChordNoteNumbersFromOneChordName(chordName, centerCnoteNum);
+      var maxTopNoteNum = maxTopNoteNums[i];
+      if (!isNumberStr(maxTopNoteNum)) return '';
       noteNumbers = getInventionNoteNumber(noteNumbers, maxTopNoteNum);
       noteNumbers = getAddedBassFromOneChordName(chordName, noteNumbers, centerCnoteNum, maxbassNoteNum);
       noteNumbersList.push(noteNumbers);

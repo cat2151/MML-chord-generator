@@ -510,7 +510,7 @@ function() {
     for (i = 0; i < chordNames.length; i++) {
       var chordName = chordNames[i];
       var noteNumbers = getChordNoteNumbersFromOneChordName(chordName, centerCnoteNum);
-      var maxTopNoteNum = maxTopNoteNums[i];
+      var maxTopNoteNum = maxTopNoteNums[i].maxTopNoteNum;
       if (!isNumberStr(maxTopNoteNum)) return '';
       noteNumbers = getInventionNoteNumber(noteNumbers, maxTopNoteNum);
       noteNumbers = getAddedBassFromOneChordName(chordName, noteNumbers, centerCnoteNum, maxbassNoteNum);

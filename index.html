@@ -17,6 +17,9 @@
     textarea.chord {
     height: 1em;
     }
+    input.mtnns {
+    width: 30px;
+    }
     </style>
 
     <title>MML和音生成器</title>
@@ -31,6 +34,12 @@
           placeholder="CやBbmを書いてみてください"
           ng-change="generate()" ng-blur="generate()"
         ></textarea>
+
+        <br/>
+        <span>ChordごとのTopNote上限</span>
+        <span ng-repeat="m in maxTopNoteNums" ng-show="$index < getNoteNumbersList().length">
+          <input type="text" ng-model="m.maxTopNoteNum" ng-change="generate()" class="mtnns">
+        </span>
 
         <br/>
         <span>音色
@@ -111,10 +120,6 @@
         <label><input type="radio" ng-value="true" ng-model="dispDebug"/>表示する</label>
       </div>
       <div ng-show="dispDebug">
-        <span>ChordごとのTopNote上限</span>
-        <span ng-repeat="m in maxTopNoteNums" ng-show="$index < getNoteNumbersList().length">
-          <input type="text" ng-model="m.maxTopNoteNum">
-        </span>
 
         <h4>noteNumbersList件数</h4>
         <span>{{getNoteNumbersList().length}}</span>

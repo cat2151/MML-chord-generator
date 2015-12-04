@@ -37,7 +37,7 @@ function($scope, $location, $timeout, GeneratorService) {
     });
     function getMaxtopnotenums() {
       var str = '';
-      angular.forEach(maxTopNoteNums, function (v) {
+      angular.forEach($scope.maxTopNoteNums, function (v) {
         if (!isEmpty(str)) str += ',';
         str += v.maxTopNoteNum;
       });

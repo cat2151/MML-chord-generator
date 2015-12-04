@@ -10,6 +10,7 @@ function($scope, $location, $timeout, GeneratorService) {
     var urlChord = $location.search().chord;
     var urlOpm = $location.search().opm;
     var urlInitWait = $location.search().initwait;
+    var urlMaxTopNoteNums = $location.search().maxtopnotenums;
     if (angular.isString(urlChord)) $scope.inputText = urlChord;
     if (angular.isString(urlOpm)) {
       $scope.prefixAllStr = urlOpm;
@@ -18,14 +19,30 @@ function($scope, $location, $timeout, GeneratorService) {
     if (angular.isString(urlInitWait)) {
       $scope.initWait = urlInitWait;
     }
+    if (angular.isString(urlMaxTopNoteNums)) {
+      var arr = urlMaxTopNoteNums.split(',');
+      $scope.maxTopNoteNums = [];
+      angular.forEach(arr, function(v) {
+        $scope.maxTopNoteNums.push({maxTopNoteNum: v});
+      });
+    }
   }
   // URLに反映 [用途] 書いたChordNameをURLコピペで共有できるようにする
   function setParamsToUrl() {
     $location.search({
       chord : $scope.inputText,
       opm : $scope.prefixAllStr,
-      initwait : $scope.initWait
+      initwait : $scope.initWait,
+      maxtopnotenums : getMaxtopnotenums()
     });
+    function getMaxtopnotenums() {
+      var str = '';
+      angular.forEach(maxTopNoteNums, function (v) {
+        if (!isEmpty(str)) str += ',';
+        str += v.maxTopNoteNum;
+      });
+      return str;
+    }
   }
 
 

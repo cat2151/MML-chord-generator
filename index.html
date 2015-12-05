@@ -8,6 +8,7 @@
     <script src="controller.js"></script>
     <script type='text/javascript' src='jquery.js'></script>
     <script type='text/javascript' src='siopm.js'></script>
+    <script type='text/javascript' src='lzbase62.min.js'></script>
 
     <style type="text/css">
     textarea {
@@ -120,6 +121,12 @@
         <label><input type="radio" ng-value="true" ng-model="dispDebug"/>表示する</label>
       </div>
       <div ng-show="dispDebug">
+
+        <h4>getCompressedStrFromUrlFormat</h4>
+        <span>{{getCompressedStrFromUrlFormat()}}</span>
+
+        <h4>getStringifyStrFromUrlFormat</h4>
+        <span>{{getStringifyStrFromUrlFormat()}}</span>
 
         <h4>noteNumbersList件数</h4>
         <span>{{getNoteNumbersList().length}}</span>

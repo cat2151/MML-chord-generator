@@ -129,6 +129,20 @@ function($scope, $location, $timeout, GeneratorService) {
     // [補足] localではonLoadに到達しないのでこれが起動後に呼ばれない、のは、やむなし
   };
 
+  $scope.getStringifyStrFromUrlFormat = function() {
+    var str = JSON.stringify($location.search());
+    return "size:" +
+    str.length + " : " +
+    str;
+  };
+
+  $scope.getCompressedStrFromUrlFormat = function() {
+    var str = lzbase62.compress(JSON.stringify($location.search()));
+    return "size:" +
+    str.length + " : " +
+    str;
+  };
+
   SIOPM.onLoad = function() {
     if (angular.isString($scope.inputText)) {
       $timeout(function() {

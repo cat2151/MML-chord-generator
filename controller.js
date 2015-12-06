@@ -2,8 +2,9 @@ angular.module('generatorApp')
 .controller('generatorController', ['$scope', '$location', '$timeout', 'GeneratorService',
 function($scope, $location, $timeout, GeneratorService) {
 
-  $scope.generatedMml = "なし";
-  $scope.initWait = 0;
+  $scope.p = {};
+  $scope.p.initWait = 0;
+  $scope.generatedMml = "なし"; // 生成結果は$scope.pには持たせない($scope.pを入力として処理した出力がこれなので)
 
   function setParamsFromUrl() {
     // [URLイメージ] ～/#?chord=C
@@ -11,33 +12,33 @@ function($scope, $location, $timeout, GeneratorService) {
     var urlOpm = $location.search().opm;
     var urlInitWait = $location.search().initwait;
     var urlMaxTopNoteNums = $location.search().maxtopnotenums;
-    if (angular.isString(urlChord)) $scope.inputText = urlChord;
+    if (angular.isString(urlChord)) $scope.p.inputText = urlChord;
     if (angular.isString(urlOpm)) {
-      $scope.prefixAllStr = urlOpm;
+      $scope.p.prefixAllStr = urlOpm;
       $scope.setPrefixAllStr();
     }
     if (angular.isString(urlInitWait)) {
-      $scope.initWait = urlInitWait;
+      $scope.p.initWait = urlInitWait;
     }
     if (angular.isString(urlMaxTopNoteNums)) {
       var arr = urlMaxTopNoteNums.split(',');
-      $scope.maxTopNoteNums = [];
+      $scope.p.maxTopNoteNums = [];
       angular.forEach(arr, function(v) {
-        $scope.maxTopNoteNums.push({maxTopNoteNum: v});
+        $scope.p.maxTopNoteNums.push({maxTopNoteNum: v});
       });
     }
   }
   // URLに反映 [用途] 書いたChordNameをURLコピペで共有できるようにする
   function setParamsToUrl() {
     $location.search({
-      chord : $scope.inputText,
-      opm : $scope.prefixAllStr,
-      initwait : $scope.initWait,
+      chord : $scope.p.inputText,
+      opm : $scope.p.prefixAllStr,
+      initwait : $scope.p.initWait,
       maxtopnotenums : getMaxtopnotenums()
     });
     function getMaxtopnotenums() {
       var str = '';
-      angular.forEach($scope.maxTopNoteNums, function (v) {
+      angular.forEach($scope.p.maxTopNoteNums, function (v) {
         if (str !== '') str += ',';
         str += v.maxTopNoteNum;
       });
@@ -49,10 +50,10 @@ function($scope, $location, $timeout, GeneratorService) {
   $scope.generate = function() {
     $scope.expandMaxTopNoteNumsByChordNamesCount(); // MML生成の前にmaxTopNoteNumsの生成を行う
 
-    //$scope.generatedMml = GeneratorService.generate($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType);
-    //$scope.generatedMml = GeneratorService.getChordsMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType);
-    //$scope.generatedMml = GeneratorService.getInventionMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType, $scope.maxTopNoteNum, $scope.maxbassNoteNum, $scope.delay);
-    $scope.generatedMml = GeneratorService.getInventionMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType, $scope.maxTopNoteNums, $scope.maxbassNoteNum, $scope.delay);
+    //$scope.generatedMml = GeneratorService.generate($scope.p.inputText, $scope.p.prefixTrackType, $scope.p.centerCnoteNum, $scope.p.prefixAllType);
+    //$scope.generatedMml = GeneratorService.getChordsMmlFromInputText($scope.p.inputText, $scope.p.prefixTrackType, $scope.p.centerCnoteNum, $scope.p.prefixAllType);
+    //$scope.generatedMml = GeneratorService.getInventionMmlFromInputText($scope.p.inputText, $scope.p.prefixTrackType, $scope.p.centerCnoteNum, $scope.p.prefixAllType, $scope.p.maxTopNoteNum, $scope.p.maxbassNoteNum, $scope.p.delay);
+    $scope.generatedMml = GeneratorService.getInventionMmlFromInputText($scope.p.inputText, $scope.p.prefixTrackType, $scope.p.centerCnoteNum, $scope.p.prefixAllType, $scope.p.maxTopNoteNums, $scope.p.maxbassNoteNum, $scope.p.delay);
 
     $timeout(function() { // compileより前にする(compileがSIOPMロード失敗の為にundefinedでexceptionになっても、先にURLへの反映はしておく)
       setParamsToUrl();
@@ -62,77 +63,77 @@ function($scope, $location, $timeout, GeneratorService) {
   };
 
   $scope.getRootNoteType = function() {
-    return GeneratorService.getRootNoteTypeFromOneChordName($scope.inputText).r;
+    return GeneratorService.getRootNoteTypeFromOneChordName($scope.p.inputText).r;
   };
 
   $scope.getChordType = function() {
-    return GeneratorService.getChordTypeFromOneChordName($scope.inputText);
+    return GeneratorService.getChordTypeFromOneChordName($scope.p.inputText);
   };
 
   $scope.getChordIntervals = function() {
-    return GeneratorService.getChordIntervalsFromOneChordName($scope.inputText);
+    return GeneratorService.getChordIntervalsFromOneChordName($scope.p.inputText);
   };
 
   $scope.getChordNoteNumbers = function() {
-    return GeneratorService.getChordNoteNumbersFromOneChordName($scope.inputText, $scope.centerCnoteNum);
+    return GeneratorService.getChordNoteNumbersFromOneChordName($scope.p.inputText, $scope.p.centerCnoteNum);
   };
 
   $scope.getNoteMml1 = function() {
-    return GeneratorService.getNoteMml1FromOneChordName($scope.inputText, $scope.centerCnoteNum);
+    return GeneratorService.getNoteMml1FromOneChordName($scope.p.inputText, $scope.p.centerCnoteNum);
   };
 
   $scope.getNoteMmls = function() {
-    return GeneratorService.getNoteMmlsFromOneChordName($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum);
+    return GeneratorService.getNoteMmlsFromOneChordName($scope.p.inputText, $scope.p.prefixTrackType, $scope.p.centerCnoteNum);
   };
 
   $scope.getChordNames = function() {
-    return GeneratorService.getChordNames($scope.inputText);
+    return GeneratorService.getChordNames($scope.p.inputText);
   };
 
   $scope.getNoteNumbersList = function() {
-    return GeneratorService.getNoteNumbersListFromInputText($scope.inputText, $scope.centerCnoteNum);
+    return GeneratorService.getNoteNumbersListFromInputText($scope.p.inputText, $scope.p.centerCnoteNum);
   };
 
   $scope.getPivotNoteNumbers = function() {
-    return GeneratorService.getPivotNoteNumbersFromInputText($scope.inputText, $scope.centerCnoteNum);
+    return GeneratorService.getPivotNoteNumbersFromInputText($scope.p.inputText, $scope.p.centerCnoteNum);
   };
 
   $scope.getChordsMml = function() {
-    return GeneratorService.getChordsMmlFromInputText($scope.inputText, $scope.prefixTrackType, $scope.centerCnoteNum, $scope.prefixAllType, $scope.delay);
+    return GeneratorService.getChordsMmlFromInputText($scope.p.inputText, $scope.p.prefixTrackType, $scope.p.centerCnoteNum, $scope.p.prefixAllType, $scope.p.delay);
   };
 
   $scope.getInventionNoteNumbers = function() {
-    return GeneratorService.getInventionNoteNumbersFromInputText($scope.inputText, $scope.centerCnoteNum, $scope.maxTopNoteNum);
+    return GeneratorService.getInventionNoteNumbersFromInputText($scope.p.inputText, $scope.p.centerCnoteNum, $scope.p.maxTopNoteNum);
   };
 
-  $scope.prefixAllStr = GeneratorService.getPrefixAllStr();
+  $scope.p.prefixAllStr = GeneratorService.getPrefixAllStr();
   $scope.getPrefixAllStr = function() {
-    $scope.prefixAllStr = GeneratorService.getPrefixAllStr();
+    $scope.p.prefixAllStr = GeneratorService.getPrefixAllStr();
   };
   $scope.setPrefixAllStr = function() {
-    GeneratorService.setPrefixAllStr($scope.prefixAllStr);
+    GeneratorService.setPrefixAllStr($scope.p.prefixAllStr);
   };
   $scope.setPrefixAllStrFromType = function() {
-    GeneratorService.setPrefixAllStrFromType($scope.prefixAllType);
+    GeneratorService.setPrefixAllStrFromType($scope.p.prefixAllType);
     $scope.getPrefixAllStr();
     $scope.generate();
   };
 
-  $scope.maxTopNoteNums = [];
-  $scope.oldMaxTopNoteNumsCount = $scope.maxTopNoteNums.length;
+  $scope.p.maxTopNoteNums = [];
+  $scope.oldMaxTopNoteNumsCount = $scope.p.maxTopNoteNums.length;
   $scope.expandMaxTopNoteNumsByChordNamesCount = function() {
     var maxTopNoteNumsCount = $scope.getNoteNumbersList().length;
     while ($scope.oldMaxTopNoteNumsCount < maxTopNoteNumsCount) {
-      $scope.maxTopNoteNums.push({maxTopNoteNum: $scope.maxTopNoteNum});
-      $scope.oldMaxTopNoteNumsCount = $scope.maxTopNoteNums.length;
+      $scope.p.maxTopNoteNums.push({maxTopNoteNum: $scope.p.maxTopNoteNum});
+      $scope.oldMaxTopNoteNumsCount = $scope.p.maxTopNoteNums.length;
     }
     // [補足] localではonLoadに到達しないのでこれが起動後に呼ばれない、のは、やむなし
   };
 
   $scope.getParsedData = function() {
     var paramFromUrl = lzbase62.compress(JSON.stringify($location.search()));
-    $scope.p = JSON.parse(lzbase62.decompress(paramFromUrl));
-    return $scope.p.chord;
+    $scope.testp = JSON.parse(lzbase62.decompress(paramFromUrl));
+    return $scope.testp.chord;
   };
 
   $scope.getStringifyStrFromUrlFormat = function() {
@@ -150,7 +151,7 @@ function($scope, $location, $timeout, GeneratorService) {
   };
 
   SIOPM.onLoad = function() {
-    if (angular.isString($scope.inputText)) {
+    if (angular.isString($scope.p.inputText)) {
       $timeout(function() {
         $scope.generate();
       }, 0);

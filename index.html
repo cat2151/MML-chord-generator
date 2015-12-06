@@ -31,20 +31,20 @@
         <span>コード進行を文字で入力すると、和音MMLを生成して演奏します</span>
         <br/>
         <textarea class="chord" cols="80" rows="1"
-          ng-model="inputText"
+          ng-model="p.inputText"
           placeholder="CやBbmを書いてみてください"
           ng-change="generate()" ng-blur="generate()"
         ></textarea>
 
         <br/>
         <span>ChordごとのTopNote上限</span>
-        <span ng-repeat="m in maxTopNoteNums" ng-show="$index < getNoteNumbersList().length">
+        <span ng-repeat="m in p.maxTopNoteNums" ng-show="$index < getNoteNumbersList().length">
           <input type="text" ng-model="m.maxTopNoteNum" ng-change="generate()" class="mtnns">
         </span>
 
         <br/>
         <span>音色
-          <select ng-model="prefixAllType" ng-init="prefixAllType='PREFIX_ALL_1'"
+          <select ng-model="p.prefixAllType" ng-init="p.prefixAllType='PREFIX_ALL_1'"
                   ng-change="setPrefixAllStrFromType()"
           >
             <option value="PREFIX_ALL_1">Piano or ユーザー音色</option>
@@ -64,38 +64,38 @@
 
       <div>
         <span>詳細設定</span>
-        <label><input type="radio" ng-value="false" ng-model="dispDetailSetting" ng-init="dispDetailSetting=false"/>表示しない</label>
-        <label><input type="radio" ng-value="true" ng-model="dispDetailSetting"/>表示する</label>
+        <label><input type="radio" ng-value="false" ng-model="p.dispDetailSetting" ng-init="p.dispDetailSetting=false"/>表示しない</label>
+        <label><input type="radio" ng-value="true" ng-model="p.dispDetailSetting"/>表示する</label>
       </div>
 
-      <div ng-show="dispDetailSetting">
+      <div ng-show="p.dispDetailSetting">
         <span>MML prefix:</span>
         <br/>
         <textarea cols="80" rows="5"
-          ng-model="prefixAllStr"
+          ng-model="p.prefixAllStr"
           placeholder="OPM音色定義MMLを入力してください"
-          ng-change="prefixAllType='PREFIX_ALL_1'; setPrefixAllStr(prefixAllStr); generate()"
-          ng-blur="prefixAllType='PREFIX_ALL_1'; setPrefixAllStr(prefixAllStr); generate()"
+          ng-change="p.prefixAllType='PREFIX_ALL_1'; setPrefixAllStr(p.prefixAllStr); generate()"
+          ng-blur="p.prefixAllType='PREFIX_ALL_1'; setPrefixAllStr(p.prefixAllStr); generate()"
         ></textarea>
         <br/>
-        <span>track発音タイミングずらし用休符<span><input type="text" ng-model="delay" ng-init="delay='r48'"
+        <span>track発音タイミングずらし用休符<span><input type="text" ng-model="p.delay" ng-init="p.delay='r48'"
           ng-change="generate()" ng-blur="generate()"
         >
         <br/>
-        <span>CのルートNoteNumber</span><input type="text" ng-model="centerCnoteNum" ng-init="centerCnoteNum='60'"
+        <span>CのルートNoteNumber</span><input type="text" ng-model="p.centerCnoteNum" ng-init="p.centerCnoteNum='60'"
           ng-change="generate()" ng-blur="generate()"
         >
         <br/>
-        <span>TopNote上限</span><input type="text" ng-model="maxTopNoteNum" ng-init="maxTopNoteNum='72'"
+        <span>TopNote上限</span><input type="text" ng-model="p.maxTopNoteNum" ng-init="p.maxTopNoteNum='72'"
           ng-change="generate()" ng-blur="generate()"
         >
         <br/>
-        <span>BassNote上限</span><input type="text" ng-model="maxbassNoteNum" ng-init="maxbassNoteNum='48'"
+        <span>BassNote上限</span><input type="text" ng-model="p.maxbassNoteNum" ng-init="p.maxbassNoteNum='48'"
           ng-change="generate()" ng-blur="generate()"
         >
         <br/>
         <span>MML track prefix:
-          <select ng-model="prefixTrackType" ng-init="prefixTrackType='PREFIX_TRACK_1'"
+          <select ng-model="p.prefixTrackType" ng-init="p.prefixTrackType='PREFIX_TRACK_1'"
                   ng-change="generate()"
           >
             <option value="PREFIX_TRACK_1">OPM@0</option>
@@ -104,7 +104,7 @@
         </span>
         <br/>
         <span>MMLフォーマット:
-          <select ng-model="formatType" ng-init="formatType='SION'"
+          <select ng-model="p.formatType" ng-init="p.formatType='SION'"
                   ng-change="generate()"
           >
             <option value="SION">SiON (すたどんたんでお馴染み)</option>
@@ -117,10 +117,10 @@
       <div>
         <hr>
         <span>デバッグ表示</span>
-        <label><input type="radio" ng-value="false" ng-model="dispDebug" ng-init="dispDebug=false"/>表示しない</label>
-        <label><input type="radio" ng-value="true" ng-model="dispDebug"/>表示する</label>
+        <label><input type="radio" ng-value="false" ng-model="p.dispDebug" ng-init="p.dispDebug=false"/>表示しない</label>
+        <label><input type="radio" ng-value="true" ng-model="p.dispDebug"/>表示する</label>
       </div>
-      <div ng-show="dispDebug">
+      <div ng-show="p.dispDebug">
 
         <h4>getParsedData</h4>
         <span>{{getParsedData()}}</span>
@@ -135,16 +135,16 @@
         <span>{{getNoteNumbersList().length}}</span>
 
         <h4>maxTopNoteNums件数</h4>
-        <span>{{maxTopNoteNums.length}}</span>
+        <span>{{p.maxTopNoteNums.length}}</span>
 
         <h4>formatType</h4>
-        <span>{{formatType}}</span>
+        <span>{{p.formatType}}</span>
 
         <h4>prefixAllType</h4>
-        <span>{{prefixAllType}}</span>
+        <span>{{p.prefixAllType}}</span>
 
         <h4>prefixTrackType</h4>
-        <span>{{prefixTrackType}}</span>
+        <span>{{p.prefixTrackType}}</span>
 
         <h4>getRootNoteType</h4>
         <span>{{getRootNoteType()}}</span>

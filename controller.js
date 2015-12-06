@@ -129,6 +129,12 @@ function($scope, $location, $timeout, GeneratorService) {
     // [補足] localではonLoadに到達しないのでこれが起動後に呼ばれない、のは、やむなし
   };
 
+  $scope.getParsedData = function() {
+    var paramFromUrl = lzbase62.compress(JSON.stringify($location.search()));
+    $scope.p = JSON.parse(lzbase62.decompress(paramFromUrl));
+    return $scope.p.chord;
+  };
+
   $scope.getStringifyStrFromUrlFormat = function() {
     var str = JSON.stringify($location.search());
     return "size:" +

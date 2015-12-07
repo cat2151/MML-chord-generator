@@ -150,6 +150,17 @@ function($scope, $location, $timeout, GeneratorService) {
     str;
   };
 
+  $scope.getCompressedParamsForUrl = function() {
+    return lzbase62.compress(JSON.stringify($scope.p));
+  };
+
+  $scope.getDecompressedParamsFromUrl = function() {
+    var paramFromUrl = $location.search().p;
+    if (!paramFromUrl) return undefined;
+    return JSON.parse(lzbase62.decompress(paramFromUrl));
+  };
+
+
   SIOPM.onLoad = function() {
     if (angular.isString($scope.p.inputText)) {
       $timeout(function() {

@@ -27,23 +27,27 @@ function($scope, $location, $timeout, GeneratorService) {
         $scope.p.maxTopNoteNums.push({maxTopNoteNum: v});
       });
     }
+    // [URLイメージ] ～/#?p=abcdef [補足] pがある場合は上記を上書き、pがない場合は上記のまま
+    var p = $scope.getDecompressedParamsFromUrl();
+    if (p) $scope.p = p;
   }
   // URLに反映 [用途] 書いたChordNameをURLコピペで共有できるようにする
   function setParamsToUrl() {
     $location.search({
-      chord : $scope.p.inputText,
-      opm : $scope.p.prefixAllStr,
-      initwait : $scope.p.initWait,
-      maxtopnotenums : getMaxtopnotenums()
+      p: $scope.getCompressedParamsForUrl()
+    //   chord : $scope.p.inputText,
+    //   opm : $scope.p.prefixAllStr,
+    //   initwait : $scope.p.initWait,
+    //   maxtopnotenums : getMaxtopnotenums()
     });
-    function getMaxtopnotenums() {
-      var str = '';
-      angular.forEach($scope.p.maxTopNoteNums, function (v) {
-        if (str !== '') str += ',';
-        str += v.maxTopNoteNum;
-      });
-      return str;
-    }
+    // function getMaxtopnotenums() {
+    //   var str = '';
+    //   angular.forEach($scope.p.maxTopNoteNums, function (v) {
+    //     if (str !== '') str += ',';
+    //     str += v.maxTopNoteNum;
+    //   });
+    //   return str;
+    // }
   }
 
 

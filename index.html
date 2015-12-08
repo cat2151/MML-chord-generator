@@ -78,7 +78,7 @@
           ng-blur="p.prefixAllType='PREFIX_ALL_1'; setPrefixAllStr(p.prefixAllStr); generate()"
         ></textarea>
         <br/>
-        <span>track発音タイミングずらし用休符<span><input type="text" ng-model="p.delay" ng-init="p.delay='r48'"
+        <span>track発音タイミングずらし用休符</span><input type="text" ng-model="p.delay" ng-init="p.delay='r48'"
           ng-change="generate()" ng-blur="generate()"
         >
         <br/>
@@ -120,7 +120,7 @@
         <label><input type="radio" ng-value="false" ng-model="p.dispDebug" ng-init="p.dispDebug=false"/>表示しない</label>
         <label><input type="radio" ng-value="true" ng-model="p.dispDebug"/>表示する</label>
       </div>
-      <div ng-show="p.dispDebug">
+      <div ng-if="p.dispDebug">
 
         <h4>getDecompressedParamsFromUrl</h4>
         <span>{{getDecompressedParamsFromUrl()}}</span>

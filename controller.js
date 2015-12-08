@@ -29,7 +29,10 @@ function($scope, $location, $timeout, GeneratorService) {
     }
     // [URLイメージ] ～/#?p=abcdef [補足] pがある場合は上記を上書き、pがない場合は上記のまま
     var p = $scope.getDecompressedParamsFromUrl();
-    if (p) $scope.p = p;
+    if (p) {
+      $scope.p = p;
+      $scope.setPrefixAllStr();
+    }
   }
   // URLに反映 [用途] 書いたChordNameをURLコピペで共有できるようにする
   function setParamsToUrl() {

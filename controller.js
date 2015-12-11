@@ -168,11 +168,12 @@ function($scope, $location, $timeout, GeneratorService) {
   };
 
   $scope.openTweet = function() {
-    var twUrl = 'https://twitter.com/share?hashtags=mmlchordgen&text=';
-    var param = "";
-    param += $scope.p.inputText + " ";
-    param += window.location.href;
-    window.open(twUrl + encodeURIComponent(param),'','scrollbars=yes,width=500,height=300,');
+    var twUrl = "https://twitter.com/share?"
+    var prms = "";
+    prms += "hashtags=" + "mmlchordgen"
+    prms += "&text=" + encodeURIComponent("♪" + $scope.p.inputText + "♪");
+    prms += "&url=" + window.location.href;
+    window.open(twUrl + prms, "", "scrollbars=yes,width=500,height=300");
   };
 
 

@@ -167,6 +167,14 @@ function($scope, $location, $timeout, GeneratorService) {
     return JSON.parse(lzbase62.decompress(paramFromUrl));
   };
 
+  $scope.openTweet = function() {
+    var twUrl = 'https://twitter.com/share?hashtags=mmlchordgen&text=';
+    var param = "";
+    param += $scope.p.inputText + " ";
+    param += window.location.href;
+    window.open(twUrl + encodeURIComponent(param),'','scrollbars=yes,width=500,height=300,');
+  };
+
 
   SIOPM.onLoad = function() {
     if (angular.isString($scope.p.inputText)) {

@@ -171,8 +171,11 @@ function($scope, $location, $timeout, GeneratorService) {
     var twUrl = "https://twitter.com/share?"
     var prms = "";
     prms += "hashtags=" + "mmlchordgen"
-    prms += "&text=" + encodeURIComponent("♪" + $scope.p.inputText + "♪");
-    prms += "&url=" + window.location.href;
+    prms += "&url=";
+    prms += "&text=" +
+      encodeURIComponent("♪" + $scope.p.inputText + "♪ " +
+        window.location.href
+      );
     window.open(twUrl + prms, "", "scrollbars=yes,width=500,height=300");
   };
 

@@ -38,7 +38,7 @@
 
         <br/>
         <span>ChordごとのTopNote上限</span>
-        <span ng-repeat="m in p.maxTopNoteNums" ng-show="$index < getNoteNumbersList().length">
+        <span ng-repeat="m in p.maxTopNoteNums track by $index" ng-show="$index < getNoteNumbersList().length">
           <input type="text" ng-model="m.maxTopNoteNum" ng-change="generate()" class="mtnns">
         </span>
 

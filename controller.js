@@ -168,10 +168,9 @@ function($scope, $location, $timeout, GeneratorService) {
   };
 
   $scope.openTweet = function() {
-    var twUrl = "https://twitter.com/share?"
+    var twUrl = "https://twitter.com/intent/tweet?";
     var prms = "";
     prms += "hashtags=" + "mmlchordgen"
-    prms += "&url=";
     prms += "&text=" +
       encodeURIComponent("♪" + $scope.p.inputText + "♪ " +
         window.location.href

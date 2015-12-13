@@ -185,13 +185,13 @@ function() {
   }
 
   // [イメージ] 'F/A' → {9, ''} 、 'C/A' → {0, ''} [補足] 入出力フォーマットはgetRootNoteTypeFromOneChordNameに合わせる
-  function getSlashChordBassNoteType(oneChordName) {
+  function getOnChordBassNoteType(oneChordName) {
     var txt = oneChordName;
     if (isEmpty(txt)) txt = ''; // undefined → ''
-    if (!isSlash(txt)) txt = ''; // slashなし
+    if (!isOnChord(txt)) txt = ''; // オンコードなし
     var ret = {r: -1, p: txt};
     if (!isEmpty(txt)) {
-      var arr = oneChordName.split('/');
+      var arr = oneChordName.split('on'); // [前提] F/A をFonAに置換済みであること。オンコードモード固定であること。
       return getRootNoteTypeFromOneChordName(arr[arr.length - 1]);
     }
     return ret;
@@ -222,7 +222,7 @@ function() {
     var txt = parsedText;
     if (isEmpty(parsedText)) txt = ''; // undefined → ''
     var ret = {t: '', p: txt};
-    if (txt.indexOf('/') != -1) txt = txt.split('/')[0]; // 分数コードは一旦無視（仮実装、あとで変更予定）
+    if (isOnChord(txt)) txt = txt.split('on')[0]; // オンコードのベースノートはここでは取り除いて扱う（別途扱うので）
     txt = getNormalizedTxt(txt);
     var i;
     for (i = 0; i < CHORD_OBJS.length; i++) {
@@ -318,6 +318,8 @@ function() {
   function getChordNames(inputText) {
     if (isEmpty(inputText)) return [];
     var txt = inputText;
+    txt = txt.replace(/ on ([A-G])/g, 'on$1'); // オンコード表記の正規化
+    txt = txt.replace(/(?:\/| \/ )([A-G])/g, 'on$1'); // slashはオンコードモード時はオンコードとみなす（現在オンコードモード固定）
     txt = txt.replace(/\-([A-G])/g, ' $1'); // [イメージ] 'Dm-Em' → 'Dm Em'
     txt = txt.replace(/ - |->|→|>/g, ' ');
     txt = txt.replace(/\{|\}/g, ' '); // ニコニコ大百科のコード進行の記事で使っている、1小節内の複数のコード進行をグルーピングするための表記
@@ -463,8 +465,8 @@ function() {
     return getInventionNoteNumbers(noteNumbersList, maxTopNoteNum);
   }
 
-  function isSlash(chordName) {
-    if (chordName.indexOf('/') == -1) return false; // slashなし
+  function isOnChord(chordName) {
+    if (chordName.indexOf('on') == -1) return false; // 非オンコード
     return true;
   }
 
@@ -474,7 +476,7 @@ function() {
     if (!isNumberStr(maxbassNoteNum)) return [];
     if (!noteNumbers.length) return [];
     var bass;
-    if (isSlash(chordName)) {
+    if (isOnChord(chordName)) {
       bass = getOnChordBass(chordName);
     } else {
       bass = getNormalBass(chordName);
@@ -490,7 +492,7 @@ function() {
       return getBass(bassNoteType);
     }
     function getOnChordBass(chordName) {
-      var bassNoteType = getSlashChordBassNoteType(chordName).r;
+      var bassNoteType = getOnChordBassNoteType(chordName).r;
       return getBass(bassNoteType);
     }
     function getBass(bassNoteType) {

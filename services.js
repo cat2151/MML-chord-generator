@@ -534,6 +534,27 @@ function() {
     return getChordsMml(pivoted, prefixTrackType, prefixAllType, delay);
   }
 
+  function getInputTextFromInputNumbers(inputNumbers) {
+    var arr = inputNumbers.split(" ");
+    if (isEmpty(arr)) return "";
+    var inputText = "";
+    angular.forEach(arr, function(v) {
+      if (!isEmpty(inputText)) inputText += " ";
+      inputText += getChordName(v);
+    });
+    return inputText;
+    function getChordName(v) {
+      if (v == "1") return "CM7";
+      if (v == "2") return "Dm7";
+      if (v == "3") return "Em7";
+      if (v == "4") return "FM7";
+      if (v == "5") return "G7";
+      if (v == "6") return "Am7";
+      if (v == "7") return "Bm7b5";
+      return "";
+    }
+  }
+
   return {
     isEmpty: isEmpty,
     generate: generate,
@@ -556,6 +577,7 @@ function() {
     getInventionMmlFromInputText: getInventionMmlFromInputText,
     setPrefixAllStr: setPrefixAllStr,
     getPrefixAllStr: getPrefixAllStr,
-    setPrefixAllStrFromType: setPrefixAllStrFromType
+    setPrefixAllStrFromType: setPrefixAllStrFromType,
+    getInputTextFromInputNumbers: getInputTextFromInputNumbers
   };
 }]);

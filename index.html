@@ -125,6 +125,11 @@
       </div>
       <div ng-if="p.dispDebug">
 
+        <span>数字でコードを指定</span><input type="text" ng-model="p.inputNumbers"
+          ng-change="getInputTextFromInputNumbers()" ng-blur="getInputTextFromInputNumbers()"
+        >
+        {{p.inputText}}
+
         <h4>getDecompressedParamsFromUrl</h4>
         <span>{{getDecompressedParamsFromUrl()}}</span>
 

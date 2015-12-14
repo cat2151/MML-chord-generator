@@ -178,6 +178,9 @@ function($scope, $location, $timeout, GeneratorService) {
     window.open(twUrl + prms, "", "scrollbars=yes,width=500,height=300");
   };
 
+  $scope.getInputTextFromInputNumbers = function() {
+    $scope.p.inputText = GeneratorService.getInputTextFromInputNumbers($scope.p.inputNumbers);
+  };
 
   SIOPM.onLoad = function() {
     if (angular.isString($scope.p.inputText)) {

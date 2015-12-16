@@ -535,6 +535,7 @@ function() {
   }
 
   function getInputTextFromInputNumbers(inputNumbers) {
+    inputNumbers = getNormalized(inputNumbers); // [イメージ] 'III - VI' → '3 6'
     var arr = inputNumbers.split(" ");
     if (isEmpty(arr)) return "";
     var inputText = "";
@@ -552,6 +553,31 @@ function() {
       if (v == "6") return "Am7";
       if (v == "7") return "Bm7b5";
       return "";
+    }
+    function getNormalized(v) {
+      // III は II より前に置換
+      v = v.replace(/III/g, '3');
+      v = v.replace(/VII/g, '7');
+      // II は I より前に置換
+      v = v.replace(/II/g, '2');
+      v = v.replace(/IV/g, '4');
+      v = v.replace(/VI/g, '6');
+      // 1文字
+      v = v.replace(/I/g, '1');
+      v = v.replace(/V/g, '5');
+      v = v.replace(/Ⅲ/g, '3');
+      v = v.replace(/Ⅶ/g, '7');
+      v = v.replace(/Ⅱ/g, '2');
+      v = v.replace(/Ⅳ/g, '4');
+      v = v.replace(/Ⅵ/g, '6');
+      v = v.replace(/Ⅰ/g, '1');
+      v = v.replace(/Ⅴ/g, '5');
+      // 数字化のあとに置換
+      v = v.replace(/\-([1-7])/g, ' $1'); // [イメージ] '3-6' → '3 6'
+      v = v.replace(/ - |->|→|>/g, ' ');
+      v = v.replace(/\s+/g, ' '); // 連続spaceをspace1つへ
+      v = v.replace(/^\s|\s$/g, ''); // 先頭と末尾のspaceを削除
+      return v;
     }
   }
 

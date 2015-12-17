@@ -60,7 +60,9 @@ function($scope, $location, $timeout, GeneratorService) {
     //$scope.generatedMml = GeneratorService.generate($scope.p.inputText, $scope.p.prefixTrackType, $scope.p.centerCnoteNum, $scope.p.prefixAllType);
     //$scope.generatedMml = GeneratorService.getChordsMmlFromInputText($scope.p.inputText, $scope.p.prefixTrackType, $scope.p.centerCnoteNum, $scope.p.prefixAllType);
     //$scope.generatedMml = GeneratorService.getInventionMmlFromInputText($scope.p.inputText, $scope.p.prefixTrackType, $scope.p.centerCnoteNum, $scope.p.prefixAllType, $scope.p.maxTopNoteNum, $scope.p.maxbassNoteNum, $scope.p.delay);
-    $scope.generatedMml = GeneratorService.getInventionMmlFromInputText($scope.p.inputText, $scope.p.prefixTrackType, $scope.p.centerCnoteNum, $scope.p.prefixAllType, $scope.p.maxTopNoteNums, $scope.p.maxbassNoteNum, $scope.p.delay);
+    $scope.generatedMml = "";
+    $scope.generatedMml += "/*♪" + $scope.p.inputText + "♪*/";
+    $scope.generatedMml += GeneratorService.getInventionMmlFromInputText($scope.p.inputText, $scope.p.prefixTrackType, $scope.p.centerCnoteNum, $scope.p.prefixAllType, $scope.p.maxTopNoteNums, $scope.p.maxbassNoteNum, $scope.p.delay);
 
     $timeout(function() { // compileより前にする(compileがSIOPMロード失敗の為にundefinedでexceptionになっても、先にURLへの反映はしておく)
       setParamsToUrl();

@@ -131,6 +131,14 @@
         <span>数字でコードを指定</span><input type="text" ng-model="p.inputNumbers"
           ng-change="getInputTextFromInputNumbers()" ng-blur="getInputTextFromInputNumbers()"
         >
+        <span>KEY : </span>
+        <span ng-repeat="r in keyRadios" ng-init="p.chordKey=0">
+          <label>
+            <input type="radio" ng-model="p.chordKey"
+                 value="{{r.id}}">{{r.name}}
+          </label>
+        </span>
+        <br/>
         {{p.inputText}}
 
         <h4>getDecompressedParamsFromUrl</h4>

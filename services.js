@@ -554,6 +554,16 @@ function() {
       if (v == "7") return "Bm7b5";
       return "";
     }
+    function getSemitoneFromDegree(d) {
+      if (d == 1) return 0;
+      if (d == 2) return 2;
+      if (d == 3) return 4;
+      if (d == 4) return 5;
+      if (d == 5) return 7;
+      if (d == 6) return 9;
+      if (d == 7) return 11;
+      return undefined;
+    }
     function getNormalized(v) {
       // III は II より前に置換
       v = v.replace(/III/g, '3');

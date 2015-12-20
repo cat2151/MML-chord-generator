@@ -181,7 +181,7 @@ function($scope, $location, $timeout, GeneratorService) {
   };
 
   $scope.getInputTextFromInputNumbers = function() {
-    $scope.p.inputText = GeneratorService.getInputTextFromInputNumbers($scope.p.inputNumbers);
+    $scope.p.inputText = GeneratorService.getInputTextFromInputNumbers($scope.p.inputNumbers, $scope.p.chordKeyOffset);
     $scope.generate();
   };
 

@@ -132,10 +132,11 @@
           ng-change="getInputTextFromInputNumbers()" ng-blur="getInputTextFromInputNumbers()"
         >
         <span>KEY : </span>
-        <span ng-repeat="r in keyRadios" ng-init="p.chordKey=0">
+        <span ng-repeat="r in keyRadios">
           <label>
-            <input type="radio" ng-model="p.chordKey"
-                 value="{{r.id}}">{{r.name}}
+            <input type="radio" ng-model="p.chordKeyOffset" ng-change="getInputTextFromInputNumbers()"
+                 value="{{r.id}}">
+                 {{r.name}}
           </label>
         </span>
         <br/>

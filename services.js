@@ -534,8 +534,9 @@ function() {
     return getChordsMml(pivoted, prefixTrackType, prefixAllType, delay);
   }
 
-  function getInputTextFromInputNumbers(inputNumbers) {
+  function getInputTextFromInputNumbers(inputNumbers, chordKeyOffset) {
     inputNumbers = getNormalized(inputNumbers); // [イメージ] 'III - VI' → '3 6'
+    chordKeyOffset = Number(chordKeyOffset);
     var arr = inputNumbers.split(" ");
     if (isEmpty(arr)) return "";
     var inputText = "";
@@ -544,15 +545,25 @@ function() {
       inputText += getChordName(v);
     });
     return inputText;
-    function getChordName(v) {
-      if (v == "1") return "CM7";
-      if (v == "2") return "Dm7";
-      if (v == "3") return "Em7";
-      if (v == "4") return "FM7";
-      if (v == "5") return "G7";
-      if (v == "6") return "Am7";
-      if (v == "7") return "Bm7b5";
-      return "";
+    function getChordName(degree) {
+      var semitone = getSemitoneFromDegree(degree);
+      if (semitone === undefined) return "";
+      semitone += chordKeyOffset;
+      return getRootFromSemitone(semitone) + getChordTypeFromDegree(degree);
+      function getRootFromSemitone(s) {
+        s = ((s % 12) + 12) % 12;
+        return ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"][s];
+      }
+      function getChordTypeFromDegree(d) {
+        if (d == "1") return "M7";
+        if (d == "2") return "m7";
+        if (d == "3") return "m7";
+        if (d == "4") return "M7";
+        if (d == "5") return "7";
+        if (d == "6") return "m7";
+        if (d == "7") return "m7b5";
+        return "";
+      }
     }
     function getSemitoneFromDegree(d) {
       if (d == 1) return 0;

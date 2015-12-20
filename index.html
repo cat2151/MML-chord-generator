@@ -128,13 +128,13 @@
       </div>
       <div ng-if="p.dispDebug">
 
-        <span>数字でコードを指定</span><input type="text" ng-model="p.inputNumbers" ng-init="p.inputNumbers=0"
+        <span>数字でコードを指定</span><input type="text" ng-model="p.inputNumbers"
           ng-change="getInputTextFromInputNumbers()" ng-blur="getInputTextFromInputNumbers()"
         >
         <span>KEY : </span>
         <span ng-repeat="r in keyRadios">
           <label>
-            <input type="radio" ng-model="p.chordKeyOffset" ng-change="getInputTextFromInputNumbers()"
+            <input type="radio" ng-model="p.chordKeyOffset" ng-init="p.chordKeyOffset=0" ng-change="getInputTextFromInputNumbers()"
                  value="{{r.id}}">
                  {{r.name}}
           </label>

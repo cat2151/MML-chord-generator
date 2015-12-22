@@ -131,6 +131,7 @@
         <span>数字でコードを指定</span><input type="text" ng-model="p.inputNumbers"
           ng-change="getInputTextFromInputNumbers()" ng-blur="getInputTextFromInputNumbers()"
         >
+        <br/>
         <span>KEY : </span>
         <span ng-repeat="r in keyRadios">
           <label>
@@ -139,6 +140,10 @@
                  {{r.name}}
           </label>
         </span>
+        <br/>
+        <label><input type="radio" value="TRIAD" ng-model="p.inputNumbersType" ng-change="getInputTextFromInputNumbers()"/>TRIAD</label>
+        <label><input type="radio" value="SEVENTH" ng-model="p.inputNumbersType" ng-change="getInputTextFromInputNumbers()"/>SEVENTH</label>
+        <label><input type="radio" value="NINTH" ng-model="p.inputNumbersType" ng-change="getInputTextFromInputNumbers()"/>NINTH</label>
         <br/>
         {{p.inputText}}
 

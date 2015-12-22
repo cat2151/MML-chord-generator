@@ -47,11 +47,11 @@ function() {
     ['DIM', ['dim'], [0, 3, 6]],
     ['MINORFLAT5', ['mb5', 'm-5'], [0, 3, 6]], /* 構成音は同じだが意味合いが違うので分けたままにしておく（あとで連結するのは楽だがあとで分けるのは考慮が必要なので） */
     ['DIM7', ['dim7'], [0, 3, 6, 9]],
+    ['MIN7DIM5', ['m7b5', 'm7-5', 'min7dim5'], [0, 3, 6, 10]],
     ['DIM9', ['dim9'], [0, 3, 6, 9, 14]],
     ['DIM11', ['dim11'], [0, 3, 6, 9, 13, 16]],
-    ['DIMMIN9', ['dimb9'], [0, 3, 6, 9, 13]],
-
-    ['MIN7DIM5', ['m7b5', 'm7-5', 'min7dim5'], [0, 3, 6, 10]],
+    ['DIMMIN9', ['dimb9', 'dim7b9'], [0, 3, 6, 9, 13]],
+    ['MIN7FLAT5FLAT9', ['m7b5b9', 'm7(b5b9)', 'min7b5b9', 'min7(b5b9)'], [0, 3, 6, 9, 13]],
 
     ['FLAT5', ['b5', '-5'], [0, 4, 6]],
     ['SEVENTHFLAT5', ['7b5', '7-5', 'dom7dim5'], [0, 4, 6, 10]],
@@ -534,7 +534,7 @@ function() {
     return getChordsMml(pivoted, prefixTrackType, prefixAllType, delay);
   }
 
-  function getInputTextFromInputNumbers(inputNumbers, chordKeyOffset) {
+  function getInputTextFromInputNumbers(inputNumbers, chordKeyOffset, inputNumbersType) {
     inputNumbers = getNormalized(inputNumbers); // [イメージ] 'III - VI' → '3 6'
     chordKeyOffset = Number(chordKeyOffset);
     var arr = inputNumbers.split(" ");
@@ -555,13 +555,31 @@ function() {
         return ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"][s];
       }
       function getChordTypeFromDegree(d) {
-        if (d == "1") return "M7";
-        if (d == "2") return "m7";
-        if (d == "3") return "m7";
-        if (d == "4") return "M7";
-        if (d == "5") return "7";
-        if (d == "6") return "m7";
-        if (d == "7") return "m7b5";
+        if (inputNumbersType == "TRIAD") {
+          if (d == "1") return "";
+          if (d == "2") return "m";
+          if (d == "3") return "m";
+          if (d == "4") return "";
+          if (d == "5") return "";
+          if (d == "6") return "m";
+          if (d == "7") return "mb5";
+        } else if (inputNumbersType == "SEVENTH") {
+          if (d == "1") return "M7";
+          if (d == "2") return "m7";
+          if (d == "3") return "m7";
+          if (d == "4") return "M7";
+          if (d == "5") return "7";
+          if (d == "6") return "m7";
+          if (d == "7") return "m7b5";
+        } else if (inputNumbersType == "NINTH") {
+          if (d == "1") return "M9";
+          if (d == "2") return "m9";
+          if (d == "3") return "m9";
+          if (d == "4") return "M9";
+          if (d == "5") return "9";
+          if (d == "6") return "m9";
+          if (d == "7") return "m7b5b9";
+        }
         return "";
       }
     }

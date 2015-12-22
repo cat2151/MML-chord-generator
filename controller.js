@@ -5,6 +5,7 @@ function($scope, $location, $timeout, GeneratorService) {
   $scope.p = {};
   $scope.p.initWait = 0;
   $scope.p.chordKeyOffset = "0"; // setParamsFromUrlより前に初期化が必要な為（ng-initではsetParamsFromUrlの後になることがあるようなので）
+  $scope.p.inputNumbersType = "SEVENTH";
   $scope.generatedMml = "なし"; // 生成結果は$scope.pには持たせない($scope.pを入力として処理した出力がこれなので)
 
   function setParamsFromUrl() {
@@ -182,7 +183,7 @@ function($scope, $location, $timeout, GeneratorService) {
   };
 
   $scope.getInputTextFromInputNumbers = function() {
-    $scope.p.inputText = GeneratorService.getInputTextFromInputNumbers($scope.p.inputNumbers, $scope.p.chordKeyOffset);
+    $scope.p.inputText = GeneratorService.getInputTextFromInputNumbers($scope.p.inputNumbers, $scope.p.chordKeyOffset, $scope.p.inputNumbersType);
     $scope.generate();
   };
 

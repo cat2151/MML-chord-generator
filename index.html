@@ -21,6 +21,9 @@
     input.mtnns {
     width: 30px;
     }
+    input.inptnmbrs {
+    width: 200px;
+    }
     </style>
 
     <title>MML和音生成器</title>
@@ -58,6 +61,28 @@
             <option value="">設定なし</option>
           </select>
         </span>
+
+        <hr/>
+
+        <input type="text" ng-model="p.inputNumbers"
+          ng-change="getInputTextFromInputNumbers()" ng-blur="getInputTextFromInputNumbers()"
+          placeholder="数字でコードを指定 [例] 2 V" class="inptnmbrs"
+        >
+        <div ng-show="p.inputNumbers">
+          <br/>
+          <span>KEY : </span>
+          <span ng-repeat="r in keyRadios">
+            <label>
+              <input type="radio" ng-model="p.chordKeyOffset" ng-change="getInputTextFromInputNumbers()"
+                   value="{{r.id}}">
+                   {{r.name}}
+            </label>
+          </span>
+          <br/>
+          <label><input type="radio" value="TRIAD" ng-model="p.inputNumbersType" ng-change="getInputTextFromInputNumbers()"/>TRIAD</label>
+          <label><input type="radio" value="SEVENTH" ng-model="p.inputNumbersType" ng-change="getInputTextFromInputNumbers()"/>SEVENTH</label>
+          <label><input type="radio" value="NINTH" ng-model="p.inputNumbersType" ng-change="getInputTextFromInputNumbers()"/>NINTH</label>
+        </div>
 
         <hr/>
         <button ng-click='openTweet()'>ツイートする</button>
@@ -127,25 +152,6 @@
         <label><input type="radio" ng-value="true" ng-model="p.dispDebug"/>表示する</label>
       </div>
       <div ng-if="p.dispDebug">
-
-        <span>数字でコードを指定</span><input type="text" ng-model="p.inputNumbers"
-          ng-change="getInputTextFromInputNumbers()" ng-blur="getInputTextFromInputNumbers()"
-        >
-        <br/>
-        <span>KEY : </span>
-        <span ng-repeat="r in keyRadios">
-          <label>
-            <input type="radio" ng-model="p.chordKeyOffset" ng-change="getInputTextFromInputNumbers()"
-                 value="{{r.id}}">
-                 {{r.name}}
-          </label>
-        </span>
-        <br/>
-        <label><input type="radio" value="TRIAD" ng-model="p.inputNumbersType" ng-change="getInputTextFromInputNumbers()"/>TRIAD</label>
-        <label><input type="radio" value="SEVENTH" ng-model="p.inputNumbersType" ng-change="getInputTextFromInputNumbers()"/>SEVENTH</label>
-        <label><input type="radio" value="NINTH" ng-model="p.inputNumbersType" ng-change="getInputTextFromInputNumbers()"/>NINTH</label>
-        <br/>
-        {{p.inputText}}
 
         <h4>getDecompressedParamsFromUrl</h4>
         <span>{{getDecompressedParamsFromUrl()}}</span>

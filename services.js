@@ -118,7 +118,7 @@ function() {
   ];
 
 
-  var prefixTrackStr = '%6 @0 l2 v8';
+  var prefixTrackStr = '%6 @0 l2 ';
 
   function setPrefixAllStr(v) {
     prefixAllStr = v;
@@ -389,6 +389,7 @@ function() {
         if (prefixTrackType == 'PREFIX_TRACK_1') {
           mml += prefixTrackStr;
         }
+        mml += volume();
         mml += delayMml;
         delayMml += delay; // trackごとに増えてゆく
         angular.forEach(trackNoteNumbers, function(noteNumber) {
@@ -400,6 +401,15 @@ function() {
         });
       });
       return mml;
+    }
+    function volume() {
+      var l = pivoted.length;
+      if (l <= 3) { return 'v8'; }  // [例] C5 + bass (3poly)
+      if (l <= 4) { return 'v8'; }
+      if (l <= 5) { return 'v8'; }
+      if (l <= 6) { return 'v7'; }  // [例] C9 + bass (6poly)
+      if (l <= 7) { return 'v7'; }
+      return 'v7';  // [例] C13 + bass (8poly)
     }
   }
 

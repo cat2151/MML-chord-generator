@@ -419,7 +419,7 @@ function() {
     var pivoted = getPivotNoteNumbersFromInputText(inputText, centerCnoteNum);
     return getChordsMml(pivoted, prefixTrackType, prefixAllType, delay);
   }
-
+  // [イメージ] [60, 64, 67] → [72, 64, 67] → [64, 67, 72]
   function inventionNoteNumbersUp(noteNumbers) {
     if (!noteNumbers.length) return;
     noteNumbers[0] += 12;
@@ -447,6 +447,12 @@ function() {
     if (!noteNumbers.length) return [];
     var i;
     var topNote;
+    for (i = 0; i < noteNumbers.length; i++) {
+      inventionNoteNumbersUp(noteNumbers);
+    }
+    for (i = 0; i < noteNumbers.length; i++) { // [例] o4ceg o5d → o4cdeg
+      inventionNoteNumbersDown(noteNumbers);
+    }
     for (i = 0; i < 128; i++) {
       topNote = noteNumbers[noteNumbers.length - 1];
       if (topNote >= Number(maxTopNoteNum)) break;

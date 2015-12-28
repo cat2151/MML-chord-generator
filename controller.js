@@ -6,6 +6,7 @@ function($scope, $location, $timeout, GeneratorService) {
   $scope.p.initWait = 0;
   $scope.p.chordKeyOffset = "0"; // setParamsFromUrlより前に初期化が必要な為（ng-initではsetParamsFromUrlの後になることがあるようなので）
   $scope.p.inputNumbersType = "SEVENTH";
+  $scope.p.voicingType = "CLOSE";
   $scope.generatedMml = "なし"; // 生成結果は$scope.pには持たせない($scope.pを入力として処理した出力がこれなので)
 
   function setParamsFromUrl() {
@@ -64,7 +65,7 @@ function($scope, $location, $timeout, GeneratorService) {
     //$scope.generatedMml = GeneratorService.getInventionMmlFromInputText($scope.p.inputText, $scope.p.prefixTrackType, $scope.p.centerCnoteNum, $scope.p.prefixAllType, $scope.p.maxTopNoteNum, $scope.p.maxbassNoteNum, $scope.p.delay);
     $scope.generatedMml = "";
     $scope.generatedMml += "/*♪" + $scope.p.inputText + "♪*/";
-    $scope.generatedMml += GeneratorService.getInventionMmlFromInputText($scope.p.inputText, $scope.p.prefixTrackType, $scope.p.centerCnoteNum, $scope.p.prefixAllType, $scope.p.maxTopNoteNums, $scope.p.maxbassNoteNum, $scope.p.delay);
+    $scope.generatedMml += GeneratorService.getInventionMmlFromInputText($scope.p.inputText, $scope.p.prefixTrackType, $scope.p.centerCnoteNum, $scope.p.prefixAllType, $scope.p.maxTopNoteNums, $scope.p.maxbassNoteNum, $scope.p.delay, $scope.p.voicingType);
 
     $timeout(function() { // compileより前にする(compileがSIOPMロード失敗の為にundefinedでexceptionになっても、先にURLへの反映はしておく)
       setParamsToUrl();

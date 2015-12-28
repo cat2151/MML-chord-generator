@@ -439,11 +439,12 @@ function() {
     if (!isNumberStr(maxTopNoteNum)) return [];
     if (!noteNumbersList.length) return [];
     angular.forEach(noteNumbersList, function(noteNumbers, key) {
-      this[key] = getInventionNoteNumber(noteNumbers, maxTopNoteNum);
+      this[key] = getInventionNoteNumber(noteNumbers, maxTopNoteNum, 'CLOSE');
     });
     return noteNumbersList;
   }
-  function getInventionNoteNumber(noteNumbers, maxTopNoteNum) {
+  // トップノートがmaxTopNoteNum以下となるよう転回する
+  function getInventionNoteNumber(noteNumbers, maxTopNoteNum, voicingType) {
     if (!noteNumbers.length) return [];
     var i;
     var topNote;
@@ -463,7 +464,9 @@ function() {
       if (topNote <= Number(maxTopNoteNum)) break;
       inventionNoteNumbersDown(noteNumbers);
     }
-   // トップノートとセカンドノートが半音差の場合は、そうならないよう、トップノートを下げる転回を行う
+    drop();
+    // トップノートとセカンドノートが半音差の場合は、そうならないよう、トップノートを下げる転回を行う
+    // [前提] Drop 2等の後に行う。[理由] Drop 2を行うことで、トップノートとセカンドノートの半音差問題に対応できることがある
     if (noteNumbers.length <= 2) return noteNumbers;
     for (i = 0; i < 128; i++) {
       topNote = noteNumbers[noteNumbers.length - 1];
@@ -472,6 +475,28 @@ function() {
       inventionNoteNumbersDown(noteNumbers);
     }
     return noteNumbers;
+    function drop() {
+      if (voicingType == 'DROP2') {
+        if (noteNumbers.length < 2) return;
+        noteNumbers[noteNumbers.length - 2] -= 12;
+        noteNumbers.sort(function(a, b) {
+          return a - b; // 数値ソート
+        });
+      } else if (voicingType == 'DROP3') {
+        if (noteNumbers.length < 3) return;
+        noteNumbers[noteNumbers.length - 3] -= 12;
+        noteNumbers.sort(function(a, b) {
+          return a - b; // 数値ソート
+        });
+      } else if (voicingType == 'DROP24') {
+        if (noteNumbers.length < 4) return;
+        noteNumbers[noteNumbers.length - 2] -= 12;
+        noteNumbers[noteNumbers.length - 4] -= 12;
+        noteNumbers.sort(function(a, b) {
+          return a - b; // 数値ソート
+        });
+      }
+    }
   }
 
   // [イメージ] 'C' → '[[60, 64, 67]]' → '[[60+12, 64, 67]] → '[[64, 67, 60+12]]
@@ -531,7 +556,7 @@ function() {
     }
   }
 
-  function getInventionMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType, maxTopNoteNums, maxbassNoteNum, delay) {
+  function getInventionMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType, maxTopNoteNums, maxbassNoteNum, delay, voicingType) {
     if (isEmpty(inputText)) return '';
     var chordNames = getChordNames(inputText);
     if (isEmpty(chordNames)) return '';
@@ -542,7 +567,7 @@ function() {
       var noteNumbers = getChordNoteNumbersFromOneChordName(chordName, centerCnoteNum);
       var maxTopNoteNum = maxTopNoteNums[i].maxTopNoteNum;
       if (!isNumberStr(maxTopNoteNum)) return '';
-      noteNumbers = getInventionNoteNumber(noteNumbers, maxTopNoteNum);
+      noteNumbers = getInventionNoteNumber(noteNumbers, maxTopNoteNum, voicingType);
       noteNumbers = getAddedBassFromOneChordName(chordName, noteNumbers, centerCnoteNum, maxbassNoteNum);
       noteNumbersList.push(noteNumbers);
     }

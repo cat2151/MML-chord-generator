@@ -100,6 +100,15 @@
       </div>
 
       <div ng-show="p.dispDetailSetting">
+        <span>Voicing:
+          <select ng-model="p.voicingType" ng-change="generate()">
+            <option value="CLOSE">Close</option>
+            <option value="DROP2">Drop 2</option>
+            <option value="DROP3">Drop 3</option>
+            <option value="DROP24">Drop 2 & 4</option>
+          </select>
+        </span>
+
         <span>MML prefix:</span>
         <br/>
         <textarea cols="80" rows="5"
@@ -152,15 +161,6 @@
         <label><input type="radio" ng-value="true" ng-model="p.dispDebug"/>表示する</label>
       </div>
       <div ng-if="p.dispDebug">
-
-        <span>Voicing:
-          <select ng-model="p.voicingType" ng-change="generate()">
-            <option value="CLOSE">Close</option>
-            <option value="DROP2">Drop 2</option>
-            <option value="DROP3">Drop 3</option>
-            <option value="DROP24">Drop 2 & 4</option>
-          </select>
-        </span>
 
         <h4>getDecompressedParamsFromUrl</h4>
         <span>{{getDecompressedParamsFromUrl()}}</span>

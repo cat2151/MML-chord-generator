@@ -576,7 +576,7 @@ function() {
   }
 
   function getInputTextFromInputNumbers(inputNumbers, chordKeyOffset, inputNumbersType) {
-    inputNumbers = getNormalized(inputNumbers); // [イメージ] 'III - VI' → '3 6'
+    inputNumbers = getNormalized(inputNumbers); // [イメージ] 'III - bVI' → '3 b6'
     chordKeyOffset = Number(chordKeyOffset);
     var arr = inputNumbers.split(" ");
     if (isEmpty(arr)) return "";
@@ -586,7 +586,7 @@ function() {
       inputText += getChordName(v);
     });
     return inputText;
-    function getChordName(degree) {
+    function getChordName(degree) { // [イメージ] 'b3' → 'D#'
       var semitone = getSemitoneFromDegree(degree);
       if (semitone === undefined) return "";
       semitone += chordKeyOffset;
@@ -625,13 +625,21 @@ function() {
       }
     }
     function getSemitoneFromDegree(d) {
-      if (d == 1) return 0;
-      if (d == 2) return 2;
-      if (d == 3) return 4;
-      if (d == 4) return 5;
-      if (d == 5) return 7;
-      if (d == 6) return 9;
-      if (d == 7) return 11;
+      var offset = 0;
+      if (d.charAt(d) == "#") {
+        offset = 1;
+        d = d.substr(1);
+      } else if (d.charAt(d) == "b") {
+        offset = -1;
+        d = d.substr(1);
+      }
+      if (d == 1) return 0 + offset; // メジャースケール基準
+      if (d == 2) return 2 + offset;
+      if (d == 3) return 4 + offset;
+      if (d == 4) return 5 + offset;
+      if (d == 5) return 7 + offset;
+      if (d == 6) return 9 + offset;
+      if (d == 7) return 11 + offset;
       return undefined;
     }
     function getNormalized(v) {
@@ -657,6 +665,7 @@ function() {
       v = v.replace(/ - |->|→|>/g, ' ');
       v = v.replace(/\s+/g, ' '); // 連続spaceをspace1つへ
       v = v.replace(/^\s|\s$/g, ''); // 先頭と末尾のspaceを削除
+      v = getNormalizedTxt(v); // #とフラット
       return v;
     }
   }

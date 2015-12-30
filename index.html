@@ -163,6 +163,16 @@
       </div>
       <div ng-if="p.dispDebug">
 
+        <span>Chord:
+          <select ng-model="p.chordAddMode"
+                  ng-change="generate()"
+          >
+            <option value="DIATONIC">ダイアトニック (例)1 2 5 → CM7 - Dm7 - G7</option>
+            <option value="NONE">なし (例)1 2 5 → C - D - G</option>
+          </select>
+        </span>
+        <br/>
+
         <h4>getDecompressedParamsFromUrl</h4>
         <span>{{getDecompressedParamsFromUrl()}}</span>
 

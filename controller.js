@@ -7,6 +7,7 @@ function($scope, $location, $timeout, GeneratorService) {
   $scope.p.chordKeyOffset = "0"; // setParamsFromUrlより前に初期化が必要な為（ng-initではsetParamsFromUrlの後になることがあるようなので）
   $scope.p.inputNumbersType = "SEVENTH";
   $scope.p.voicingType = "CLOSE";
+  $scope.p.chordAddMode = "DIATONIC";
   $scope.generatedMml = "なし"; // 生成結果は$scope.pには持たせない($scope.pを入力として処理した出力がこれなので)
 
   function setParamsFromUrl() {

@@ -604,6 +604,9 @@ function() {
           if (d == "5") return "";
           if (d == "6") return "m";
           if (d == "7") return "mb5";
+          if (d == "b3") return "";
+          if (d == "b6") return "";
+          if (d == "b7") return "";
         } else if (inputNumbersType == "SEVENTH") {
           if (d == "1") return "M7";
           if (d == "2") return "m7";
@@ -612,6 +615,9 @@ function() {
           if (d == "5") return "7";
           if (d == "6") return "m7";
           if (d == "7") return "m7b5";
+          if (d == "b3") return "M7";
+          if (d == "b6") return "M7";
+          if (d == "b7") return "7";
         } else if (inputNumbersType == "NINTH") {
           if (d == "1") return "M9";
           if (d == "2") return "m9";
@@ -620,6 +626,9 @@ function() {
           if (d == "5") return "9";
           if (d == "6") return "m9";
           if (d == "7") return "m7b5b9";
+          if (d == "b3") return "M9";
+          if (d == "b6") return "M9";
+          if (d == "b7") return "9";
         }
         return "";
       }

@@ -591,7 +591,7 @@ function() {
       if (semitone === undefined) return "";
       semitone += chordKeyOffset;
       var chordType;
-      if (chordAddMode == "DIATONIC") {
+      if (chordAddMode == "DIATONIC") { // [イメージ] 'b6" → "G#M7"
         chordType = getChordTypeFromDegree(degree);
         if (chordType == undefined) return "";
         return getRootFromSemitone(semitone) + chordType;
@@ -603,46 +603,49 @@ function() {
         return getRootFromSemitone(semitone) + chordType;N
       }
       return "";
-      function getRootFromSemitone(s) {
+      function getRootFromSemitone(s) { // [イメージ] 8 → "G#"
         s = ((s % 12) + 12) % 12;
         return ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"][s];
       }
-      function getChordTypeFromDegree(d) {
-        var d1 = d.charAt(0);
-        var d2 = d.substr(0, 2);
+      function getChordTypeFromDegree(d) {  // [イメージ] "b6" → "M7"
+        if (d.charAt(0) == "#" || d.charAt(0) == "b") { // [イメージ] "b3sus4" → "b3"
+          d = d.substr(0, 2);
+        } else {  // [イメージ] "3sus4" → "3"
+          d = d.charAt(0);
+        }
         if (inputNumbersType == "TRIAD") {
-          if (d1 == "1") return "";
-          if (d1 == "2") return "m";
-          if (d1 == "3") return "m";
-          if (d1 == "4") return "";
-          if (d1 == "5") return "";
-          if (d1 == "6") return "m";
-          if (d1 == "7") return "mb5";
-          if (d2 == "b3") return "";
-          if (d2 == "b6") return "";
-          if (d2 == "b7") return "";
+          if (d == "1") return "";
+          if (d == "2") return "m";
+          if (d == "3") return "m";
+          if (d == "4") return "";
+          if (d == "5") return "";
+          if (d == "6") return "m";
+          if (d == "7") return "mb5";
+          if (d == "b3") return "";
+          if (d == "b6") return "";
+          if (d == "b7") return "";
         } else if (inputNumbersType == "SEVENTH") {
-          if (d1 == "1") return "M7";
-          if (d1 == "2") return "m7";
-          if (d1 == "3") return "m7";
-          if (d1 == "4") return "M7";
-          if (d1 == "5") return "7";
-          if (d1 == "6") return "m7";
-          if (d1 == "7") return "m7b5";
-          if (d2 == "b3") return "M7";
-          if (d2 == "b6") return "M7";
-          if (d2 == "b7") return "7";
+          if (d == "1") return "M7";
+          if (d == "2") return "m7";
+          if (d == "3") return "m7";
+          if (d == "4") return "M7";
+          if (d == "5") return "7";
+          if (d == "6") return "m7";
+          if (d == "7") return "m7b5";
+          if (d == "b3") return "M7";
+          if (d == "b6") return "M7";
+          if (d == "b7") return "7";
         } else if (inputNumbersType == "NINTH") {
-          if (d1 == "1") return "M9";
-          if (d1 == "2") return "m9";
-          if (d1 == "3") return "m9";
-          if (d1 == "4") return "M9";
-          if (d1 == "5") return "9";
-          if (d1 == "6") return "m9";
-          if (d1 == "7") return "m7b5b9";
-          if (d2 == "b3") return "M9";
-          if (d2 == "b6") return "M9";
-          if (d2 == "b7") return "9";
+          if (d == "1") return "M9";
+          if (d == "2") return "m9";
+          if (d == "3") return "m9";
+          if (d == "4") return "M9";
+          if (d == "5") return "9";
+          if (d == "6") return "m9";
+          if (d == "7") return "m7b5b9";
+          if (d == "b3") return "M9";
+          if (d == "b6") return "M9";
+          if (d == "b7") return "9";
         }
         return undefined;
       }

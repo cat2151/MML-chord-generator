@@ -575,7 +575,7 @@ function() {
     return getChordsMml(pivoted, prefixTrackType, prefixAllType, delay);
   }
 
-  function getInputTextFromInputNumbers(inputNumbers, chordKeyOffset, inputNumbersType) {
+  function getInputTextFromInputNumbers(inputNumbers, chordKeyOffset, inputNumbersType, chordAddMode) {
     inputNumbers = getNormalized(inputNumbers); // [イメージ] 'III - bVI' → '3 b6'
     chordKeyOffset = Number(chordKeyOffset);
     var arr = inputNumbers.split(" ");
@@ -590,58 +590,73 @@ function() {
       var semitone = getSemitoneFromDegree(degree);
       if (semitone === undefined) return "";
       semitone += chordKeyOffset;
-      return getRootFromSemitone(semitone) + getChordTypeFromDegree(degree);
+      var chordType;
+      if (chordAddMode == "DIATONIC") {
+        chordType = getChordTypeFromDegree(degree);
+        if (chordType == undefined) return "";
+        return getRootFromSemitone(semitone) + chordType;
+      }
+      if (chordAddMode == "NONE") { // [イメージ] '4m7' → 'Fm7'
+        var offset = 1;
+        if (degree.charAt(0) == "#" || degree.charAt(0) == "b") offset++;
+        chordType = degree.substr(offset);
+        return getRootFromSemitone(semitone) + chordType;N
+      }
+      return "";
       function getRootFromSemitone(s) {
         s = ((s % 12) + 12) % 12;
         return ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"][s];
       }
       function getChordTypeFromDegree(d) {
+        var d1 = d.charAt(0);
+        var d2 = d.substr(0, 2);
         if (inputNumbersType == "TRIAD") {
-          if (d == "1") return "";
-          if (d == "2") return "m";
-          if (d == "3") return "m";
-          if (d == "4") return "";
-          if (d == "5") return "";
-          if (d == "6") return "m";
-          if (d == "7") return "mb5";
-          if (d == "b3") return "";
-          if (d == "b6") return "";
-          if (d == "b7") return "";
+          if (d1 == "1") return "";
+          if (d1 == "2") return "m";
+          if (d1 == "3") return "m";
+          if (d1 == "4") return "";
+          if (d1 == "5") return "";
+          if (d1 == "6") return "m";
+          if (d1 == "7") return "mb5";
+          if (d2 == "b3") return "";
+          if (d2 == "b6") return "";
+          if (d2 == "b7") return "";
         } else if (inputNumbersType == "SEVENTH") {
-          if (d == "1") return "M7";
-          if (d == "2") return "m7";
-          if (d == "3") return "m7";
-          if (d == "4") return "M7";
-          if (d == "5") return "7";
-          if (d == "6") return "m7";
-          if (d == "7") return "m7b5";
-          if (d == "b3") return "M7";
-          if (d == "b6") return "M7";
-          if (d == "b7") return "7";
+          if (d1 == "1") return "M7";
+          if (d1 == "2") return "m7";
+          if (d1 == "3") return "m7";
+          if (d1 == "4") return "M7";
+          if (d1 == "5") return "7";
+          if (d1 == "6") return "m7";
+          if (d1 == "7") return "m7b5";
+          if (d2 == "b3") return "M7";
+          if (d2 == "b6") return "M7";
+          if (d2 == "b7") return "7";
         } else if (inputNumbersType == "NINTH") {
-          if (d == "1") return "M9";
-          if (d == "2") return "m9";
-          if (d == "3") return "m9";
-          if (d == "4") return "M9";
-          if (d == "5") return "9";
-          if (d == "6") return "m9";
-          if (d == "7") return "m7b5b9";
-          if (d == "b3") return "M9";
-          if (d == "b6") return "M9";
-          if (d == "b7") return "9";
+          if (d1 == "1") return "M9";
+          if (d1 == "2") return "m9";
+          if (d1 == "3") return "m9";
+          if (d1 == "4") return "M9";
+          if (d1 == "5") return "9";
+          if (d1 == "6") return "m9";
+          if (d1 == "7") return "m7b5b9";
+          if (d2 == "b3") return "M9";
+          if (d2 == "b6") return "M9";
+          if (d2 == "b7") return "9";
         }
-        return "";
+        return undefined;
       }
     }
-    function getSemitoneFromDegree(d) {
+    function getSemitoneFromDegree(d) { // [イメージ] 'b6'度 → '8'半音
       var offset = 0;
-      if (d.charAt(d) == "#") {
+      if (d.charAt(0) == "#") {
         offset = 1;
         d = d.substr(1);
-      } else if (d.charAt(d) == "b") {
+      } else if (d.charAt(0) == "b") {
         offset = -1;
         d = d.substr(1);
       }
+      d = Number(d.charAt(0));
       if (d == 1) return 0 + offset; // メジャースケール基準
       if (d == 2) return 2 + offset;
       if (d == 3) return 4 + offset;

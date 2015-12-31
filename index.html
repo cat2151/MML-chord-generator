@@ -69,7 +69,6 @@
           placeholder="数字でコードを指定 [例] 2 V" class="inptnmbrs"
         >
         <div ng-show="p.inputNumbers">
-          <br/>
           <span>KEY : </span>
           <span ng-repeat="r in keyRadios">
             <label>
@@ -79,9 +78,19 @@
             </label>
           </span>
           <br/>
-          <label><input type="radio" value="TRIAD" ng-model="p.inputNumbersType" ng-change="getInputTextFromInputNumbers()"/>TRIAD</label>
-          <label><input type="radio" value="SEVENTH" ng-model="p.inputNumbersType" ng-change="getInputTextFromInputNumbers()"/>SEVENTH</label>
-          <label><input type="radio" value="NINTH" ng-model="p.inputNumbersType" ng-change="getInputTextFromInputNumbers()"/>NINTH</label>
+
+          <span>生成方式:
+            <select ng-model="p.chordAddMode" ng-change="getInputTextFromInputNumbers()">
+              <option value="DIATONIC">ダイアトニックコードを生成 (例)1 2 5 → CM7 - Dm7 - G7</option>
+              <option value="NONE">そのまま (例)1 2 5 → C - D - G</option>
+            </select>
+          </span>
+
+          <div ng-show="p.chordAddMode=='DIATONIC'">
+            <label><input type="radio" value="TRIAD" ng-model="p.inputNumbersType" ng-change="getInputTextFromInputNumbers()"/>TRIAD</label>
+            <label><input type="radio" value="SEVENTH" ng-model="p.inputNumbersType" ng-change="getInputTextFromInputNumbers()"/>SEVENTH</label>
+            <label><input type="radio" value="NINTH" ng-model="p.inputNumbersType" ng-change="getInputTextFromInputNumbers()"/>NINTH</label>
+          </div>
         </div>
 
         <hr/>
@@ -162,16 +171,6 @@
         <label><input type="radio" ng-value="true" ng-model="p.dispDebug"/>表示する</label>
       </div>
       <div ng-if="p.dispDebug">
-
-        <span>Chord:
-          <select ng-model="p.chordAddMode"
-                  ng-change="generate()"
-          >
-            <option value="DIATONIC">ダイアトニック (例)1 2 5 → CM7 - Dm7 - G7</option>
-            <option value="NONE">なし (例)1 2 5 → C - D - G</option>
-          </select>
-        </span>
-        <br/>
 
         <h4>getDecompressedParamsFromUrl</h4>
         <span>{{getDecompressedParamsFromUrl()}}</span>

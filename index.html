@@ -24,6 +24,9 @@
     input.inptnmbrs {
     width: 200px;
     }
+    input.inptrt {
+    width: 200px;
+    }
     </style>
 
     <title>MML和音生成器</title>
@@ -171,6 +174,11 @@
         <label><input type="radio" ng-value="true" ng-model="p.dispDebug"/>表示する</label>
       </div>
       <div ng-if="p.dispDebug">
+
+        <input type="text" ng-model="p.rhythmTemplate"
+          ng-change="generate()" ng-blur="generate()"
+          placeholder="l16 c r r c r r c r" class="inptrt"
+        >
 
         <h4>getDecompressedParamsFromUrl</h4>
         <span>{{getDecompressedParamsFromUrl()}}</span>

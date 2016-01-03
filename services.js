@@ -375,7 +375,7 @@ function() {
     return getPivotNoteNumbers(noteNumbersList);
   }
 
-  function getChordsMml(/*pivotedNoteNumbersList as */pivoted, prefixTrackType, prefixAllType, delay) {
+  function getChordsMml(/*pivotedNoteNumbersList as */pivoted, prefixTrackType, prefixAllType, delay, rhythmTemplate) {
     if (!pivoted.length) return [];
     var mml = '';
     mml += getPrefixAllStrFromType(prefixAllType);
@@ -397,7 +397,7 @@ function() {
             mml += 'r';
             return; // forEachを1つ進める
           }
-          mml += getNoteMml(noteNumber);
+          mml += getRhythmicalNotesMml(noteNumber);
         });
       });
       return mml;
@@ -410,6 +410,9 @@ function() {
       if (l <= 6) { return 'v7'; }  // [例] C9 + bass (6poly)
       if (l <= 7) { return 'v7'; }
       return 'v7';  // [例] C13 + bass (8poly)
+    }
+    function getRhythmicalNotesMml(noteNumber) {
+      return getNoteMml(noteNumber);
     }
   }
 
@@ -556,7 +559,7 @@ function() {
     }
   }
 
-  function getInventionMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType, maxTopNoteNums, maxbassNoteNum, delay, voicingType) {
+  function getInventionMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType, maxTopNoteNums, maxbassNoteNum, delay, voicingType, rhythmTemplate) {
     if (isEmpty(inputText)) return '';
     var chordNames = getChordNames(inputText);
     if (isEmpty(chordNames)) return '';
@@ -572,7 +575,7 @@ function() {
       noteNumbersList.push(noteNumbers);
     }
     var pivoted = getPivotNoteNumbers(noteNumbersList);
-    return getChordsMml(pivoted, prefixTrackType, prefixAllType, delay);
+    return getChordsMml(pivoted, prefixTrackType, prefixAllType, delay, rhythmTemplate);
   }
 
   function getInputTextFromInputNumbers(inputNumbers, chordKeyOffset, inputNumbersType, chordAddMode) {

@@ -692,7 +692,7 @@ function() {
       v = v.replace(/Ⅴ/g, '5');
       // 数字化のあとに置換
       v = v.replace(/\-([1-7])/g, ' $1'); // [イメージ] '3-6' → '3 6'
-      v = v.replace(/ - |->|→|>/g, ' ');
+      v = v.replace(/ - |->|ー＞|→|>|＞/g, ' ');
       v = v.replace(/\s+/g, ' '); // 連続spaceをspace1つへ
       v = v.replace(/^\s|\s$/g, ''); // 先頭と末尾のspaceを削除
       v = getNormalizedTxt(v); // #とフラット

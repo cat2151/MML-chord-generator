@@ -412,7 +412,17 @@ function() {
       return 'v7';  // [例] C13 + bass (8poly)
     }
     function getRhythmicalNotesMml(noteNumber) {
-      return getNoteMml(noteNumber);
+      if (isEmpty(rhythmTemplate)) return getNoteMml(noteNumber);
+      var r = '';
+      var rhythms = rhythmTemplate.split(' ');
+      angular.forEach(rhythms, function(rhythm) {
+        if (rhythm == 'c') {
+          r += getNoteMml(noteNumber);
+        } else {
+          r += rhythm;
+        }
+      });
+      return r;
     }
   }
 

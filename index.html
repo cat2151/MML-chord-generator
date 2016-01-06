@@ -179,6 +179,17 @@
           ng-change="generate()" ng-blur="generate()"
           placeholder="l16 c r r c r r c r" class="inptrt"
         >
+        <br/>
+        <span>rhythm template:
+          <select ng-model="p.rhythmTemplate" ng-change="generate()">
+            <option value="l2 c">l2 c</option>
+            <option value="l1 c">l1 c</option>
+            <option value="l16 c r r c r r c r">l16 c r r c r r c r</option>
+            <option value="l16 c r c r r c r r">l16 c r c r r c r r</option>
+            <option value="l16 c r r c r c r r">l16 c r r c r c r r</option>
+          </select>
+        </span>
+        <br/>
 
         <h4>getDecompressedParamsFromUrl</h4>
         <span>{{getDecompressedParamsFromUrl()}}</span>

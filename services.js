@@ -73,6 +73,8 @@ function() {
     null
   ];
 
+  var delimiterPattern = / - |->|ー＞|→|>|＞|、/g;
+
   function isEmpty(v) {
     if (v === undefined || v === null || v === '') return true;
     return false;
@@ -321,7 +323,7 @@ function() {
     txt = txt.replace(/ on ([A-G])/g, 'on$1'); // オンコード表記の正規化
     txt = txt.replace(/(?:\/| \/ )([A-G])/g, 'on$1'); // slashはオンコードモード時はオンコードとみなす（現在オンコードモード固定）
     txt = txt.replace(/\-([A-G])/g, ' $1'); // [イメージ] 'Dm-Em' → 'Dm Em'
-    txt = txt.replace(/ - |->|→|>|、/g, ' ');
+    txt = txt.replace(delimiterPattern, ' ');
     txt = txt.replace(/\{|\}/g, ' '); // ニコニコ大百科のコード進行の記事で使っている、1小節内の複数のコード進行をグルーピングするための表記
     txt = txt.replace(/\s+/g, ' '); // 連続spaceをspace1つへ
     txt = txt.replace(/^\s|\s$/g, ''); // 先頭と末尾のspaceを削除
@@ -702,7 +704,7 @@ function() {
       v = v.replace(/Ⅴ/g, '5');
       // 数字化のあとに置換
       v = v.replace(/\-([1-7])/g, ' $1'); // [イメージ] '3-6' → '3 6'
-      v = v.replace(/ - |->|ー＞|→|>|＞/g, ' ');
+      v = v.replace(delimiterPattern, ' ');
       v = v.replace(/\s+/g, ' '); // 連続spaceをspace1つへ
       v = v.replace(/^\s|\s$/g, ''); // 先頭と末尾のspaceを削除
       v = getNormalizedTxt(v); // #とフラット

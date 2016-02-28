@@ -615,7 +615,7 @@ function() {
         var offset = 1;
         if (degree.charAt(0) == "#" || degree.charAt(0) == "b") offset++;
         chordType = degree.substr(offset);
-        return getRootFromSemitone(semitone) + chordType;N
+        return getRootFromSemitone(semitone) + chordType;
       }
       return "";
       function getRootFromSemitone(s) { // [イメージ] 8 → "G#"

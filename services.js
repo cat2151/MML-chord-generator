@@ -620,6 +620,8 @@ function() {
         if (iSlash != -1) { // [イメージ] 'M7/2' → 'M7/D'
           var bassDegree = chordType.substr(iSlash + 1); // [イメージ] 'M7/2' → '2'
           var bassSemitone = getSemitoneFromDegree(bassDegree); // [イメージ] '2' → '2'
+          if (bassSemitone === undefined) return "";
+          bassSemitone += chordKeyOffset;
           chordType = chordType.substring(0, iSlash + 1); // [イメージ] 'M7/2' → 'M7/'
           chordType += getRootFromSemitone(bassSemitone); // [イメージ] 'M7/', 2 → 'M7/D'
         }

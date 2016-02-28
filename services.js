@@ -590,6 +590,7 @@ function() {
     return getChordsMml(pivoted, prefixTrackType, prefixAllType, delay, rhythmTemplate);
   }
 
+  // [イメージ] 'III - bVI' → 'E - G#'
   function getInputTextFromInputNumbers(inputNumbers, chordKeyOffset, inputNumbersType, chordAddMode) {
     inputNumbers = getNormalized(inputNumbers); // [イメージ] 'III - bVI' → '3 b6'
     chordKeyOffset = Number(chordKeyOffset);
@@ -615,6 +616,13 @@ function() {
         var offset = 1;
         if (degree.charAt(0) == "#" || degree.charAt(0) == "b") offset++;
         chordType = degree.substr(offset);
+        var iSlash = chordType.indexOf('/');
+        if (iSlash != -1) { // [イメージ] 'M7/2' → 'M7/D'
+          var bassDegree = chordType.substr(iSlash + 1); // [イメージ] 'M7/2' → '2'
+          var bassSemitone = getSemitoneFromDegree(bassDegree); // [イメージ] '2' → '2'
+          chordType = chordType.substring(0, iSlash + 1); // [イメージ] 'M7/2' → 'M7/'
+          chordType += getRootFromSemitone(bassSemitone); // [イメージ] 'M7/', 2 → 'M7/D'
+        }
         return getRootFromSemitone(semitone) + chordType;
       }
       return "";

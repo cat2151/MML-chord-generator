@@ -2,11 +2,12 @@ angular.module('generatorApp')
 .service('GeneratorService', [
 function() {
   var CHORD_DEFINITIONS = [
-    ['MAJOR', ['', 'maj'], [0, 4, 7]],
+    ['MAJOR', ['', 'maj', '△'], [0, 4, 7]],
     ['MAJORADD9', ['2', 'add9'], [0, 4, 7, 14]],
-    ['MAJOR7', ['M7', 'maj7'], [0, 4, 7, 11]],
+    ['MAJOR7', ['M7', 'maj7', '△7'], [0, 4, 7, 11]],
     ['MAJOR9', ['M9', 'maj9'], [0, 4, 7, 11, 14]],
     ['MAJOR11', ['M11', 'maj11'], [0, 4, 7, 11, 14, 17]],
+    ['MAJOR7SHARP11', ['M7#11', 'maj7#11', '△7(#11)'], [0, 4, 7, 11, 18]],
     ['MAJOR13', ['M13', 'maj13'], [0, 4, 7, 11, 14, 17, 21]],
 
     ['SIXTH', ['6', 'maj6'], [0, 4, 7, 9]],
@@ -152,7 +153,20 @@ function() {
     var ret = txt;
     ret = ret.replace(/[♯＃]/g, '#');
     ret = ret.replace(/♭/g, 'b');
+    ret = getHalfWidth(ret);
     return ret;
+  }
+
+  function getHalfWidth(v){
+    var v = v.replace(/[！-～]/g, function(full) {
+        return String.fromCharCode(full.charCodeAt(0) - 0xFEE0);
+    });
+    return v.replace(/”/g, "\"")
+      .replace(/’/g, "'")
+      .replace(/‘/g, "`")
+      .replace(/￥/g, "\\")
+      .replace(/　/g, " ")
+      .replace(/?/g, "~");
   }
 
   // [イメージ] 'Bb' → {10, ''} 、 'Am' → {9, 'm'}

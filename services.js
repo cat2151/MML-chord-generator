@@ -166,7 +166,7 @@ function() {
       .replace(/‘/g, "`")
       .replace(/￥/g, "\\")
       .replace(/　/g, " ")
-      .replace(/?/g, "~");
+      .replace(/〜/g, "~");
   }
 
   // [イメージ] 'Bb' → {10, ''} 、 'Am' → {9, 'm'}

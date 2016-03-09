@@ -501,6 +501,8 @@ function() {
     drop();
     // トップノートとセカンドノートが半音差の場合は、そうならないよう、トップノートを下げる転回を行う
     // [前提] Drop 2等の後に行う。[理由] Drop 2を行うことで、トップノートとセカンドノートの半音差問題に対応できることがある
+    // [例] CM7,topnote<=72,close → c,e,g,bを生成（e,g,b,c を転回した結果）
+    //      CM7,topnote<=72,drop2 → b,e,g,cを生成（e,g,b,c をdrop2した結果）
     if (noteNumbers.length <= 2) return noteNumbers;
     for (i = 0; i < 128; i++) {
       topNote = noteNumbers[noteNumbers.length - 1];

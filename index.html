@@ -33,19 +33,22 @@
   </head>
   <body>
     <div ng-controller="generatorController">
-      <div>
-        <span>コード進行を文字で入力すると、和音MMLを生成して演奏します</span>
-        <br/>
-        <span><a href="https://github.com/cat2151/MML-chord-generator/blob/gh-pages/services.js" target="_blank">鳴らせるコードの一覧</a></span>
+      <span>コード進行を文字で入力すると、和音MMLを生成して演奏します</span>
+      <br/>
 
-        <br/>
-        <textarea class="chord" cols="80" rows="1"
-          ng-model="p.inputText"
-          placeholder="CやBbmを書いてみてください"
-          ng-change="generate()" ng-blur="generate()"
-        ></textarea>
+      <span ng-show="p.inputText"><a href="https://github.com/cat2151/MML-chord-generator/blob/gh-pages/services.js" target="_blank">鳴らせるコードの一覧</a></span>
 
-        <br/>
+      <br/>
+      <textarea class="chord" cols="80" rows="1"
+        ng-model="p.inputText"
+        placeholder="C や Bbm を書いてみてください"
+        ng-change="generate()" ng-blur="generate()"
+      ></textarea>
+
+      <br/>
+
+      <div ng-show="p.inputText">
+
         <span>ChordごとのTopNote上限</span>
         <span ng-repeat="m in p.maxTopNoteNums track by $index" ng-show="$index < getNoteNumbersList().length">
           <input type="text" ng-model="m.maxTopNoteNum" ng-change="generate()" class="mtnns">
@@ -65,11 +68,14 @@
           </select>
         </span>
 
-        <hr/>
+      </div>
 
+      <hr/>
+
+      <div>
         <input type="text" ng-model="p.inputNumbers"
           ng-change="getInputTextFromInputNumbers()" ng-blur="getInputTextFromInputNumbers()"
-          placeholder="数字でコードを指定 [例] 2 V" class="inptnmbrs"
+          placeholder="2 や V を書いてみてください" class="inptnmbrs"
         >
         <div ng-show="p.inputNumbers">
           <span>KEY : </span>
@@ -95,7 +101,9 @@
             <label><input type="radio" value="NINTH" ng-model="p.inputNumbersType" ng-change="getInputTextFromInputNumbers()"/>NINTH</label>
           </div>
         </div>
+      </div>
 
+      <div ng-show="p.inputText">
         <hr/>
         <button ng-click='openTweet()'>ツイートする</button>
         <a href="https://twitter.com/search?q=%23mmlchordgen%20OR%20%23sionmml%20OR%20%23opmtone%20-RT&src=typd" target="_blank">ハッシュタグ検索</a>
@@ -106,7 +114,7 @@
         <hr/>
       </div>
 
-      <div>
+      <div ng-show="p.inputText">
         <span>詳細設定</span>
         <label><input type="radio" ng-value="false" ng-model="p.dispDetailSetting" ng-init="p.dispDetailSetting=false"/>表示しない</label>
         <label><input type="radio" ng-value="true" ng-model="p.dispDetailSetting"/>表示する</label>
@@ -168,8 +176,8 @@
         <br/>
       </div>
 
-      <div>
-        <hr>
+      <div ng-show="p.inputText">
+        <hr/>
         <span>デバッグ表示</span>
         <label><input type="radio" ng-value="false" ng-model="p.dispDebug" ng-init="p.dispDebug=false"/>表示しない</label>
         <label><input type="radio" ng-value="true" ng-model="p.dispDebug"/>表示する</label>
@@ -253,22 +261,24 @@
         <span>{{getInventionNoteNumbers()}}</span>
       </div>
 
-      <hr>
+      <hr/>
 
-      <div>
-        <a href="http://app.16dimensional.com/stadon/">すたどんたん</a>
-      </div>
-      <br/>
-      <div>
-        <a href="https://github.com/cat2151/MML-chord-generator/issues/13">音が途切れた場合はchromeを試すといいかも</a>
-      </div>
-      <br/>
-      <div>
-        <a href="https://github.com/cat2151/MML-chord-generator/">ソースファイル githubリポジトリ</a>
-      </div>
-      <br/>
-      <div>
-        <a href="https://github.com/keim/SiON/">Powered by SiON</a>
+      <div ng-show="p.inputText">
+        <div>
+          <a href="http://app.16dimensional.com/stadon/">すたどんたん</a>
+        </div>
+        <br/>
+        <div>
+          <a href="https://github.com/cat2151/MML-chord-generator/issues/13">音が途切れた場合はchromeを試すといいかも</a>
+        </div>
+        <br/>
+        <div>
+          <a href="https://github.com/cat2151/MML-chord-generator/">ソースファイル githubリポジトリ</a>
+        </div>
+        <br/>
+        <div>
+          <a href="https://github.com/keim/SiON/">Powered by SiON</a>
+        </div>
       </div>
     </div>
   </body>

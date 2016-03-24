@@ -200,6 +200,17 @@
         </span>
         <br/>
 
+        <span>Bass pedal point</span>
+        <label><input type="radio" ng-value="null" ng-model="p.bassPedal" ng-init="p.bassPedal=null"/>なし</label>
+        <label><input type="radio" ng-value="1" ng-model="p.bassPedal"/>I</label>
+        <label><input type="radio" ng-value="2" ng-model="p.bassPedal"/>II</label>
+        <label><input type="radio" ng-value="3" ng-model="p.bassPedal"/>III</label>
+        <label><input type="radio" ng-value="4" ng-model="p.bassPedal"/>IV</label>
+        <label><input type="radio" ng-value="5" ng-model="p.bassPedal"/>V</label>
+        <label><input type="radio" ng-value="6" ng-model="p.bassPedal"/>VI</label>
+        <label><input type="radio" ng-value="7" ng-model="p.bassPedal"/>VII</label>
+        <br/>
+
         <h4>getDecompressedParamsFromUrl</h4>
         <span>{{getDecompressedParamsFromUrl()}}</span>
 

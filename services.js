@@ -439,14 +439,14 @@ function() {
       if (l <= 7) { return 'v7'; }
       return 'v7';  // [例] C13 + bass (8poly)
     }
-    function getRhythmicalNotesMml(noteNumber) {
+    function getRhythmicalNotesMml(noteNumber) { // [例] 'l16 c r c r' 間にspace必須。仕様をシンプルにする為
       if (isEmpty(rhythmTemplate)) return getNoteMml(noteNumber);
       var r = '';
       var rhythms = rhythmTemplate.split(' ');
       angular.forEach(rhythms, function(rhythm) {
-        if (rhythm.search(/[a-g][\+\-]*/) === 0) {  // cdefgab, c+やd-やd++にマッチ
+        if (rhythm.search(/[a-g][\+\-]*/) === 0) {  // [例] cdefgab, c+やd-やd++ → chord用ノートを出力
           r += getNoteMml(noteNumber);
-        } else {
+        } else { // [例] 'l16' → そのまま'l16'を出力
           r += rhythm;
         }
       });

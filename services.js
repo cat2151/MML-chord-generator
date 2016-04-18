@@ -444,7 +444,7 @@ function() {
       var r = '';
       var rhythms = rhythmTemplate.split(' ');
       angular.forEach(rhythms, function(rhythm) {
-        if (rhythm == 'c') {
+        if (rhythm.search(/[a-g][\+\-]*/) === 0) {  // cdefgab, c+やd-やd++にマッチ
           r += getNoteMml(noteNumber);
         } else {
           r += rhythm;

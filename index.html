@@ -18,6 +18,9 @@
     textarea.chord {
     height: 1em;
     }
+    textarea.generated {
+    height: 1em;
+    }
     input.mtnns {
     width: 30px;
     }
@@ -110,7 +113,14 @@
 
         <hr/>
         <h3>MML生成結果:</h3>
-        <span>{{generatedMml}}</span>
+        <span>
+          結果確認用(改行なし) : {{generatedMml}}
+          <br/>
+          コピー用(改行あり) : 
+          <textarea class="generated" cols="80" rows="1" readonly
+            ng-model="generatedMml" placeholder="MML生成結果"
+          ></textarea>
+        </span>
         <hr/>
       </div>
 

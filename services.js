@@ -99,7 +99,7 @@ function() {
     ' 24,  9,  9,  3, 15,  0,  2,  3,  3,  0,  0,' + '\n' +
     ' 22,  8,  6,  5, 12,  0,  1,  2,  5,  0,  0,' + '\n' +
     ' 20,  7, 11,  5, 14,  0,  0,  1,  4,  0,  0,' + '\n' +
-    '};'
+    '};\n'
   ;
   var prefixAllArrStr = [
     '#OPM@0 { 6, 1, /*E.Piano*/\n' +
@@ -108,28 +108,28 @@ function() {
     ' 24,  9,  9,  3, 15,  0,  2,  4,  3,  0,  1,\n' +
     ' 22,  8,  6,  5, 12,  0,  1,  3,  5,  0,  1,\n' +
     ' 20,  7, 11,  5, 14,  0,  0,  1,  4,  0,  1,\n' +
-    '}t100 ma0,25,15,15;#EFFECT0{autopan};',
+    '}t100 ma0,25,15,15;#EFFECT0{autopan};\n',
     '#OPM@0 { 5, 7, /*Brass*/\n' +
     OPM_COMMENT +
     ' 16,  7,  5,  4,  1, 20,  0,  1,  0,  0,  0,\n' +
     ' 10,  5,  3, 21,  1,  4,  1,  0,  5,  0,  0,\n' +
     ' 14,  4,  2, 20,  1,  0,  0,  1,  4,  0,  0,\n' +
     ' 15,  3,  4, 22,  1,  0,  0,  1,  5,  0,  0,\n' +
-    '};',
+    '};\n',
     '#OPM@0 { 4, 7, /*Brass*/\n' +
     OPM_COMMENT +
     ' 16,  7,  5,  4,  1, 20,  0,  1,  3,  0,  0,\n' +
     ' 13,  5,  3, 21,  1,  0,  0,  1,  4,  0,  0,\n' +
     ' 14,  4,  2,  4,  1, 20,  0,  1,  5,  0,  0,\n' +
     ' 15,  3,  4, 22,  1,  0,  0,  1,  4,  0,  0,\n' +
-    '};',
+    '};\n',
     '#OPM@0 { 4, 7, /*Brass slow*/\n' +
     OPM_COMMENT +
     '  8,  3,  5, 23,  1, 25,  0,  1,  3,  0,  0,\n' +
     ' 13,  5,  3, 23,  1,  0,  0,  1,  4,  0,  0,\n' +
     '  5,  4,  2, 23,  1, 20,  0,  1,  5,  0,  0,\n' +
     ' 15,  3,  4, 23,  1,  0,  0,  1,  4,  0,  0,\n' +
-    '};'
+    '};\n'
   ];
 
 
@@ -327,7 +327,7 @@ function() {
     if (!noteNumbers.length) return '';
     var mml = '';
     angular.forEach(noteNumbers, function(noteNumber) {
-      if (mml) mml += ';';
+      if (mml) mml += ';\n';
       if (prefixTrackType == 'PREFIX_TRACK_1') {
         mml += prefixTrackStr;
       }
@@ -415,7 +415,7 @@ function() {
       var delayMml = '';
       var iNoteNums; // trackNoteNumbersの何番目かのindex
       angular.forEach(pivoted, function(trackNoteNumbers) {
-        if (mml) mml += ';';
+        if (mml) mml += ';\n';
         if (prefixTrackType == 'PREFIX_TRACK_1') {
           mml += prefixTrackStr;
         }

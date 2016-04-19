@@ -135,12 +135,16 @@ function($scope, $location, $timeout, GeneratorService) {
   $scope.p.maxTopNoteNums = [];
   $scope.p.rhythmTemplates = [];
   $scope.oldMaxTopNoteNumsCount = $scope.p.maxTopNoteNums.length;
+  $scope.oldRhythmTemplatesCount = $scope.p.rhythmTemplates.length;
   $scope.expandMaxTopNoteNumsByChordNamesCount = function() {
-    var maxTopNoteNumsCount = $scope.getNoteNumbersList().length;
-    while ($scope.oldMaxTopNoteNumsCount < maxTopNoteNumsCount) {
+    var noteNumsCount = $scope.getNoteNumbersList().length;
+    while ($scope.oldMaxTopNoteNumsCount < noteNumsCount) {
       $scope.p.maxTopNoteNums.push({maxTopNoteNum: $scope.p.maxTopNoteNum});
+      $scope.oldMaxTopNoteNumsCount++;
+    }
+    while ($scope.oldRhythmTemplatesCount < noteNumsCount) {
       $scope.p.rhythmTemplates.push({r: $scope.p.rhythmTemplate});
-      $scope.oldMaxTopNoteNumsCount = $scope.p.maxTopNoteNums.length;
+      $scope.oldRhythmTemplatesCount++;
     }
     // [補足] localではonLoadに到達しないのでこれが起動後に呼ばれない、のは、やむなし
   };

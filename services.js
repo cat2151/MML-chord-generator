@@ -403,7 +403,8 @@ function() {
     return getPivotNoteNumbers(noteNumbersList);
   }
 
-  function getChordsMml(/*pivotedNoteNumbersList as */pivoted, prefixTrackType, prefixAllType, delay, rhythmTemplate) {
+  // [イメージ] [ [60, 60], [64, 64], [67, 67] ] → 'cc ; ee ; gg'
+  function getChordsMml(/*pivotedNoteNumbersList as */pivoted, prefixTrackType, prefixAllType, delay, rhythmTemplates) {
     if (!pivoted.length) return [];
     var mml = '';
     mml += getPrefixAllStrFromType(prefixAllType);
@@ -412,6 +413,7 @@ function() {
     function getM() {
       var mml = '';
       var delayMml = '';
+      var iNoteNums; // trackNoteNumbersの何番目かのindex
       angular.forEach(pivoted, function(trackNoteNumbers) {
         if (mml) mml += ';';
         if (prefixTrackType == 'PREFIX_TRACK_1') {
@@ -420,12 +422,14 @@ function() {
         mml += volume();
         mml += delayMml;
         delayMml += delay; // trackごとに増えてゆく
+        iNoteNums = -1; // -1なのは最初に++する為。最初に++するのは++場所を1箇所にまとめる為
         angular.forEach(trackNoteNumbers, function(noteNumber) {
+          iNoteNums++;
           if (isEmpty(noteNumber)) {
             mml += 'r';
             return; // forEachを1つ進める
           }
-          mml += getRhythmicalNotesMml(noteNumber);
+          mml += getRhythmicalNotesMml(noteNumber, iNoteNums);
         });
       });
       return mml;
@@ -439,7 +443,9 @@ function() {
       if (l <= 7) { return 'v7'; }
       return 'v7';  // [例] C13 + bass (8poly)
     }
-    function getRhythmicalNotesMml(noteNumber) { // [例] 'l16 c r c r' 間にspace必須。仕様をシンプルにする為
+    function getRhythmicalNotesMml(noteNumber, iNoteNums) { // [例] 60 → 'c'
+      if (isEmpty(rhythmTemplates)) return getNoteMml(noteNumber);
+      var rhythmTemplate = rhythmTemplates[iNoteNums].r;   // [例] 'l16 c r c r' 間にspace必須。仕様をシンプルにする為
       if (isEmpty(rhythmTemplate)) return getNoteMml(noteNumber);
       var r = '';
       var rhythms = rhythmTemplate.split(' ');
@@ -599,7 +605,7 @@ function() {
     }
   }
 
-  function getInventionMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType, maxTopNoteNums, maxbassNoteNum, delay, voicingType, rhythmTemplate) {
+  function getInventionMmlFromInputText(inputText, prefixTrackType, centerCnoteNum, prefixAllType, maxTopNoteNums, maxbassNoteNum, delay, voicingType, rhythmTemplates) {
     if (isEmpty(inputText)) return '';
     var chordNames = getChordNames(inputText);
     if (isEmpty(chordNames)) return '';
@@ -615,7 +621,7 @@ function() {
       noteNumbersList.push(noteNumbers);
     }
     var pivoted = getPivotNoteNumbers(noteNumbersList);
-    return getChordsMml(pivoted, prefixTrackType, prefixAllType, delay, rhythmTemplate);
+    return getChordsMml(pivoted, prefixTrackType, prefixAllType, delay, rhythmTemplates);
   }
 
   // [イメージ] 'III - bVI' → 'E - G#'

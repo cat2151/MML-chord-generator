@@ -66,7 +66,7 @@ function($scope, $location, $timeout, GeneratorService) {
     //$scope.generatedMml = GeneratorService.getInventionMmlFromInputText($scope.p.inputText, $scope.p.prefixTrackType, $scope.p.centerCnoteNum, $scope.p.prefixAllType, $scope.p.maxTopNoteNum, $scope.p.maxbassNoteNum, $scope.p.delay);
     $scope.generatedMml = "";
     $scope.generatedMml += "/*♪" + $scope.p.inputText + "♪*/";
-    $scope.generatedMml += GeneratorService.getInventionMmlFromInputText($scope.p.inputText, $scope.p.prefixTrackType, $scope.p.centerCnoteNum, $scope.p.prefixAllType, $scope.p.maxTopNoteNums, $scope.p.maxbassNoteNum, $scope.p.delay, $scope.p.voicingType, $scope.p.rhythmTemplate);
+    $scope.generatedMml += GeneratorService.getInventionMmlFromInputText($scope.p.inputText, $scope.p.prefixTrackType, $scope.p.centerCnoteNum, $scope.p.prefixAllType, $scope.p.maxTopNoteNums, $scope.p.maxbassNoteNum, $scope.p.delay, $scope.p.voicingType, $scope.p.rhythmTemplates);
 
     $timeout(function() { // compileより前にする(compileがSIOPMロード失敗の為にundefinedでexceptionになっても、先にURLへの反映はしておく)
       setParamsToUrl();
@@ -133,15 +133,29 @@ function($scope, $location, $timeout, GeneratorService) {
   };
 
   $scope.p.maxTopNoteNums = [];
+  $scope.p.rhythmTemplates = [];
   $scope.oldMaxTopNoteNumsCount = $scope.p.maxTopNoteNums.length;
   $scope.expandMaxTopNoteNumsByChordNamesCount = function() {
     var maxTopNoteNumsCount = $scope.getNoteNumbersList().length;
     while ($scope.oldMaxTopNoteNumsCount < maxTopNoteNumsCount) {
       $scope.p.maxTopNoteNums.push({maxTopNoteNum: $scope.p.maxTopNoteNum});
+      $scope.p.rhythmTemplates.push({r: $scope.p.rhythmTemplate});
       $scope.oldMaxTopNoteNumsCount = $scope.p.maxTopNoteNums.length;
     }
     // [補足] localではonLoadに到達しないのでこれが起動後に呼ばれない、のは、やむなし
   };
+  $scope.resetMaxTopNoteNums = function() {
+    angular.forEach($scope.p.maxTopNoteNums, function(mtnn) {
+      mtnn.maxTopNoteNum = $scope.p.maxTopNoteNum;
+    });
+    $scope.generate();
+  }
+  $scope.resetRhythmTemplates = function() {
+    angular.forEach($scope.p.rhythmTemplates, function(rhythmTemplate) {
+      rhythmTemplate.r = $scope.p.rhythmTemplate;
+    });
+    $scope.generate();
+  }
 
   $scope.getParsedData = function() {
     var paramFromUrl = lzbase62.compress(JSON.stringify($location.search()));

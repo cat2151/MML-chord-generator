@@ -149,7 +149,7 @@
         >
         <br/>
         <span>TopNote上限</span><input type="text" ng-model="p.maxTopNoteNum" ng-init="p.maxTopNoteNum='72'"
-          ng-change="generate()" ng-blur="generate()"
+          ng-change="resetMaxTopNoteNums()" ng-blur="resetMaxTopNoteNums()"
         >
         <br/>
         <span>BassNote上限</span><input type="text" ng-model="p.maxbassNoteNum" ng-init="p.maxbassNoteNum='48'"
@@ -182,15 +182,22 @@
         <label><input type="radio" ng-value="false" ng-model="p.dispDebug" ng-init="p.dispDebug=false"/>表示しない</label>
         <label><input type="radio" ng-value="true" ng-model="p.dispDebug"/>表示する</label>
       </div>
-      <div ng-if="p.dispDebug">
+      <div ng-show="p.dispDebug">
 
-        <input type="text" ng-model="p.rhythmTemplate"
-          ng-change="generate()" ng-blur="generate()"
-          placeholder="l16 c r r c r r c r" class="inptrt"
-        >
+        <span ng-repeat="m in p.rhythmTemplates track by $index" ng-show="$index < getNoteNumbersList().length">
+          <input type="text" ng-model="m.r"
+            ng-change="generate()" ng-blur="generate()"
+            placeholder="l16 c r r c r r c r" class="inptrt"
+          >
+        </span>
         <br/>
         <span>rhythm template:
-          <select ng-model="p.rhythmTemplate" ng-change="generate()">
+          <input type="text" ng-model="p.rhythmTemplate" ng-init="p.rhythmTemplate='c'"
+            ng-change="generate()" ng-blur="generate()"
+            placeholder="l16 c r r c r r c r" class="inptrt"
+          >
+          <select ng-model="p.rhythmTemplate" ng-change="resetRhythmTemplates()">
+            <option value="c">c</option>
             <option value="l2 c">l2 c</option>
             <option value="l1 c">l1 c</option>
             <option value="l16 c r r c r r c r">l16 c r r c r r c r</option>

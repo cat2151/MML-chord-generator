@@ -306,7 +306,7 @@ function() {
 
   // [イメージ] 60 → o4c
   function getNoteMml(noteNumber) {
-    if (noteNumber < 0 || noteNumber > 127) return ''; // 0～127 のみ許可
+    if (noteNumber < 0 || noteNumber > 127) return ''; // 0～127 でなければ空にする
     var octave = 'o' + (Math.floor(noteNumber / 12) - 0); /* 基準 : OPMのnoteNumber60が中央ドに聴こえる程度 */
     var cdefgab = getCdefgab(noteNumber % 12);
     return octave + cdefgab;
@@ -422,14 +422,10 @@ function() {
         mml += volume();
         mml += delayMml;
         delayMml += delay; // trackごとに増えてゆく
-        iNoteNums = -1; // -1なのは最初に++する為。最初に++するのは++場所を1箇所にまとめる為
+        iNoteNums = 0;
         angular.forEach(trackNoteNumbers, function(noteNumber) {
-          iNoteNums++;
-          if (isEmpty(noteNumber)) {
-            mml += 'r';
-            return; // forEachを1つ進める
-          }
           mml += getRhythmicalNotesMml(noteNumber, iNoteNums);
+          iNoteNums++;
         });
       });
       return mml;
@@ -444,20 +440,24 @@ function() {
       return 'v7';  // [例] C13 + bass (8poly)
     }
     function getRhythmicalNotesMml(noteNumber, iNoteNums) { // [例] 60 → 'c'
-      if (isEmpty(rhythmTemplates)) return getNoteMml(noteNumber);
-      if (iNoteNums >= rhythmTemplates.length) return getNoteMml(noteNumber);
+      if (isEmpty(rhythmTemplates)) return getNoteOrRestMml(noteNumber);
+      if (iNoteNums >= rhythmTemplates.length) return getNoteOrRestMml(noteNumber);
       var rhythmTemplate = rhythmTemplates[iNoteNums].r;   // [例] 'l16 c r c r' 間にspace必須。仕様をシンプルにする為
-      if (isEmpty(rhythmTemplate)) return getNoteMml(noteNumber);
+      if (isEmpty(rhythmTemplate)) return getNoteOrRestMml(noteNumber);
       var r = '';
       var rhythms = rhythmTemplate.split(' ');
       angular.forEach(rhythms, function(rhythm) {
         if (rhythm.search(/[a-g][\+\-]*/) === 0) {  // [例] cdefgab, c+やd-やd++ → chord用ノートを出力
-          r += getNoteMml(noteNumber);
+          r += getNoteOrRestMml(noteNumber);
         } else { // [例] 'l16' → そのまま'l16'を出力
           r += rhythm;
         }
       });
       return r;
+    }
+    function getNoteOrRestMml(noteNumber) {
+      if (isEmpty(noteNumber)) return 'r';
+      return getNoteMml(noteNumber);
     }
   }
 

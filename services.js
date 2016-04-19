@@ -445,6 +445,7 @@ function() {
     }
     function getRhythmicalNotesMml(noteNumber, iNoteNums) { // [例] 60 → 'c'
       if (isEmpty(rhythmTemplates)) return getNoteMml(noteNumber);
+      if (iNoteNums >= rhythmTemplates.length) return getNoteMml(noteNumber);
       var rhythmTemplate = rhythmTemplates[iNoteNums].r;   // [例] 'l16 c r c r' 間にspace必須。仕様をシンプルにする為
       if (isEmpty(rhythmTemplate)) return getNoteMml(noteNumber);
       var r = '';

@@ -203,7 +203,7 @@
         <br/>
         <span>rhythm template:
           <input type="text" ng-model="p.rhythmTemplate" ng-init="p.rhythmTemplate='c'"
-            ng-change="resetRhythmTemplates()" ng-blur="resetRhythmTemplates()"
+            ng-change="resetRhythmTemplates()" ng-blur="generate()"
             placeholder="l16 c r r c r r c r" class="inptrt"
           >
           <select ng-model="p.rhythmTemplate" ng-change="resetRhythmTemplates()">

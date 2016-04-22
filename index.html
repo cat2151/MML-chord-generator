@@ -175,25 +175,7 @@
           </select>
         </span>
         <br/>
-        <span>MMLフォーマット:
-          <select ng-model="p.formatType" ng-init="p.formatType='SION'"
-                  ng-change="generate()"
-          >
-            <option value="SION">SiON (すたどんたんでお馴染み)</option>
-          </select>
-        </span>
-
-        <br/>
-      </div>
-
-      <div ng-show="p.inputText">
-        <hr/>
-        <span>デバッグ表示</span>
-        <label><input type="radio" ng-value="false" ng-model="p.dispDebug" ng-init="p.dispDebug=false"/>表示しない</label>
-        <label><input type="radio" ng-value="true" ng-model="p.dispDebug"/>表示する</label>
-      </div>
-      <div ng-show="p.dispDebug">
-
+        <span>rhythm:</span>
         <span ng-repeat="m in p.rhythmTemplates track by $index" ng-show="$index < getNoteNumbersList().length">
           <input type="text" ng-model="m.r"
             ng-change="generate()" ng-blur="generate()"
@@ -216,6 +198,24 @@
           </select>
         </span>
         <br/>
+        <span>MMLフォーマット:
+          <select ng-model="p.formatType" ng-init="p.formatType='SION'"
+                  ng-change="generate()"
+          >
+            <option value="SION">SiON (すたどんたんでお馴染み)</option>
+          </select>
+        </span>
+
+        <br/>
+      </div>
+
+      <div ng-show="p.inputText">
+        <hr/>
+        <span>デバッグ表示</span>
+        <label><input type="radio" ng-value="false" ng-model="p.dispDebug" ng-init="p.dispDebug=false"/>表示しない</label>
+        <label><input type="radio" ng-value="true" ng-model="p.dispDebug"/>表示する</label>
+      </div>
+      <div ng-show="p.dispDebug">
 
         <span>Bass pedal point</span>
         <label><input type="radio" ng-value="null" ng-model="p.bassPedal" ng-init="p.bassPedal=null" ng-change="generate()"/>なし</label>

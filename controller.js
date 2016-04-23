@@ -34,7 +34,7 @@ function($scope, $location, $timeout, GeneratorService) {
     // [URLイメージ] ～/#?p=abcdef [補足] pがある場合は上記を上書き、pがない場合は上記のまま
     var p = $scope.getDecompressedParamsFromUrl();
     if (p) {
-      $scope.p = p;
+      angular.extend($scope.p, p);  // pの初期値を消さない。[理由] 古いバージョンが出力したURLも鳴らせるようにする為
       $scope.setPrefixAllStr();
     }
   }

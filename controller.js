@@ -202,8 +202,9 @@ function($scope, $location, $timeout, GeneratorService) {
     window.open(twUrl + prms, "", "scrollbars=yes,width=500,height=300");
   };
 
+  // degree表記のコードネーム入力を元に、コードMMLを生成する
   $scope.getInputTextFromInputNumbers = function() {
-    $scope.p.inputText = GeneratorService.getInputTextFromInputNumbers($scope.p.inputNumbers, $scope.p.chordKeyOffset, $scope.p.inputNumbersType, $scope.p.chordAddMode);
+    $scope.p.inputText = GeneratorService.getInputTextFromInputNumbers($scope.p.inputNumbers, $scope.p.chordKeyOffset, $scope.p.inputNumbersType, $scope.p.chordAddMode, $scope.p.bassPedal);
     $scope.generate();
   };
 

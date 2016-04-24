@@ -626,7 +626,7 @@ function() {
   }
 
   // [イメージ] 'III - bVI' → 'E - G#'
-  function getInputTextFromInputNumbers(inputNumbers, chordKeyOffset, inputNumbersType, chordAddMode) {
+  function getInputTextFromInputNumbers(inputNumbers, chordKeyOffset, inputNumbersType, chordAddMode, bassPedal) {
     inputNumbers = getNormalized(inputNumbers); // [イメージ] 'III - bVI' → '3 b6'
     chordKeyOffset = Number(chordKeyOffset);
     var arr = inputNumbers.split(" ");
@@ -643,26 +643,33 @@ function() {
       semitone += chordKeyOffset;
       var chordType;
       if (chordAddMode == "DIATONIC") { // [イメージ] 'b6" → "G#M7"
-        chordType = getChordTypeFromDegree(degree);
+        chordType = getChordTypeFromDegree(degree); // [イメージ] '1/5' → '1' → 'C'
         if (chordType == undefined) return "";
-        return getRootFromSemitone(semitone) + chordType;
+        var iSlash = degree.indexOf('/');
+        if (iSlash != -1) chordType += degree.substr(iSlash); // [イメージ] '1/5','C' → 'C/5'
       }
       if (chordAddMode == "NONE") { // [イメージ] '4m7' → 'Fm7'
         var offset = 1;
         if (degree.charAt(0) == "#" || degree.charAt(0) == "b") offset++;
-        chordType = degree.substr(offset);
-        var iSlash = chordType.indexOf('/');
-        if (iSlash != -1) { // [イメージ] 'M7/2' → 'M7/D'
-          var bassDegree = chordType.substr(iSlash + 1); // [イメージ] 'M7/2' → '2'
-          var bassSemitone = getSemitoneFromDegree(bassDegree); // [イメージ] '2' → '2'
-          if (bassSemitone === undefined) return "";
-          bassSemitone += chordKeyOffset;
-          chordType = chordType.substring(0, iSlash + 1); // [イメージ] 'M7/2' → 'M7/'
-          chordType += getRootFromSemitone(bassSemitone); // [イメージ] 'M7/', 2 → 'M7/D'
-        }
-        return getRootFromSemitone(semitone) + chordType;
+        chordType = degree.substr(offset); // [イメージ] 'b6M7/5' → 'M7/5'
       }
-      return "";
+      chordType = getChordTypeByBasstone(chordType);
+      return getRootFromSemitone(semitone) + chordType;
+
+      function getChordTypeByBasstone(chordType) { // [イメージ] 'M7/2' → 'M7/D'
+        var iSlash = chordType.indexOf('/');
+        if (!isEmpty(bassPedal) && iSlash == -1) chordType += ("/" + bassPedal); // [イメージ] 'M7' → 'M7/6' [補足] bassPedalはI～VIIでなく1～7であること(後続処理がそれ前提なので)
+        iSlash = chordType.indexOf('/');
+        if (iSlash == -1) return chordType;
+        // [イメージ] 'M7/2' → 'M7/D'
+        var bassDegree = chordType.substr(iSlash + 1); // [イメージ] 'M7/2' → '2'
+        var bassSemitone = getSemitoneFromDegree(bassDegree); // [イメージ] '2' → '2'
+        if (bassSemitone === undefined) return "";
+        bassSemitone += chordKeyOffset;
+        chordType = chordType.substring(0, iSlash + 1); // [イメージ] 'M7/2' → 'M7/'
+        chordType += getRootFromSemitone(bassSemitone); // [イメージ] 'M7/', 2 → 'M7/D'
+        return chordType;
+      }
       function getRootFromSemitone(s) { // [イメージ] 8 → "G#"
         s = ((s % 12) + 12) % 12;
         return ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"][s];

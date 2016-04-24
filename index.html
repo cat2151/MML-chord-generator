@@ -96,13 +96,29 @@
               <option value="DIATONIC">ダイアトニックコードを生成 (例)1 2 5 → CM7 - Dm7 - G7</option>
               <option value="NONE">そのまま (例)1 2 5 → C - D - G</option>
             </select>
+            <br/>
           </span>
 
           <div ng-show="p.chordAddMode=='DIATONIC'">
             <label><input type="radio" value="TRIAD" ng-model="p.inputNumbersType" ng-change="getInputTextFromInputNumbers()"/>TRIAD</label>
             <label><input type="radio" value="SEVENTH" ng-model="p.inputNumbersType" ng-change="getInputTextFromInputNumbers()"/>SEVENTH</label>
             <label><input type="radio" value="NINTH" ng-model="p.inputNumbersType" ng-change="getInputTextFromInputNumbers()"/>NINTH</label>
+            <br/>
           </div>
+
+          <div>
+            <span>Bass pedal point</span>
+            <label><input type="radio" ng-value="null" ng-model="p.bassPedal" ng-init="p.bassPedal=null" ng-change="getInputTextFromInputNumbers()"/>なし</label>
+            <label><input type="radio" ng-value="1" ng-model="p.bassPedal" ng-change="getInputTextFromInputNumbers()"/>I</label>
+            <label><input type="radio" ng-value="2" ng-model="p.bassPedal" ng-change="getInputTextFromInputNumbers()"/>II</label>
+            <label><input type="radio" ng-value="3" ng-model="p.bassPedal" ng-change="getInputTextFromInputNumbers()"/>III</label>
+            <label><input type="radio" ng-value="4" ng-model="p.bassPedal" ng-change="getInputTextFromInputNumbers()"/>IV</label>
+            <label><input type="radio" ng-value="5" ng-model="p.bassPedal" ng-change="getInputTextFromInputNumbers()"/>V</label>
+            <label><input type="radio" ng-value="6" ng-model="p.bassPedal" ng-change="getInputTextFromInputNumbers()"/>VI</label>
+            <label><input type="radio" ng-value="7" ng-model="p.bassPedal" ng-change="getInputTextFromInputNumbers()"/>VII</label>
+            <br/>
+          </div>
+
         </div>
       </div>
 
@@ -216,17 +232,6 @@
         <label><input type="radio" ng-value="true" ng-model="p.dispDebug"/>表示する</label>
       </div>
       <div ng-show="p.dispDebug">
-
-        <span>Bass pedal point</span>
-        <label><input type="radio" ng-value="null" ng-model="p.bassPedal" ng-init="p.bassPedal=null" ng-change="generate()"/>なし</label>
-        <label><input type="radio" ng-value="1" ng-model="p.bassPedal" ng-change="generate()"/>I</label>
-        <label><input type="radio" ng-value="2" ng-model="p.bassPedal" ng-change="generate()"/>II</label>
-        <label><input type="radio" ng-value="3" ng-model="p.bassPedal" ng-change="generate()"/>III</label>
-        <label><input type="radio" ng-value="4" ng-model="p.bassPedal" ng-change="generate()"/>IV</label>
-        <label><input type="radio" ng-value="5" ng-model="p.bassPedal" ng-change="generate()"/>V</label>
-        <label><input type="radio" ng-value="6" ng-model="p.bassPedal" ng-change="generate()"/>VI</label>
-        <label><input type="radio" ng-value="7" ng-model="p.bassPedal" ng-change="generate()"/>VII</label>
-        <br/>
 
         <h4>getDecompressedParamsFromUrl</h4>
         <span>{{getDecompressedParamsFromUrl()}}</span>

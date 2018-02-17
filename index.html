@@ -9,6 +9,8 @@
     <script type='text/javascript' src='jquery.js'></script>
     <script type='text/javascript' src='siopm.js'></script>
     <script type='text/javascript' src='lzbase62.min.js'></script>
+    <script src="https://minipop.github.io/sionicjs/demo/pico.min.js"></script>
+    <script src="https://minipop.github.io/sionicjs/dist/sionic.js"></script>
 
     <style type="text/css">
     textarea {
@@ -49,6 +51,7 @@
       ></textarea>
 
       <br/>
+      <button ng-show="isiPhone()" ng-click='play()'>再生</button>
 
       <div ng-show="p.inputText">
 
@@ -215,13 +218,13 @@
         </span>
         <br/>
         <span>MMLフォーマット:
-          <select ng-model="p.formatType" ng-init="p.formatType='SION'"
+          <select ng-model="p.mmlFormat" ng-init="p.mmlFormat='sion'"
                   ng-change="generate()"
           >
-            <option value="SION">SiON (すたどんたんでお馴染み)</option>
+            <option value="sion">SiON (すたどんたんでお馴染み)</option>
+            <option value="sionic">Pico.js + Sionic.js</option>
           </select>
         </span>
-
         <br/>
       </div>
 
@@ -251,8 +254,8 @@
         <h4>maxTopNoteNums件数</h4>
         <span>{{p.maxTopNoteNums.length}}</span>
 
-        <h4>formatType</h4>
-        <span>{{p.formatType}}</span>
+        <h4>mmlFormat</h4>
+        <span>{{p.mmlFormat}}</span>
 
         <h4>prefixAllType</h4>
         <span>{{p.prefixAllType}}</span>

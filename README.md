@@ -8,8 +8,11 @@ http://cat2151.github.io/MML-chord-generator/#?chord=CM7%20Dm7%20Em7%20FM7%20G6%
 # 鳴らせるコード
 https://github.com/cat2151/MML-chord-generator/blob/gh-pages/services.js
 
-# Flashについて
-演奏にFlashを使っているので、Flash非対応ブラウザの場合は音が鳴りません
+# FLASH
+FLASHが使えない環境でも鳴ります。
+（Sionic.jsとpico.jsを利用）
 
 -
-Powered by SiON https://github.com/keim/SiON
+Powered by [SiON](https://github.com/keim/SiON)
+and [Sionic.js](https://github.com/minipop/sionicjs/)
+and [pico.js](https://github.com/mohayonao/pico.js/)

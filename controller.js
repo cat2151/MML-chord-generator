@@ -9,6 +9,8 @@ function($scope, $location, $timeout, GeneratorService) {
   $scope.p.voicingType = "CLOSE";
   $scope.p.chordAddMode = "DIATONIC";
   $scope.generatedMml = "なし"; // 生成結果は$scope.pには持たせない($scope.pを入力として処理した出力がこれなので)
+  $scope.mmlFormat = "sion";
+  $scope.iPhoneReady = false;
 
   function setParamsFromUrl() {
     // [URLイメージ] ～/#?chord=C
@@ -59,6 +61,12 @@ function($scope, $location, $timeout, GeneratorService) {
 
 
   $scope.generate = function() {
+    //iOSでは、WebAudioを最初にclickイベントから扱う必要がある。
+    //一度onloadまたはonchangedで実行してしまうと、その後clickで再生しても無音になる。
+    if($scope.isiPhone() && $scope.iPhoneReady === false){
+        return;
+    }
+
     $scope.expandMaxTopNoteNumsByChordNamesCount(); // MML生成の前にmaxTopNoteNumsの生成を行う
 
     //$scope.generatedMml = GeneratorService.generate($scope.p.inputText, $scope.p.prefixTrackType, $scope.p.centerCnoteNum, $scope.p.prefixAllType);
@@ -72,8 +80,34 @@ function($scope, $location, $timeout, GeneratorService) {
       setParamsToUrl();
     }, 0);
 
-    SIOPM.compile($scope.generatedMml);
+    $scope.generatedMml = $scope.p.inputText;
+    try{
+      SIOPM.stop();
+    }catch(e){
+      console.log(e);
+    }
+    Pico.pause();
+
+    switch($scope.mmlFormat){
+      case "sion" :
+        SIOPM.compile($scope.generatedMml);
+        break;
+      case "sionic" :
+        Pico.play(Sionic($scope.generatedMml));
+        break;
+      default: 
+        console.error("Unsupported format");
+    }
   };
+
+  $scope.play = function(){
+    $scope.iPhoneReady = true;
+    $scope.generate();
+  }
+  
+  $scope.isiPhone = function(){
+    return window.navigator.userAgent.toLowerCase().indexOf("iphone") >= 0;
+  }
 
   $scope.getRootNoteType = function() {
     return GeneratorService.getRootNoteTypeFromOneChordName($scope.p.inputText).r;
@@ -235,9 +269,19 @@ function($scope, $location, $timeout, GeneratorService) {
     SIOPM.play();
   };
 
-  SIOPM.initialize(); // [前提] SIOPMのプロパティへ各functionを代入し終わっていること
+  }, 0);
+
+
+  try{
+    SIOPM.initialize(); // [前提] SIOPMのプロパティへ各functionを代入し終わっていること
+  }catch(e){
+    //fallback
+    $scope.mmlFormat = "sionic";
+    $scope.generate();
+  }
   $timeout(function() {
     setParamsFromUrl(); // [前提] $scopeのプロパティへ各functionを代入し終わっていること
   }, 0);
+
 
 }]);

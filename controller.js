@@ -269,9 +269,6 @@ function($scope, $location, $timeout, GeneratorService) {
     SIOPM.play();
   };
 
-  }, 0);
-
-
   try{
     SIOPM.initialize(); // [前提] SIOPMのプロパティへ各functionを代入し終わっていること
   }catch(e){

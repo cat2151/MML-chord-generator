@@ -80,13 +80,24 @@ function($scope, $location, $timeout, GeneratorService) {
       setParamsToUrl();
     }, 0);
 
-    $scope.generatedMml = $scope.p.inputText;
-    try{
-      SIOPM.stop();
-    }catch(e){
-      console.log(e);
+    switch($scope.mmlFormat){
+      case "sion" :
+        try{
+          SIOPM.stop();
+        }catch(e){
+          //console.log(e);
+          //fallback
+          $scope.mmlFormat = "sionic";
+          $scope.generate();
+          return;
+        }
+        break;
+      case "sionic" :
+        Pico.pause();
+        break;
+      default: 
+        console.error("Unsupported format");
     }
-    Pico.pause();
 
     switch($scope.mmlFormat){
       case "sion" :

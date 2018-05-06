@@ -11,6 +11,7 @@ function($scope, $location, $timeout, GeneratorService) {
   $scope.generatedMml = "なし"; // 生成結果は$scope.pには持たせない($scope.pを入力として処理した出力がこれなので)
   $scope.mmlFormat = "sion";
   $scope.iPhoneReady = false;
+  $scope.isPlayFromUrl = false;
 
   function setParamsFromUrl() {
     // [URLイメージ] ～/#?chord=C
@@ -38,6 +39,7 @@ function($scope, $location, $timeout, GeneratorService) {
     if (p) {
       angular.extend($scope.p, p);  // pの初期値を消さない。[理由] 古いバージョンが出力したURLも鳴らせるようにする為
       $scope.setPrefixAllStr();
+      $scope.isPlayFromUrl = true;
     }
   }
   // URLに反映 [用途] 書いたChordNameをURLコピペで共有できるようにする
@@ -285,7 +287,6 @@ function($scope, $location, $timeout, GeneratorService) {
   }catch(e){
     //fallback
     $scope.mmlFormat = "sionic";
-    $scope.generate();
   }
   $timeout(function() {
     setParamsFromUrl(); // [前提] $scopeのプロパティへ各functionを代入し終わっていること

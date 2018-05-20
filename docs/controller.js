@@ -69,6 +69,11 @@ function($scope, $location, $timeout, GeneratorService) {
         return;
     }
 
+    if ($scope.p.prefixTrackType == "PREFIX_TRACK_1" && $scope.p.mmlFormat == 'sionic') {
+      // Sionic.jsを選んだ場合、sionic向けMMLに変換
+      $scope.p.prefixTrackType = "PREFIX_TRACK_3";
+    }
+
     $scope.expandMaxTopNoteNumsByChordNamesCount(); // MML生成の前にmaxTopNoteNumsの生成を行う
 
     //$scope.generatedMml = GeneratorService.generate($scope.p.inputText, $scope.p.prefixTrackType, $scope.p.centerCnoteNum, $scope.p.prefixAllType);

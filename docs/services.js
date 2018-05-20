@@ -133,8 +133,18 @@ function() {
     '};\n'
   ];
 
-
-  var prefixTrackStr = '%6 @0 l2 ';
+  function getPrefixTrackStr(prefixTrackType) {
+    switch(prefixTrackType){
+      case "PREFIX_TRACK_1" :
+        return '%6 @0 l2 '; // SiON
+      case "PREFIX_TRACK_2" :
+        return '@5 l2 ';    // Sionic.js
+      case "PREFIX_TRACK_3" :
+        return '@6 l2 ';    // Sionic.js
+      default :
+        return '';
+    }
+  }
 
   function setPrefixAllStr(v) {
     prefixAllStr = v;
@@ -329,9 +339,7 @@ function() {
     var mml = '';
     angular.forEach(noteNumbers, function(noteNumber) {
       if (mml) mml += ';\n';
-      if (prefixTrackType == 'PREFIX_TRACK_1') {
-        mml += prefixTrackStr;
-      }
+      mml += getPrefixTrackStr(prefixTrackType);
       mml += getNoteMml(noteNumber);
     });
     return mml;
@@ -417,9 +425,7 @@ function() {
       var iNoteNums; // trackNoteNumbersの何番目かのindex
       angular.forEach(pivoted, function(trackNoteNumbers) {
         if (mml) mml += ';\n';
-        if (prefixTrackType == 'PREFIX_TRACK_1') {
-          mml += prefixTrackStr;
-        }
+        mml += getPrefixTrackStr(prefixTrackType);
         mml += volume();
         mml += delayMml;
         delayMml += delay; // trackごとに増えてゆく
